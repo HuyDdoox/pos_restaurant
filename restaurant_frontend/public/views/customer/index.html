@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Khách hàng QR - FoodHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/customer.css">
+    <style>
+        /* Mobile specific utilities */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+        /* Hide scrollbar for category list */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes flyToCart {
+            0% { transform: scale(1); opacity: 1; top: var(--startY); left: var(--startX); }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(0.1); opacity: 0; top: var(--endY); left: var(--endX); }
+        }
+        .flying-img {
+            position: fixed;
+            z-index: 9999;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: flyToCart 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col relative pb-20 pt-safe">
+
+    <!-- KHỐI ĐẦU TRANG CỐ ĐỊNH (STICKY TOP) -->
+    <div class="sticky top-0 z-40 bg-slate-50 border-b border-slate-200 shadow-sm shrink-0 pt-safe">
+        <!-- Header -->
+        <header class="bg-white pb-2">
+            <div class="px-4 h-14 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-black text-white text-sm shadow-md">FH</div>
+                    <h1 class="text-lg font-black tracking-tight">Food<span class="text-orange-500">Hub</span></h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btn-order-history" class="text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors border border-orange-200 shadow-sm hidden">Đã gọi</button>
+                    <button id="btn-change-table" class="bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-black text-xs flex items-center gap-1 hover:bg-orange-200 transition-colors shadow-sm">
+                        <span id="lbl-table-id">Bàn --</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search & Categories area -->
+        <div class="px-4 pt-3 pb-2 bg-slate-50">
+            <!-- Search Bar -->
+            <div class="relative mb-3">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-input" placeholder="Tìm kiếm món ăn..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm focus:outline-none focus:border-orange-500 transition-all">
+            </div>
+
+            <!-- Categories -->
+            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4" id="category-list">
+                <!-- Danh mục được load bằng JS -->
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-1 w-full px-4 pt-4 pb-4">
+        
+        <!-- Menu Grid -->
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" id="menu-list">
+            <!-- Danh sách món ăn được load bằng JS -->
+        </div>
+    </main>
+
+    <!-- Floating Bottom Cart Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-3 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] z-40 flex justify-between items-center pb-safe">
+        <div class="flex flex-col">
+            <span class="text-xs text-slate-500 font-bold mb-0.5">Giỏ hàng (<span id="cart-count">0 món</span>)</span>
+            <span class="text-lg font-black text-orange-600 leading-none" id="cart-total-mobile">0 ₫</span>
+        </div>
+        <button id="btn-view-cart" class="bg-orange-500 active:bg-orange-600 text-white px-5 py-2.5 rounded-xl font-black text-sm shadow-md flex items-center gap-2 transition-transform active:scale-95">
+            Xem giỏ 
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </button>
+    </div>
+
+    <!-- Cart Modal (Bottom Sheet style) -->
+    <div id="modal-cart-sheet" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex-col justify-end">
+        <div class="bg-white w-full h-[85vh] rounded-t-3xl shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300" id="cart-sheet-content">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-3xl shrink-0">
+                <h2 class="text-lg font-black text-slate-800">Giỏ hàng của bạn</h2>
+                <button id="btn-close-cart" class="w-8 h-8 flex items-center justify-center bg-slate-200 text-slate-600 rounded-full font-bold active:scale-95 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50" id="cart-items-list">
+                <!-- Giỏ hàng trống sẽ hiển thị ở đây -->
+            </div>
+
+            <div class="p-4 border-t border-slate-100 shrink-0 bg-white pb-safe">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-slate-500 font-bold text-sm">Tổng thanh toán:</span>
+                    <span class="text-2xl font-black text-orange-600" id="cart-total">0 ₫</span>
+                </div>
+                <button id="btn-checkout" class="w-full py-3.5 bg-orange-500 active:bg-orange-600 text-white rounded-xl font-black text-base transition-transform active:scale-95 shadow-lg flex justify-center items-center gap-2">
+                    Xác nhận đặt món <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chọn bàn -->
+    <div id="modal-table" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 class="text-xl font-black text-slate-800 mb-1 text-center">Chọn bàn</h3>
+            <p class="text-slate-500 text-xs text-center mb-5">Vui lòng chọn bàn để gọi món</p>
+            <div class="grid grid-cols-3 gap-2" id="table-grid">
+                <!-- Load bằng JS -->
+            </div>
+            <button id="btn-close-modal" class="w-full mt-5 py-3 bg-slate-100 active:bg-slate-200 text-slate-600 rounded-xl font-bold transition-colors">Hủy</button>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết Món (Gộp chọn Variant) -->
+    <div id="modal-food-detail" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-[110] hidden flex-col justify-end">
+        <div class="bg-white w-full h-[90vh] rounded-t-3xl shadow-2xl flex flex-col transform translate-y-full transition-transform duration-300" id="food-detail-content">
+            <div class="relative w-full h-48 shrink-0 bg-slate-200 rounded-t-3xl overflow-hidden">
+                <img id="food-detail-img" src="" class="w-full h-full object-cover">
+                <button id="btn-close-food-detail" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/50 text-white rounded-full font-bold active:scale-95 transition-transform backdrop-blur">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-5 pb-safe">
+                <div class="flex flex-wrap gap-1.5 mb-2" id="food-detail-tags"></div>
+                <h3 class="text-2xl font-black text-slate-800 mb-2" id="food-detail-name">Tên món</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed" id="food-detail-desc"></p>
+
+                <div id="variant-section" class="hidden">
+                    <h4 class="font-bold text-slate-800 mb-3 text-sm uppercase tracking-wide">Tùy chọn</h4>
+                    <div id="variant-list" class="space-y-2.5 mb-5">
+                        <!-- Variants render here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-slate-100 shrink-0 bg-white pb-safe flex gap-3 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)]">
+                <div class="flex flex-col justify-center">
+                    <span class="text-xs font-bold text-slate-500">Tạm tính</span>
+                    <span class="text-xl font-black text-orange-600 leading-none" id="food-detail-price">0 ₫</span>
+                </div>
+                <button id="btn-add-food-detail" class="flex-1 py-3 bg-orange-500 active:bg-orange-600 text-white rounded-xl font-black transition-transform active:scale-95 shadow-md flex items-center justify-center gap-2">
+                    Thêm vào giỏ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Lịch sử món đã gọi -->
+    <div id="modal-order-history" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden flex-col justify-end">
+        <div class="bg-white w-full h-[85vh] rounded-t-3xl shadow-2xl flex flex-col pb-safe">
+            <div class="flex justify-between items-center p-4 border-b border-slate-100 bg-slate-50 rounded-t-3xl shrink-0">
+                <h3 class="text-lg font-black text-slate-800">Món đã gọi</h3>
+                <button id="btn-close-history" class="w-8 h-8 flex items-center justify-center bg-slate-200 text-slate-600 rounded-full font-bold active:scale-95 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div id="history-items-list" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+                <!-- Items render here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-16 right-4 left-4 z-[120] flex flex-col gap-2 pointer-events-none"></div>
+
+    <script src="../../js/customer.js?v=12"></script>
+    <script>
+        // UI Logic for Bottom Sheet Cart
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnViewCart = document.getElementById('btn-view-cart');
+            const modalCartSheet = document.getElementById('modal-cart-sheet');
+            const cartSheetContent = document.getElementById('cart-sheet-content');
+            const btnCloseCart = document.getElementById('btn-close-cart');
+
+            const openCart = () => {
+                modalCartSheet.classList.remove('hidden');
+                modalCartSheet.classList.add('flex');
+                // Small delay to allow display:flex to apply before translating
+                setTimeout(() => {
+                    cartSheetContent.classList.remove('translate-y-full');
+                }, 10);
+            };
+
+            const closeCart = () => {
+                cartSheetContent.classList.add('translate-y-full');
+                setTimeout(() => {
+                    modalCartSheet.classList.add('hidden');
+                    modalCartSheet.classList.remove('flex');
+                }, 300); // match duration-300
+            };
+
+            if (btnViewCart) btnViewCart.addEventListener('click', openCart);
+            if (btnCloseCart) btnCloseCart.addEventListener('click', closeCart);
+            if (modalCartSheet) {
+                modalCartSheet.addEventListener('click', (e) => {
+                    if (e.target === modalCartSheet) closeCart();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

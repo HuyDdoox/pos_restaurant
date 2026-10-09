@@ -1,0 +1,23 @@
+{
+  "name": "restaurant_frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack ",
+    "dev": "webpack",
+    "server": "json-server --watch db.json --port 3000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "json-server": "^0.17.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3"
+  }
+}

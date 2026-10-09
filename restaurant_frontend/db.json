@@ -1,0 +1,1362 @@
+{
+  "Branches": [
+    {
+      "id": "BR001",
+      "name": "FoodHub Đồ Âu Quận 1",
+      "address": "123 Lê Lợi, Quận 1, TP.HCM",
+      "status": "Active",
+      "createdAt": "2023-01-15T08:00:00Z"
+    }
+  ],
+  "Users": [
+    {
+      "id": "U001",
+      "branch_id": "BR001",
+      "username": "admin_hcm",
+      "password": "hashed_password_123",
+      "fullname": "Nguyễn Minh Khôi",
+      "phone": "0901234567",
+      "email": "khoi.nguyen@foodhub.com",
+      "role": "Admin",
+      "endingCash": 0,
+      "status": "Active",
+      "lock_reason": ""
+    },
+    {
+      "id": "U002",
+      "branch_id": "BR001",
+      "username": "cashier_lan",
+      "password": "hashed_password_123",
+      "fullname": "Trần Thị Lan",
+      "phone": "0912345678",
+      "email": "lan.tran@foodhub.com",
+      "role": "Cashier",
+      "endingCash": 5000000,
+      "status": "Active",
+      "lock_reason": ""
+    },
+    {
+      "id": "U003",
+      "branch_id": "BR001",
+      "username": "chef_wong",
+      "password": "hashed_password_123",
+      "fullname": "Bếp Trưởng Wong",
+      "phone": "0987654321",
+      "email": "wong@foodhub.com",
+      "role": "Chef",
+      "endingCash": 0,
+      "status": "Active",
+      "lock_reason": ""
+    },
+    {
+      "id": "U004",
+      "branch_id": "BR001",
+      "username": "waiter_nhat",
+      "password": "hashed_password_123",
+      "fullname": "Phan Đăng Nhật",
+      "phone": "0934567890",
+      "email": "nhat.phan@foodhub.com",
+      "role": "Waiter",
+      "endingCash": 0,
+      "status": "Active",
+      "lock_reason": ""
+    }
+  ],
+  "Tables": [
+    {
+      "id": "T001",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 1",
+      "max_capacity": 4,
+      "current_pax": 2,
+      "status": "Occupied",
+      "qr_code": "QR_T001_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T002",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 2",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Locked",
+      "qr_code": "QR_T002_BR001",
+      "merged_with": "T001"
+    },
+    {
+      "id": "T003",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 3",
+      "max_capacity": 4,
+      "current_pax": 2,
+      "status": "Occupied",
+      "qr_code": "QR_T003_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T004",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 4",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T004_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T005",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 5",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T005_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T006",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 6",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T006_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T007",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 7",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T007_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T008",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 8",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T008_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T009",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 9",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T009_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T010",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 10",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T010_BR001",
+      "merged_with": null
+    },
+    {
+      "id": "T011",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 11",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T011_BR002",
+      "merged_with": null
+    },
+    {
+      "id": "T012",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 12",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T012_BR002",
+      "merged_with": null
+    },
+    {
+      "id": "T013",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 13",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T013_BR002",
+      "merged_with": null
+    },
+    {
+      "id": "T014",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 14",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T014_BR002",
+      "merged_with": null
+    },
+    {
+      "id": "T015",
+      "branch_id": "BR001",
+      "tableNumber": "Bàn 15",
+      "max_capacity": 4,
+      "current_pax": 0,
+      "status": "Available",
+      "qr_code": "QR_T015_BR002",
+      "merged_with": null
+    }
+  ],
+  "Categories": [
+    {
+      "id": "C001",
+      "name": "Món Âu",
+      "description": "Các món ăn phong cách Châu Âu"
+    },
+    {
+      "id": "C002",
+      "name": "Món Á",
+      "description": "Các món ăn phong cách Châu Á"
+    },
+    {
+      "id": "C003",
+      "name": "Tráng miệng",
+      "description": "Bánh ngọt và tráng miệng"
+    },
+    {
+      "id": "C004",
+      "name": "Đồ uống",
+      "description": "Trà, cà phê, nước trái cây"
+    }
+  ],
+  "MenuItems": [
+    {
+      "id": "M001",
+      "category_id": "C001",
+      "name": "Beefsteak Kobe",
+      "base_price": 1500000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "description": "Thịt bò Kobe nướng than hoa mềm tan trong miệng, ăn kèm sốt tiêu đen bí truyền.",
+      "tags": [
+        "Bestseller",
+        "Must Try"
+      ],
+      "stock_quantity": 15
+    },
+    {
+      "id": "M002",
+      "category_id": "C001",
+      "name": "Beefsteak Sốt Tiêu",
+      "base_price": 250000,
+      "status": "Active",
+      "image": "https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "description": "Beefsteak sốt tiêu chuẩn vị Âu, thơm lừng.",
+      "tags": [
+        "Cay"
+      ],
+      "stock_quantity": 13
+    },
+    {
+      "id": "M003",
+      "category_id": "C001",
+      "name": "Cá Hồi Áp Chảo",
+      "base_price": 320000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1485921325833-c519f76c4927?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 39
+    },
+    {
+      "id": "M004",
+      "category_id": "C001",
+      "name": "Spaghetti Carbonara",
+      "base_price": 180000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 47
+    },
+    {
+      "id": "M005",
+      "category_id": "C001",
+      "name": "Gà Nướng Mật Ong",
+      "base_price": 190000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 43
+    },
+    {
+      "id": "M006",
+      "category_id": "C001",
+      "name": "Súp Bí Đỏ",
+      "base_price": 80000,
+      "status": "Out_of_stock",
+      "image": "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 35
+    },
+    {
+      "id": "M007",
+      "category_id": "C001",
+      "name": "Salad Cá Hồi",
+      "base_price": 150000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1485921325833-c519f76c4927?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 25
+    },
+    {
+      "id": "M008",
+      "category_id": "C002",
+      "name": "Phở Bò Kobe",
+      "base_price": 120000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1582878826629-29b7ad1cb438?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 45
+    },
+    {
+      "id": "M009",
+      "category_id": "C002",
+      "name": "Cơm Gà Hải Nam",
+      "base_price": 85000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 26
+    },
+    {
+      "id": "M010",
+      "category_id": "C002",
+      "name": "Cơm Tấm Sườn",
+      "base_price": 75000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 25
+    },
+    {
+      "id": "M011",
+      "category_id": "C002",
+      "name": "Tôm Hấp Nước Dừa",
+      "base_price": 180000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 33
+    },
+    {
+      "id": "M012",
+      "category_id": "C002",
+      "name": "Bún Bò Huế",
+      "base_price": 65000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1582878826629-29b7ad1cb438?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 38
+    },
+    {
+      "id": "M013",
+      "category_id": "C002",
+      "name": "Cơm Chiên Hải Sản",
+      "base_price": 95000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 37
+    },
+    {
+      "id": "M014",
+      "category_id": "C002",
+      "name": "Há Cảo Tôm",
+      "base_price": 55000,
+      "status": "Out_of_stock",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 38
+    },
+    {
+      "id": "M015",
+      "category_id": "C003",
+      "name": "Bánh Tiramisu",
+      "base_price": 65000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 28
+    },
+    {
+      "id": "M016",
+      "category_id": "C003",
+      "name": "Panna Cotta",
+      "base_price": 45000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 22
+    },
+    {
+      "id": "M017",
+      "category_id": "C003",
+      "name": "Bánh Mì Bơ Tỏi",
+      "base_price": 35000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 32
+    },
+    {
+      "id": "M018",
+      "category_id": "C004",
+      "name": "Trà Sữa Trân Châu",
+      "base_price": 45000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 17
+    },
+    {
+      "id": "M019",
+      "category_id": "C004",
+      "name": "Cà Phê Đen Đá",
+      "base_price": 29000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 24
+    },
+    {
+      "id": "M020",
+      "category_id": "C004",
+      "name": "Bạc Xỉu",
+      "base_price": 35000,
+      "status": "Available",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+      "stock_quantity": 42
+    }
+  ],
+  "Variants": [
+    {
+      "id": "V1790712120163_0",
+      "menuItem_id": "M001",
+      "group_name": "size",
+      "name": "S",
+      "extra_price": 0,
+      "status": "Available",
+      "allowMultiple": false
+    },
+    {
+      "id": "V1790712120209_1",
+      "menuItem_id": "M001",
+      "group_name": "size",
+      "name": "M",
+      "extra_price": 50000,
+      "status": "Available",
+      "allowMultiple": false
+    },
+    {
+      "id": "V1790712120240_2",
+      "menuItem_id": "M001",
+      "group_name": "size",
+      "name": "L",
+      "extra_price": 100000,
+      "status": "Available",
+      "allowMultiple": false
+    },
+    {
+      "id": "V1790712327802_0",
+      "menuItem_id": "M001",
+      "group_name": "style",
+      "name": "Rare",
+      "extra_price": 0,
+      "status": "Available",
+      "allowMultiple": false
+    },
+    {
+      "id": "V1790712327842_1",
+      "menuItem_id": "M001",
+      "group_name": "style",
+      "name": "Medium",
+      "extra_price": 0,
+      "status": "Available",
+      "allowMultiple": false
+    },
+    {
+      "id": "V1790712327888_2",
+      "menuItem_id": "M001",
+      "group_name": "ĐỘ CHÍN",
+      "name": "Chín Kỹ (Well-done)",
+      "extra_price": 0,
+      "status": "Archived",
+      "allowMultiple": false
+    },
+    {
+      "id": "V_TS_SIZE_M",
+      "menuItem_id": "M018",
+      "group_name": "KÍCH CỠ",
+      "name": "Size M",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_SIZE_L",
+      "menuItem_id": "M018",
+      "group_name": "KÍCH CỠ",
+      "name": "Size L",
+      "extra_price": 10000,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_DUONG_30",
+      "menuItem_id": "M018",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "30% Đường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_DUONG_50",
+      "menuItem_id": "M018",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "50% Đường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_DUONG_100",
+      "menuItem_id": "M018",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "100% Đường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_TOPPING_1",
+      "menuItem_id": "M018",
+      "group_name": "TOPPING THÊM",
+      "name": "Trân Châu Trắng",
+      "extra_price": 8000,
+      "status": "Available"
+    },
+    {
+      "id": "V_TS_TOPPING_2",
+      "menuItem_id": "M018",
+      "group_name": "TOPPING THÊM",
+      "name": "Pudding Trứng",
+      "extra_price": 10000,
+      "status": "Available"
+    },
+    {
+      "id": "V_PHO_SIZE_N",
+      "menuItem_id": "M008",
+      "group_name": "KÍCH CỠ",
+      "name": "Bát Thường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_PHO_SIZE_L",
+      "menuItem_id": "M008",
+      "group_name": "KÍCH CỠ",
+      "name": "Bát Lớn",
+      "extra_price": 30000,
+      "status": "Available"
+    },
+    {
+      "id": "V_PHO_HANH_1",
+      "menuItem_id": "M008",
+      "group_name": "TÙY CHỌN",
+      "name": "Thêm Hành",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_PHO_HANH_2",
+      "menuItem_id": "M008",
+      "group_name": "TÙY CHỌN",
+      "name": "Không Hành",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_PHO_BEO",
+      "menuItem_id": "M008",
+      "group_name": "TÙY CHỌN",
+      "name": "Nước Béo",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_ADD_1",
+      "menuItem_id": "M010",
+      "group_name": "MÓN GỌI THÊM",
+      "name": "Trứng Ốp La",
+      "extra_price": 10000,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_ADD_2",
+      "menuItem_id": "M010",
+      "group_name": "MÓN GỌI THÊM",
+      "name": "Chả Cua",
+      "extra_price": 15000,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_ADD_3",
+      "menuItem_id": "M010",
+      "group_name": "MÓN GỌI THÊM",
+      "name": "Bì",
+      "extra_price": 10000,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_ADD_4",
+      "menuItem_id": "M010",
+      "group_name": "MÓN GỌI THÊM",
+      "name": "Thêm Cơm",
+      "extra_price": 5000,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_STYLE_1",
+      "menuItem_id": "M010",
+      "group_name": "ĐỘ CHÍN CỦA CƠM",
+      "name": "Chín Mềm",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_COM_STYLE_2",
+      "menuItem_id": "M010",
+      "group_name": "ĐỘ CHÍN CỦA CƠM",
+      "name": "Khô",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_CAFE_SUGAR_1",
+      "menuItem_id": "M019",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "Không Đường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_CAFE_SUGAR_2",
+      "menuItem_id": "M019",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "Ít Đường",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_CAFE_SUGAR_3",
+      "menuItem_id": "M019",
+      "group_name": "LƯỢNG ĐƯỜNG",
+      "name": "Ngọt Vừa",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_CAFE_BEAN_1",
+      "menuItem_id": "M019",
+      "group_name": "LOẠI HẠT",
+      "name": "Robusta Đậm Vị",
+      "extra_price": 0,
+      "status": "Available"
+    },
+    {
+      "id": "V_CAFE_BEAN_2",
+      "menuItem_id": "M019",
+      "group_name": "LOẠI HẠT",
+      "name": "Arabica Chua Thanh",
+      "extra_price": 10000,
+      "status": "Available"
+    },
+    {
+      "id": "tEBT_QD34nE",
+      "menuItem_id": "M001",
+      "group_name": "style",
+      "name": "Well-done",
+      "extra_price": 0,
+      "status": "Available",
+      "allowMultiple": false
+    }
+  ],
+  "Ingredients": [
+    {
+      "id": "ING01",
+      "name": "Thịt Bò Kobe",
+      "stock_quantity": 2,
+      "unit": "kg",
+      "cost_per_unit": 50000
+    },
+    {
+      "id": "ING02",
+      "name": "Thịt thăn bò",
+      "stock_quantity": 200,
+      "unit": "kg",
+      "cost_per_unit": 57000
+    },
+    {
+      "id": "ING03",
+      "name": "Cá hồi Na Uy",
+      "stock_quantity": 50,
+      "unit": "kg",
+      "cost_per_unit": 49000
+    },
+    {
+      "id": "ING04",
+      "name": "Gạo ST25",
+      "stock_quantity": 100,
+      "unit": "kg",
+      "cost_per_unit": 18000
+    },
+    {
+      "id": "ING05",
+      "name": "Ức gà",
+      "stock_quantity": 100,
+      "unit": "kg",
+      "cost_per_unit": 16000
+    },
+    {
+      "id": "ING06",
+      "name": "Sữa tươi",
+      "stock_quantity": 50,
+      "unit": "lít",
+      "cost_per_unit": 53000
+    },
+    {
+      "id": "ING07",
+      "name": "Cà phê hạt",
+      "stock_quantity": 20,
+      "unit": "kg",
+      "cost_per_unit": 52000
+    },
+    {
+      "id": "ING08",
+      "name": "Khoai tây",
+      "stock_quantity": 150,
+      "unit": "kg",
+      "cost_per_unit": 27000
+    },
+    {
+      "id": "ING09",
+      "name": "Tôm sú",
+      "stock_quantity": 60,
+      "unit": "kg",
+      "cost_per_unit": 34000
+    },
+    {
+      "id": "ING10",
+      "name": "Thịt heo",
+      "stock_quantity": 120,
+      "unit": "kg",
+      "cost_per_unit": 53000
+    },
+    {
+      "id": "ING11",
+      "name": "Xương bò",
+      "stock_quantity": 100,
+      "unit": "kg",
+      "cost_per_unit": 23000
+    },
+    {
+      "id": "ING12",
+      "name": "Bánh phở",
+      "stock_quantity": 80,
+      "unit": "kg",
+      "cost_per_unit": 43000
+    },
+    {
+      "id": "ING13",
+      "name": "Đường cát",
+      "stock_quantity": 50,
+      "unit": "kg",
+      "cost_per_unit": 23000
+    },
+    {
+      "id": "ING14",
+      "name": "Trà đen",
+      "stock_quantity": 30,
+      "unit": "kg",
+      "cost_per_unit": 36000
+    },
+    {
+      "id": "ING15",
+      "name": "Bột mì",
+      "stock_quantity": 100,
+      "unit": "kg",
+      "cost_per_unit": 31000
+    },
+    {
+      "name": "cá",
+      "stock_quantity": 50,
+      "unit": "pcs",
+      "id": "5wGCgLJwXNY",
+      "cost_per_unit": 29000
+    },
+    {
+      "name": "Thịt Bò Kobe",
+      "stock_quantity": 5000,
+      "unit": "g",
+      "status": "Active",
+      "id": "NZlzLmLHOJo",
+      "cost_per_unit": 33000
+    },
+    {
+      "name": "Cá Hồi Na Uy",
+      "stock_quantity": 10,
+      "unit": "con",
+      "status": "Active",
+      "id": "fxGaT9ugxa4",
+      "cost_per_unit": 25000
+    },
+    {
+      "name": "Sữa tươi TH True Milk",
+      "stock_quantity": 20000,
+      "unit": "ml",
+      "status": "Active",
+      "id": "x3DMp0Ze4Uc",
+      "cost_per_unit": 24000
+    },
+    {
+      "name": "Nước cốt dừa",
+      "stock_quantity": 500,
+      "unit": "ml",
+      "status": "Active",
+      "id": "TUtEQpDvPis",
+      "cost_per_unit": 58000
+    },
+    {
+      "name": "Đường cát trắng",
+      "stock_quantity": 2000,
+      "unit": "g",
+      "status": "Active",
+      "id": "hgo2GuQ7tlA",
+      "cost_per_unit": 15000
+    },
+    {
+      "name": "Bia Heineken",
+      "stock_quantity": 48,
+      "unit": "lon",
+      "status": "Active",
+      "id": "g0lI50XY-Gk",
+      "cost_per_unit": 12000
+    },
+    {
+      "name": "Thịt Bò Kobe",
+      "stock_quantity": 5000,
+      "unit": "g",
+      "status": "Active",
+      "id": "WVLQWEYEXkU",
+      "cost_per_unit": 17000
+    },
+    {
+      "name": "Cá Hồi Na Uy",
+      "stock_quantity": 10,
+      "unit": "con",
+      "status": "Active",
+      "id": "RfrwCaOAcTE",
+      "cost_per_unit": 41000
+    },
+    {
+      "name": "Sữa tươi TH True Milk",
+      "stock_quantity": 20000,
+      "unit": "ml",
+      "status": "Active",
+      "id": "MEYEgPa3Rxs",
+      "cost_per_unit": 12000
+    },
+    {
+      "name": "Nước cốt dừa",
+      "stock_quantity": 500,
+      "unit": "ml",
+      "status": "Active",
+      "id": "Yph75qkBFbA",
+      "cost_per_unit": 47000
+    },
+    {
+      "name": "Đường cát trắng",
+      "stock_quantity": 2000,
+      "unit": "g",
+      "status": "Active",
+      "id": "nX0DAHQb0jo",
+      "cost_per_unit": 22000
+    },
+    {
+      "name": "Bia Heineken",
+      "stock_quantity": 48,
+      "unit": "lon",
+      "status": "Active",
+      "id": "5R4KBEbRCpg",
+      "cost_per_unit": 20000
+    },
+    {
+      "name": "Thịt Bò Kobe",
+      "stock_quantity": 5000,
+      "unit": "g",
+      "status": "Active",
+      "id": "kdqXlKjuEps",
+      "cost_per_unit": 32000
+    },
+    {
+      "name": "Cá Hồi Na Uy",
+      "stock_quantity": 10,
+      "unit": "con",
+      "status": "Active",
+      "id": "hzrLX_2Puns",
+      "cost_per_unit": 38000
+    },
+    {
+      "name": "Sữa tươi TH True Milk",
+      "stock_quantity": 20000,
+      "unit": "ml",
+      "status": "Active",
+      "id": "0TISq-qjDcM",
+      "cost_per_unit": 55000
+    },
+    {
+      "name": "Nước cốt dừa",
+      "stock_quantity": 500,
+      "unit": "ml",
+      "status": "Active",
+      "id": "ScULxHonwbE",
+      "cost_per_unit": 10000
+    },
+    {
+      "name": "Đường cát trắng",
+      "stock_quantity": 2000,
+      "unit": "g",
+      "status": "Active",
+      "id": "JkF7UtMuY5A",
+      "cost_per_unit": 44000
+    },
+    {
+      "name": "Bia Heineken",
+      "stock_quantity": 48,
+      "unit": "lon",
+      "status": "Active",
+      "id": "Er5iED2F2TA",
+      "cost_per_unit": 43000
+    }
+  ],
+  "Recipes": [
+    {
+      "id": "R001",
+      "menuItem_id": "M001",
+      "ingredient_id": "ING01",
+      "quantity_required": 0.25,
+      "custom_qty": 250,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R002",
+      "menuItem_id": "M001",
+      "ingredient_id": "ING08",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R003",
+      "menuItem_id": "M002",
+      "ingredient_id": "ING02",
+      "quantity_required": 0.25,
+      "custom_qty": 250,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R004",
+      "menuItem_id": "M002",
+      "ingredient_id": "ING08",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R005",
+      "menuItem_id": "M003",
+      "ingredient_id": "ING03",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R006",
+      "menuItem_id": "M003",
+      "ingredient_id": "ING08",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R007",
+      "menuItem_id": "M004",
+      "ingredient_id": "ING10",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R008",
+      "menuItem_id": "M004",
+      "ingredient_id": "ING15",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R009",
+      "menuItem_id": "M005",
+      "ingredient_id": "ING05",
+      "quantity_required": 0.3,
+      "custom_qty": 300,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R010",
+      "menuItem_id": "M006",
+      "ingredient_id": "ING08",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R011",
+      "menuItem_id": "M007",
+      "ingredient_id": "ING03",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R012",
+      "menuItem_id": "M008",
+      "ingredient_id": "ING01",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R013",
+      "menuItem_id": "M008",
+      "ingredient_id": "ING11",
+      "quantity_required": 0.3,
+      "custom_qty": 300,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R014",
+      "menuItem_id": "M008",
+      "ingredient_id": "ING12",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R015",
+      "menuItem_id": "M009",
+      "ingredient_id": "ING05",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R016",
+      "menuItem_id": "M009",
+      "ingredient_id": "ING04",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R017",
+      "menuItem_id": "M010",
+      "ingredient_id": "ING10",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R018",
+      "menuItem_id": "M010",
+      "ingredient_id": "ING04",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R019",
+      "menuItem_id": "M011",
+      "ingredient_id": "ING09",
+      "quantity_required": 0.25,
+      "custom_qty": 250,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R020",
+      "menuItem_id": "M012",
+      "ingredient_id": "ING02",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R021",
+      "menuItem_id": "M012",
+      "ingredient_id": "ING11",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R022",
+      "menuItem_id": "M013",
+      "ingredient_id": "ING04",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R023",
+      "menuItem_id": "M013",
+      "ingredient_id": "ING09",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R024",
+      "menuItem_id": "M014",
+      "ingredient_id": "ING09",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R025",
+      "menuItem_id": "M014",
+      "ingredient_id": "ING15",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R026",
+      "menuItem_id": "M015",
+      "ingredient_id": "ING07",
+      "quantity_required": 0.05,
+      "custom_qty": 50,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R027",
+      "menuItem_id": "M015",
+      "ingredient_id": "ING15",
+      "quantity_required": 0.1,
+      "custom_qty": 100,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R028",
+      "menuItem_id": "M015",
+      "ingredient_id": "ING13",
+      "quantity_required": 0.05,
+      "custom_qty": 50,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R029",
+      "menuItem_id": "M016",
+      "ingredient_id": "ING06",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R030",
+      "menuItem_id": "M016",
+      "ingredient_id": "ING13",
+      "quantity_required": 0.05,
+      "custom_qty": 50,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R031",
+      "menuItem_id": "M017",
+      "ingredient_id": "ING15",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R032",
+      "menuItem_id": "M018",
+      "ingredient_id": "ING06",
+      "quantity_required": 0.15,
+      "custom_qty": 150,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R033",
+      "menuItem_id": "M018",
+      "ingredient_id": "ING14",
+      "quantity_required": 0.02,
+      "custom_qty": 20,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R034",
+      "menuItem_id": "M018",
+      "ingredient_id": "ING13",
+      "quantity_required": 0.03,
+      "custom_qty": 30,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R035",
+      "menuItem_id": "M019",
+      "ingredient_id": "ING07",
+      "quantity_required": 0.03,
+      "custom_qty": 30,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R036",
+      "menuItem_id": "M019",
+      "ingredient_id": "ING13",
+      "quantity_required": 0.02,
+      "custom_qty": 20,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R037",
+      "menuItem_id": "M020",
+      "ingredient_id": "ING07",
+      "quantity_required": 0.02,
+      "custom_qty": 20,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R038",
+      "menuItem_id": "M020",
+      "ingredient_id": "ING06",
+      "quantity_required": 0.05,
+      "custom_qty": 50,
+      "custom_unit": "g"
+    },
+    {
+      "id": "R039",
+      "menuItem_id": "M020",
+      "ingredient_id": "ING13",
+      "quantity_required": 0.02,
+      "custom_qty": 20,
+      "custom_unit": "g"
+    },
+    {
+      "menuItem_id": "M001",
+      "ingredient_id": "ING14",
+      "quantity_required": 0.2,
+      "custom_qty": 200,
+      "custom_unit": "g",
+      "id": "7rRIV0n43_U"
+    }
+  ],
+  "Orders": [
+    {
+      "table_id": "T001",
+      "customerInfo": "Khách vãng lai",
+      "totalAmount": 0,
+      "status": "In_Progress",
+      "paymentStatus": "Unpaid",
+      "createdAt": "2026-10-07T16:02:12.019Z",
+      "id": "ht2j1Nj8BTo"
+    },
+    {
+      "table_id": "T003",
+      "customerInfo": "Khách vãng lai",
+      "totalAmount": 0,
+      "status": "In_Progress",
+      "paymentStatus": "Unpaid",
+      "createdAt": "2026-10-07T17:31:46.722Z",
+      "id": "YYLiUqoTedM"
+    }
+  ],
+  "OrderDetails": [
+    {
+      "order_id": "ht2j1Nj8BTo",
+      "menuItem_id": "M002",
+      "quantity": 1,
+      "priceAtOrder": 250000,
+      "notes": "",
+      "status": "Ready",
+      "incidentNote": "",
+      "createdAt": "2026-10-07T16:02:25.036Z",
+      "id": "K57Z0EP9DWE"
+    },
+    {
+      "order_id": "YYLiUqoTedM",
+      "menuItem_id": "M009",
+      "quantity": 1,
+      "priceAtOrder": 85000,
+      "notes": "",
+      "status": "Pending",
+      "incidentNote": "",
+      "createdAt": "2026-10-07T17:32:06.745Z",
+      "id": "FoJVyqrKNCc"
+    }
+  ],
+  "Payments": [],
+  "Shifts": [
+    {
+      "cashier_id": "u1",
+      "startTime": "2026-10-06T19:50:55.146Z",
+      "endTime": "",
+      "startingCash": 20000000,
+      "endingCash": 0,
+      "status": "Open",
+      "id": "1"
+    }
+  ],
+  "VariantRecipes": [
+    {
+      "id": "VR01",
+      "variantId": "V1790712120209_1",
+      "ingredientId": "ING01",
+      "ingredientName": "Thịt Bò Kobe",
+      "quantity": 150,
+      "unit": "g"
+    },
+    {
+      "id": "VR02",
+      "variantId": "V1790712120163_0",
+      "ingredientId": "ING01",
+      "ingredientName": "Thịt Bò Kobe",
+      "quantity": 50,
+      "unit": "g"
+    }
+  ],
+  "LossReports": [
+    {
+      "ingredientId": "ING01",
+      "ingredientName": "Thịt Bò Kobe",
+      "systemStock": 20,
+      "actualStock": 1,
+      "lossAmount": 19,
+      "lossCost": 950000,
+      "unit": "kg",
+      "reason": "thịt bị hỏng",
+      "isAbnormal": true,
+      "createdAt": "2026-10-03T17:13:26.904Z",
+      "id": "xjYM-XrHkJ0"
+    },
+    {
+      "ingredientId": "ING01",
+      "ingredientName": "Thịt Bò Kobe",
+      "systemStock": 41,
+      "actualStock": 2,
+      "lossAmount": 39,
+      "lossCost": 1950000,
+      "unit": "kg",
+      "reason": "hư hỏng",
+      "isAbnormal": true,
+      "createdAt": "2026-10-03T17:48:03.553Z",
+      "id": "xzyT1Vn6Jtw"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
