@@ -940,7 +940,7 @@
       "tableNumber": "01",
       "max_capacity": 4,
       "zone": "Khu Trong Nhà (Tầng 1)",
-      "status": "occupied",
+      "status": "Waiting_Payment",
       "currentOrderId": "6ad6828f44ce483ecadd7815",
       "createdAt": "2026-10-18T18:29:58.817Z",
       "updatedAt": "2026-10-19T20:50:23.405Z",

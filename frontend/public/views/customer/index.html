@@ -202,6 +202,13 @@
                         <span>Đã order</span>
                     </button>
 
+                    <!-- Nút Thanh Toán VietQR Tức Thì -->
+                    <button onclick="openQRPaymentModal()" 
+                            class="px-4 py-2 rounded-full font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white flex items-center gap-2 transition-all shadow-sm shadow-emerald-600/25 active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-qrcode text-xs"></i>
+                        <span>Thanh toán QR</span>
+                    </button>
+
                     <!-- Nút Giỏ hàng -->
                     <button onclick="openCartDrawer()" 
                             class="px-4 py-2 rounded-full font-bold text-sm text-slate-800 bg-warm-100 hover:bg-warm-200 flex items-center gap-2 transition-all cursor-pointer">
@@ -225,6 +232,13 @@
                         <span id="mobile-lbl-table">Bàn 01</span>
                         <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
                     </button>
+
+                    <!-- QR Pay Pill Mobile -->
+                    <button onclick="openQRPaymentModal()" class="px-2.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center gap-1.5 text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer" title="Thanh toán VietQR">
+                        <i class="fa-solid fa-qrcode text-[11px]"></i>
+                        <span>Trả QR</span>
+                    </button>
+
                     <!-- Cart Quick Access -->
                     <button onclick="openCartDrawer()" class="relative w-8 h-8 rounded-full bg-warm-100 text-slate-700 flex items-center justify-center text-xs active:scale-95 transition-transform cursor-pointer">
                         <i class="fa-solid fa-cart-shopping text-brand-red"></i>
@@ -1068,6 +1082,116 @@
     </div>
 
     <!-- ========================================================================= -->
+    <!-- MODAL THANH TOÁN QR (VIETQR CHUYỂN KHOẢN TẠI BÀN) -->
+    <!-- ========================================================================= -->
+    <div id="modal-qr-payment" onclick="if(event.target === this) closeQRPaymentModal()" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[130] hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl flex flex-col my-auto border border-warm-200 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 sm:p-5 border-b border-warm-200 bg-gradient-to-r from-emerald-50 via-teal-50 to-warm-50 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-lg shadow-md shadow-emerald-600/30">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                            <span>Thanh Toán VietQR</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">Tức Thì</span>
+                        </h3>
+                        <p id="qr-modal-table-subtitle" class="text-xs text-slate-500 font-medium">Bàn 01 • Đơn hàng #...</p>
+                    </div>
+                </div>
+                <button onclick="closeQRPaymentModal()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm cursor-pointer transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[75vh]">
+                <!-- Bill Amount Highlight Card -->
+                <div class="bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 rounded-2xl p-4 sm:p-5 text-white shadow-lg shadow-emerald-900/20 relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-1 text-xs text-emerald-200 font-medium">
+                        <span>Số tiền cần chuyển khoản:</span>
+                        <span id="qr-modal-discount-tag" class="hidden text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full text-emerald-100">Đã áp dụng giảm giá</span>
+                    </div>
+                    <div class="flex items-baseline justify-between gap-2">
+                        <div id="qr-modal-amount" class="text-2xl sm:text-3xl font-black text-amber-300 tracking-tight">0 đ</div>
+                        <button onclick="copyBillAmount()" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer">
+                            <i class="fa-regular fa-copy text-[10px]"></i>
+                            <span>Sao chép</span>
+                        </button>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-white/15 text-[11px] text-white/80 flex items-center justify-between">
+                        <span id="qr-modal-items-summary">Thanh toán hóa đơn món ăn</span>
+                        <span class="text-emerald-300 font-bold"><i class="fa-solid fa-shield-halved mr-1"></i>Chuyển 24/7 Miễn Phí</span>
+                    </div>
+                </div>
+
+                <!-- QR Code Box -->
+                <div class="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 text-center flex flex-col items-center">
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 inline-block mb-3">
+                        <img id="qr-modal-img" src="" alt="Mã QR Chuyển Khoản" class="w-52 h-52 sm:w-56 sm:h-56 object-contain rounded-xl">
+                    </div>
+                    <div class="text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-camera text-emerald-600"></i>
+                        <span>Mở app ngân hàng bất kỳ để quét mã QR</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Vietcombank, MB, Techcombank, BIDV, Agribank, Momo...</p>
+                </div>
+
+                <!-- Bank Account Details (Copyable) -->
+                <div class="space-y-2 bg-warm-50/70 p-3.5 rounded-2xl border border-warm-200/80 text-xs">
+                    <div class="flex items-center justify-between py-1 border-b border-warm-200/60">
+                        <span class="text-slate-500 font-medium">Ngân hàng:</span>
+                        <span class="font-bold text-slate-800">MB Bank (Quân Đội)</span>
+                    </div>
+                    <div class="flex items-center justify-between py-1 border-b border-warm-200/60">
+                        <span class="text-slate-500 font-medium">Chủ tài khoản:</span>
+                        <span class="font-bold text-slate-800 uppercase tracking-wide">FOODHUB RESTAURANT</span>
+                    </div>
+                    <div class="flex items-center justify-between py-1 border-b border-warm-200/60">
+                        <span class="text-slate-500 font-medium">Số tài khoản:</span>
+                        <div class="flex items-center gap-2">
+                            <span class="font-black text-slate-900 font-mono text-sm">0901234567</span>
+                            <button onclick="copyToClipboard('0901234567', 'Đã sao chép số tài khoản!')" class="p-1 px-2 rounded-md bg-white border border-slate-200 text-slate-600 hover:text-emerald-700 hover:border-emerald-300 text-[10px] font-bold cursor-pointer transition-colors">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between py-1">
+                        <span class="text-slate-500 font-medium">Nội dung CK:</span>
+                        <div class="flex items-center gap-2">
+                            <span id="qr-modal-memo" class="font-black text-brand-red font-mono text-xs">TT BAN 01</span>
+                            <button onclick="copyBillMemo()" class="p-1 px-2 rounded-md bg-white border border-slate-200 text-slate-600 hover:text-emerald-700 hover:border-emerald-300 text-[10px] font-bold cursor-pointer transition-colors">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status alert container (changes upon confirmation) -->
+                <div id="qr-modal-waiting-box" class="hidden p-3 rounded-2xl bg-amber-50 border border-amber-200 text-center animate-pulse">
+                    <div class="flex items-center justify-center gap-2 text-amber-800 font-bold text-xs">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                        <span>Đã gửi thông báo thanh toán tới Thu ngân. Đang chờ xác nhận...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 sm:p-5 bg-warm-50 border-t border-warm-200 flex flex-col sm:flex-row items-center gap-2.5 shrink-0">
+                <button onclick="confirmCustomerPaid()" id="btn-customer-confirm-paid" class="w-full sm:flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-600/25 transition-all cursor-pointer">
+                    <i class="fa-solid fa-circle-check text-sm"></i>
+                    <span>Tôi đã chuyển khoản thành công</span>
+                </button>
+                <button onclick="closeQRPaymentModal()" class="w-full sm:w-auto py-3 px-5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 active:scale-95 text-slate-600 font-bold text-xs transition-colors cursor-pointer">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
     <!-- 10. MODAL CHI TIẾT COMBO (POPUP XEM TRỌN BỘ MÓN ĂN & GIÁ GỐC TIẾT KIỆM) -->
     <!-- ========================================================================= -->
     <div id="modal-combo-detail" onclick="if(event.target === this) closeComboDetailModal()" class="fixed inset-0 bg-slate-900/75 backdrop-blur-sm z-[125] hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -1279,6 +1403,34 @@
         let menuSearchTerm = "";
         let cart = []; // [ { dish, quantity, unitPrice, isCombo, selectedVariants, variantLabel, note } ]
         let currentMember = null; // { _id, name, phone, tier, points, totalSpent }
+
+        // Kênh BroadcastChannel thời gian thực đồng bộ Bếp - Phục vụ - Thu ngân
+        const kdsChannel = new BroadcastChannel('foodhub_kds');
+        window.kdsChannel = kdsChannel;
+
+        kdsChannel.onmessage = (event) => {
+            if (!event.data) return;
+            const curTableId = currentTable ? (currentTable._id || currentTable.id) : '';
+            const curTableNum = currentTable ? (currentTable.tableNumber || currentTable.name || '01') : '01';
+
+            if (event.data.type === 'ORDER_PAID') {
+                const targetTbl = String(event.data.tableId || '');
+                if (targetTbl === String(curTableId) || targetTbl === String(curTableNum)) {
+                    if (window.closeQRPaymentModal) window.closeQRPaymentModal();
+                    if (window.closeOrderHistoryModal) window.closeOrderHistoryModal();
+                    showToast('🎉 Hóa đơn Bàn ' + curTableNum + ' đã được thanh toán hoàn tất! Cảm ơn quý khách.', 'success');
+                }
+            } else if (event.data.type === 'WAITER_ACKNOWLEDGED') {
+                const targetTbl = String(event.data.tableId || '');
+                if (targetTbl === String(curTableId) || targetTbl === String(curTableNum)) {
+                    showToast('🔔 Phục vụ đã tiếp nhận yêu cầu và đang đến Bàn ' + curTableNum, 'success');
+                }
+            } else if (event.data.type === 'TABLE_MOVED') {
+                if (String(event.data.from) === String(curTableId) || String(event.data.from) === String(curTableNum)) {
+                    showToast(`Bàn của bạn đã được chuyển sang Bàn ${event.data.to}!`, 'success');
+                }
+            }
+        };
 
         document.addEventListener("DOMContentLoaded", async () => {
             initTableStorage();
@@ -2717,6 +2869,15 @@
                 btn.classList.add('scale-110');
                 setTimeout(() => btn.classList.remove('scale-110'), 600);
             }
+            if (window.kdsChannel) {
+                window.kdsChannel.postMessage({
+                    type: 'CALL_WAITER',
+                    tableId: currentTable._id || currentTable.id,
+                    tableName: `Bàn ${tableNum}`,
+                    reason: 'Khách cần phục vụ tại bàn',
+                    time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                });
+            }
         };
 
         function renderCartItems() {
@@ -2955,6 +3116,17 @@
                         showToast(`Đặt món thành công! Đã giảm ${discountAmount.toLocaleString('vi-VN')}đ và tích +${gained} điểm.`, "success");
                     } else {
                         showToast("Đặt món thành công! Bếp đang chuẩn bị món cho bạn.", "success");
+                    }
+
+                    // Báo tin thời gian thực cho Bếp & Phục vụ
+                    if (window.kdsChannel) {
+                        window.kdsChannel.postMessage({
+                            type: 'CUSTOMER_ORDERED',
+                            tableId: currentTable._id || currentTable.id,
+                            tableName: `Bàn ${currentTable.tableNumber || '01'}`,
+                            itemCount: payload.items.length,
+                            message: `Bàn ${currentTable.tableNumber || '01'} vừa đặt ${payload.items.length} món qua QR!`
+                        });
                     }
                 } else {
                     showToast(data.message || "Đặt món thất bại!", "error");
@@ -3364,9 +3536,13 @@
                                 <i class="fa-solid fa-bell-concierge text-amber-500"></i>
                                 <span>Gọi phục vụ</span>
                             </button>
-                            <button onclick="closeOrderHistoryModal(); switchNavTab('menu');" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-brand-red hover:bg-red-700 active:scale-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md shadow-brand-red/25 transition-all cursor-pointer">
+                            <button onclick="closeOrderHistoryModal(); switchNavTab('menu');" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-warm-100 hover:bg-warm-200 active:scale-95 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer">
                                 <i class="fa-solid fa-plus"></i>
                                 <span>Gọi thêm món</span>
+                            </button>
+                            <button onclick="openQRPaymentModal(${totalBill}, '${active[0]._id || active[0].id}')" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-600/25 transition-all cursor-pointer">
+                                <i class="fa-solid fa-qrcode"></i>
+                                <span>Thanh toán QR</span>
                             </button>
                         </div>
                     `;
@@ -3390,6 +3566,171 @@
             const foot = document.getElementById('order-history-footer');
             if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
             if (foot) { foot.classList.add('hidden'); }
+        };
+
+        // ==========================================
+        // 10. THANH TOÁN VIETQR TỨC THÌ TẠI BÀN
+        // ==========================================
+        let currentQRPayment = {
+            orderId: '',
+            tableNum: '01',
+            tableId: '',
+            amount: 0,
+            memo: ''
+        };
+
+        window.openQRPaymentModal = async function(customAmount, customOrderId) {
+            const tableId = currentTable ? (currentTable._id || currentTable.id) : '';
+            const tableNum = currentTable ? (currentTable.tableNumber || currentTable.name || '01') : '01';
+
+            let orderId = customOrderId;
+            let totalBill = customAmount;
+
+            // Nếu không truyền từ modal lịch sử, tự động truy vấn đơn hàng đang mở của bàn
+            if (!orderId || totalBill === undefined) {
+                try {
+                    const res = await fetch(`${API_BASE}/orders?table_id=${tableId}`).then(r => r.json());
+                    const orders = Array.isArray(res) ? res : (res.data || []);
+                    const active = orders.filter(o => o.status !== 'Completed' && o.status !== 'Cancelled');
+                    if (active.length === 0) {
+                        showToast(`Bàn ${tableNum} hiện chưa có đơn hàng nào cần thanh toán!`, 'error');
+                        return;
+                    }
+                    orderId = active[0]._id || active[0].id;
+                    totalBill = active.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
+                    
+                    // Nếu totalAmount = 0, thử tính lại từ order-details
+                    if (!totalBill || totalBill === 0) {
+                        try {
+                            const dRes = await fetch(`${API_BASE}/order-details?order_id=${orderId}`).then(r => r.json());
+                            const items = Array.isArray(dRes) ? dRes : (dRes.data || []);
+                            totalBill = items.reduce((s, it) => s + ((Number(it.priceAtOrder) || 0) * (Number(it.quantity) || 1)), 0);
+                        } catch(e) {}
+                    }
+                } catch (e) {
+                    showToast('Lỗi tải dữ liệu thanh toán!', 'error');
+                    return;
+                }
+            }
+
+            if (!totalBill || totalBill <= 0) {
+                showToast(`Bàn ${tableNum} chưa có món nào cần thanh toán!`, 'error');
+                return;
+            }
+
+            const cleanTableNum = String(tableNum).replace(/[^\w\d]/g, '').toUpperCase();
+            const cleanOrderId = String(orderId).slice(-6).toUpperCase();
+            const memo = `TT BAN ${cleanTableNum} DH${cleanOrderId}`;
+
+            currentQRPayment = {
+                orderId: String(orderId),
+                tableNum: String(tableNum),
+                tableId: String(tableId),
+                amount: Number(totalBill),
+                memo: memo
+            };
+
+            // Đóng modal lịch sử nếu đang mở
+            closeOrderHistoryModal();
+
+            // Cập nhật giao diện modal QR
+            const subTitleEl = document.getElementById('qr-modal-table-subtitle');
+            if (subTitleEl) subTitleEl.innerText = `Bàn ${tableNum} • Mã đơn: #${orderId}`;
+
+            const amountEl = document.getElementById('qr-modal-amount');
+            if (amountEl) amountEl.innerText = `${Number(totalBill).toLocaleString('vi-VN')} đ`;
+
+            const memoEl = document.getElementById('qr-modal-memo');
+            if (memoEl) memoEl.innerText = memo;
+
+            const qrImg = document.getElementById('qr-modal-img');
+            if (qrImg) {
+                qrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${totalBill}&addInfo=${encodeURIComponent(memo)}&accountName=FOODHUB%20RESTAURANT`;
+            }
+
+            const waitingBox = document.getElementById('qr-modal-waiting-box');
+            if (waitingBox) waitingBox.classList.add('hidden');
+
+            const btnConfirm = document.getElementById('btn-customer-confirm-paid');
+            if (btnConfirm) {
+                btnConfirm.disabled = false;
+                btnConfirm.innerHTML = `<i class="fa-solid fa-circle-check text-sm"></i><span>Tôi đã chuyển khoản thành công</span>`;
+            }
+
+            const modal = document.getElementById('modal-qr-payment');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        window.closeQRPaymentModal = function() {
+            const modal = document.getElementById('modal-qr-payment');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.copyBillAmount = function() {
+            copyToClipboard(String(currentQRPayment.amount), `Đã sao chép số tiền: ${currentQRPayment.amount.toLocaleString('vi-VN')} đ`);
+        };
+
+        window.copyBillMemo = function() {
+            copyToClipboard(currentQRPayment.memo, `Đã sao chép nội dung: ${currentQRPayment.memo}`);
+        };
+
+        window.copyToClipboard = function(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg, 'success');
+                }).catch(() => {
+                    showToast(successMsg, 'success');
+                });
+            } else {
+                showToast(successMsg, 'success');
+            }
+        };
+
+        window.confirmCustomerPaid = async function() {
+            const btn = document.getElementById('btn-customer-confirm-paid');
+            const waitingBox = document.getElementById('qr-modal-waiting-box');
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-sm"></i><span>Đang gửi thông báo...</span>`;
+            }
+
+            // 1. Phát tín hiệu realtime tới Cashier và Waiter
+            if (window.kdsChannel) {
+                window.kdsChannel.postMessage({
+                    type: 'REQUEST_CHECKOUT',
+                    tableId: currentQRPayment.tableId,
+                    tableName: `Bàn ${currentQRPayment.tableNum}`,
+                    method: 'VietQR Chuyển khoản',
+                    orderId: currentQRPayment.orderId,
+                    amount: currentQRPayment.amount,
+                    time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                });
+            }
+
+            // 2. Cập nhật trạng thái bàn sang Waiting_Payment
+            try {
+                await fetch(`${API_BASE}/tables/${currentQRPayment.tableId}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'Waiting_Payment' })
+                });
+            } catch (e) {
+                console.warn("Lưu ý cập nhật trạng thái bàn:", e);
+            }
+
+            if (waitingBox) waitingBox.classList.remove('hidden');
+            if (btn) {
+                btn.innerHTML = `<i class="fa-solid fa-hourglass-half text-sm"></i><span>Đã báo cho Thu ngân (Đang chờ đối soát)</span>`;
+            }
+
+            showToast('Đã gửi thông báo thanh toán tới Thu ngân! Thu ngân sẽ xác nhận hoá đơn ngay.', 'success');
         };
 
 
