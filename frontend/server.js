@@ -75,7 +75,10 @@ function proxyToBackend(req, res, next) {
     });
 }
 
+const express = require('express');
+
 server.use(middlewares);
+server.use('/images', express.static(path.join(__dirname, 'public/images')));
 server.use(jsonServer.bodyParser);
 
 // Áp dụng smart proxy cho tất cả /api/* requests
