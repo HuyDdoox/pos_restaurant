@@ -178,7 +178,7 @@ POS_Restaurant/
 │   ├── bin/www                           # File khởi chạy HTTP Server
 │   ├── config/                           # Cấu hình kết nối MongoDB
 │   ├── controllers/                      # Điều hướng nghiệp vụ (Auth, Cashier, Order, Menu, Inventory...)
-│   ├── middleware/                       # Middleware authen.js (Xác thực JWT Token)
+│   ├── middlewares/                      # Middleware authen.js (Xác thực JWT Token)
 │   ├── models/                           # 20 Mongoose Schemas & Models
 │   ├── routes/                           # Khai báo các API Endpoints
 │   ├── scripts/                          # Script khởi tạo dữ liệu mẫu (seed_western_restaurant_full.js)
