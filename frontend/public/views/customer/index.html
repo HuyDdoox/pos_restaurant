@@ -1267,7 +1267,8 @@
     <!-- 11. JAVASCRIPT LOGIC CLIENT -->
     <!-- ========================================================================= -->
     <script>
-        const API_BASE = "http://localhost:4000/api";
+        const API_PORT = "3000"; // JSON-Server (Môn TSC: 3000)
+        const API_BASE = `http://localhost:${API_PORT}/api`;
         
         let allMenuItems = [];
         let allCategories = [];
@@ -1444,7 +1445,8 @@
             try {
                 const res = await fetch(`${API_BASE}/customers?q=${encodeURIComponent(phone)}`);
                 const data = await res.json();
-                const matched = (data.data || []).find(c => c.phone === phone);
+                const list = Array.isArray(data) ? data : (data.data || []);
+                const matched = list.find(c => c.phone === phone);
 
                 if (matched) {
                     currentMember = matched;
@@ -1645,22 +1647,75 @@
             }
         }
 
-        // Tải dữ liệu từ Backend
+        // Tải dữ liệu từ JSON-Server / Backend (Tối ưu hóa tức thì với Local Cache SWR)
         async function loadData() {
-            showMenuSkeletons();
+            // 1. Tải tức thì từ bộ nhớ đệm (Instant Render 0ms)
+            const cachedMenu = localStorage.getItem('foodhub_menu_cache');
+            const cachedCats = localStorage.getItem('foodhub_cats_cache');
+            const cachedVariants = localStorage.getItem('foodhub_variants_cache');
+
+            let hasCache = false;
+            if (cachedMenu && cachedCats) {
+                try {
+                    allMenuItems = JSON.parse(cachedMenu);
+                    allCategories = JSON.parse(cachedCats);
+                    if (cachedVariants) allVariants = JSON.parse(cachedVariants);
+                    if (allMenuItems.length > 0) {
+                        hasCache = true;
+                        renderComboFlashSale();
+                        renderFullMenuTabs();
+                        renderFullMenuGrid(true);
+                    }
+                } catch(e) {}
+            }
+
+            if (!hasCache) {
+                showMenuSkeletons();
+            }
+
+            // 2. Fetch đồng thời với timeout ngắn (Tốc độ cao)
             try {
-                const ts = Date.now();
+                const fetchWithTimeout = async (url, ms = 4000) => {
+                    const ctl = new AbortController();
+                    const timer = setTimeout(() => ctl.abort(), ms);
+                    try {
+                        const r = await fetch(url, { signal: ctl.signal });
+                        clearTimeout(timer);
+                        if (!r.ok) return [];
+                        return await r.json();
+                    } catch (e) {
+                        clearTimeout(timer);
+                        return [];
+                    }
+                };
+
                 const [menuRes, catRes, tableRes, variantRes] = await Promise.all([
-                    fetch(`${API_BASE}/menu?_t=${ts}`).then(r => r.json()),
-                    fetch(`${API_BASE}/categories?_t=${ts}`).then(r => r.json()),
-                    fetch(`${API_BASE}/tables?_t=${ts}`).then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch(`${API_BASE}/variants?_t=${ts}`).then(r => r.json()).catch(() => ({ data: [] }))
+                    fetchWithTimeout(`${API_BASE}/menu`),
+                    fetchWithTimeout(`${API_BASE}/categories`),
+                    fetchWithTimeout(`${API_BASE}/tables`),
+                    fetchWithTimeout(`${API_BASE}/variants`)
                 ]);
 
-                allMenuItems = menuRes.data || [];
-                allCategories = catRes.data || [];
-                allTables = tableRes.data || [];
-                allVariants = variantRes.data || [];
+                const fetchedMenu = Array.isArray(menuRes) ? menuRes : (menuRes.data || []);
+                const fetchedCats = Array.isArray(catRes) ? catRes : (catRes.data || []);
+                const fetchedTables = Array.isArray(tableRes) ? tableRes : (tableRes.data || []);
+                const fetchedVariants = Array.isArray(variantRes) ? variantRes : (variantRes.data || []);
+
+                if (fetchedMenu.length > 0) {
+                    allMenuItems = fetchedMenu;
+                    localStorage.setItem('foodhub_menu_cache', JSON.stringify(allMenuItems));
+                }
+                if (fetchedCats.length > 0) {
+                    allCategories = fetchedCats;
+                    localStorage.setItem('foodhub_cats_cache', JSON.stringify(allCategories));
+                }
+                if (fetchedTables.length > 0) {
+                    allTables = fetchedTables;
+                }
+                if (fetchedVariants.length > 0) {
+                    allVariants = fetchedVariants;
+                    localStorage.setItem('foodhub_variants_cache', JSON.stringify(allVariants));
+                }
 
                 // Tự động kết nối đúng ID Bàn ăn từ CSDL
                 if (allTables.length > 0) {
@@ -1668,10 +1723,10 @@
                     const pTable = params.get('table') || params.get('tableId');
                     let matchedTable = null;
                     if (pTable) {
-                        matchedTable = allTables.find(t => t.tableNumber === pTable || t.tableNumber === ('0' + pTable).slice(-2) || t._id === pTable);
+                        matchedTable = allTables.find(t => t.tableNumber === pTable || t.tableNumber === ('0' + pTable).slice(-2) || t._id === pTable || t.id === pTable);
                     }
                     if (!matchedTable && currentTable && currentTable._id) {
-                        matchedTable = allTables.find(t => t._id === currentTable._id);
+                        matchedTable = allTables.find(t => t._id === currentTable._id || t.id === currentTable._id);
                     }
                     if (!matchedTable) {
                         matchedTable = allTables.find(t => t.tableNumber === '01') || allTables[0];
@@ -1679,7 +1734,7 @@
 
                     if (matchedTable) {
                         currentTable = {
-                            _id: matchedTable._id,
+                            _id: matchedTable._id || matchedTable.id,
                             tableNumber: matchedTable.tableNumber || matchedTable.name || '01',
                             capacity: matchedTable.capacity || 4
                         };
@@ -3038,7 +3093,7 @@
             try {
                 const tableId = currentTable._id || currentTable.id;
                 const res = await fetch(`${API_BASE}/orders?table_id=${tableId}`).then(r => r.json());
-                const orders = res.data || [];
+                const orders = Array.isArray(res) ? res : (res.data || []);
                 const active = orders.filter(o => o.status !== 'Completed' && o.status !== 'Cancelled');
 
                 if (active.length === 0) {
@@ -3063,7 +3118,7 @@
                 const ordersWithDetails = await Promise.all(active.map(async (ord) => {
                     try {
                         const dRes = await fetch(`${API_BASE}/order-details?order_id=${ord._id || ord.id}`).then(r => r.json());
-                        return { order: ord, items: dRes.data || [] };
+                        return { order: ord, items: Array.isArray(dRes) ? dRes : (dRes.data || []) };
                     } catch (e) {
                         return { order: ord, items: [] };
                     }

@@ -1708,9 +1708,12 @@ const khoiTaoTrang = async () => {
     initOrderHistory();
     initCustomerServiceCalls();
     renderLiveCart(); 
-    mangIngredients = await layDanhSachIngredients();
-    mangRecipes = await layDanhSachRecipes();
-    mangMonAn = await layDanhSachMonAn();
+    const [monAns, danhMucs] = await Promise.all([
+        layDanhSachMonAn(),
+        layDanhSachDanhMuc()
+    ]);
+    mangMonAn = monAns;
+    mangDanhMuc = danhMucs;
     await hienThiDanhMuc();
     renderDanhSachMonAn('all');
 };
