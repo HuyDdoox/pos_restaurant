@@ -6,35 +6,39 @@
 [![Webpack](https://img.shields.io/badge/Webpack-5.x-dodgerblue.svg)](https://webpack.js.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-brightgreen.svg)](https://www.mongodb.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.x-38B2AC.svg)](https://tailwindcss.com/)
-[![JWT Auth](https://img.shields.io/badge/Auth-JWT%20RBAC-orange.svg)](https://jwt.io/)
+[![VietQR](https://img.shields.io/badge/Payment-VietQR%20Dynamic-blue.svg)](https://vietqr.io/)
+[![Architecture](https://img.shields.io/badge/Backend-Dual%20Mode%20(Node.js%20%2B%20JSON--Server)-success.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Hệ thống Quản lý Nhà hàng & Bán hàng Đa phân hệ Toàn diện (All-in-One Restaurant POS)**
-> Tích hợp đồng bộ từ **Khách hàng gọi món qua QR (Self-ordering)**, **Bồi bàn phục vụ (Waiter Floor)**, **Màn hình bếp thông minh (Kitchen Display System - KDS)**, **Thu ngân thanh toán (Cashier POS)** đến **Trung tâm Quản trị & Báo cáo Lãi/Lỗ P&L (Admin Hub)**.
+> **Hệ thống Quản lý Nhà hàng & Bán hàng Đa phân hệ Toàn diện (All-in-One Restaurant POS)**  
+> Tích hợp đồng bộ từ **Khách hàng gọi món qua QR (Self-ordering)**, **Bồi bàn phục vụ (Waiter Floor)**, **Màn hình bếp thông minh (Kitchen Display System - KDS)**, **Thu ngân thanh toán (Cashier POS) với VietQR động**, đến **Trung tâm Quản trị & Báo cáo Lãi/Lỗ P&L (Admin Hub)**.
 
 ---
 
 ## 📑 Mục Lục
 1. [Tổng Quan Dự Án](#-tổng-quan-dự-án)
 2. [Kiến Trúc & Vòng Đời Đơn Hàng](#-kiến-trúc--vòng-đời-đơn-hàng)
-3. [Tính Năng Chi Tiết Theo Phân Hệ](#-tính-năng-chi-tiết-theo-phân-hệ)
-4. [Công Nghệ Sử Dụng](#-công-nghệ-sử-dụng)
-5. [Cấu Trúc Thư Mục](#-cấu-trúc-thư-mục)
-6. [Hướng Dẫn Cài Đặt & Khởi Chạy](#-hướng-dẫn-cài-đặt--khởi-chạy)
-7. [Tài Khoản Kiểm Thử Mẫu](#-tài-khoản-kiểm-thử-mẫu)
-8. [Danh Mục RESTful API](#-danh-mục-restful-api)
-9. [Kịch Bản Kiểm Thử Tự Động](#-kịch-bản-kiểm-thử-tự-động)
-10. [Tác Giả & Giấy Phép](#-tác-giả--giấy-phép)
+3. [Tính Năng Nổi Bật Theo Phân Hệ](#-tính-năng-nổi-bật-theo-phân-hệ)
+4. [Kiến Trúc Máy Chủ Kép (Dual-Backend Architecture)](#-kiến-trúc-máy-chủ-kép-dual-backend-architecture)
+5. [Công Nghệ Sử Dụng](#-công-nghệ-sử-dụng)
+6. [Cấu Trúc Thư Mục](#-cấu-trúc-thư-mục)
+7. [Hướng Dẫn Cài Đặt & Khởi Chạy](#-hướng-dẫn-cài-đặt--khởi-chạy)
+8. [Tài Khoản Kiểm Thử Mẫu](#-tài-khoản-kiểm-thử-mẫu)
+9. [Danh Mục RESTful API](#-danh-mục-restful-api)
+10. [Kịch Bản Kiểm Thử Tự Động](#-kịch-bản-kiểm-thử-tự-động)
+11. [Tác Giả & Giấy Phép](#-tác-giả--giấy-phép)
 
 ---
 
 ## 🌟 Tổng Quan Dự Án
 
-Hệ thống **POS Restaurant** được thiết kế nhằm số hóa toàn diện quy trình vận hành của nhà hàng F&B hiện đại. Dự án giải quyết triệt để các bài toán thường gặp:
+Hệ thống **POS Restaurant** được thiết kế nhằm số hóa toàn diện quy trình vận hành của nhà hàng F&B hiện đại. Dự án giải quyết triệt để các bài toán thực tế:
 - **Tốc độ & Tính chính xác**: Khách hàng quét mã QR tại bàn để tự gọi món hoặc bồi bàn order trực tiếp trên máy tính bảng; dữ liệu tức thì được định tuyến đến đúng trạm bếp theo nguyên tắc FIFO.
+- **Thanh toán VietQR động 2 chiều (Dynamic VietQR)**: Tích hợp mã QR chuẩn NAPAS 247 trên hóa đơn in nhiệt K80 và màn hình thanh toán trực tuyến, khách quét là tự động điền số tiền và thông tin bàn ăn.
 - **Minh bạch tài chính & Tiền két**: Phân hệ thu ngân quản lý ca làm việc nghiêm ngặt (mở ca, kiểm tiền thực tế, đối soát lệch két, ghi nhận giao dịch thu/chi phát sinh).
 - **Kiểm soát chiết khấu**: Tích hợp thuật toán khống chế mức giảm giá Combo và giảm giá hóa đơn **không vượt quá 50%**, hiển thị cảnh báo đỏ trực quan ngăn ngừa thất thoát.
 - **Tự động hóa kho & Định lượng (BOM)**: Tự động trừ kho nguyên liệu thô theo công thức món ăn (Recipe) ngay khi bếp hoàn thành chế biến.
+- **Kiến trúc Máy chủ kép (Dual-Backend)**: Hỗ trợ linh hoạt cả Backend Node.js/MongoDB đầy đủ lẫn chế độ Standalone JSON-Server chạy ngay tức thì không cần cài database.
 
 ---
 
@@ -60,29 +64,30 @@ sequenceDiagram
     Kitchen->>Waiter: Hoàn thành món (Chuyển sang READY - Phát chuông báo)
     Kitchen->>Inventory: Trừ nguyên liệu tự động theo định lượng (Recipe)
 
-    Note over Waiter, Cashier: Bước 3: Phục vụ & Thanh toán
+    Note over Waiter, Cashier: Bước 3: Phục vụ & Thanh toán VietQR
     Waiter->>Customer: Phục vụ món tại bàn (Chuyển sang SERVED)
-    Customer->>Cashier: Yêu cầu thanh toán (In bill tạm tính)
+    Customer->>Cashier: Yêu cầu thanh toán (In bill tạm tính hoặc Quét VietQR tại bàn)
     Cashier->>Cashier: Áp dụng Voucher / Giảm giá (Tối đa 50%)
-    Cashier->>Customer: Thanh toán (Tiền mặt/Chuyển khoản/Thẻ) -> PAID
-    Cashier->>Waiter: Cập nhật trạng thái bàn sang DỌN DẸP / TRỐNG
+    Cashier->>Customer: Xuất hóa đơn K80 có sẵn mã VietQR hoặc hiện QR trên POS -> PAID
+    Cashier->>Waiter: Tự động giải phóng bàn về trạng thái TRỐNG (Màu xanh)
 ```
 
 ---
 
-## 🎯 Tính Năng Chi Tiết Theo Phân Hệ
+## 🎯 Tính Năng Nổi Bật Theo Phân Hệ
 
 ### 1. Phân Hệ Khách Hàng Gọi Món (Customer QR Portal)
-- **Truy cập không cần cài đặt**: Quét mã QR tại bàn mở ngay Web App trên trình duyệt di động.
-- **Thực đơn trực quan**: Xem hình ảnh món ăn, giá tiền, mô tả chi tiết, phân loại theo danh mục (Khai vị, Món chính, Tráng miệng, Đồ uống,...).
+- **Truy cập không cần cài đặt**: Quét mã QR tại bàn mở ngay Web App trên trình duyệt di động (`/views/customer/index.html?table=01`).
+- **Header tối giản (Minimalist Icon-only Header)**: Thiết kế thanh điều hướng phía trên gọn nhẹ với cụm icon thông minh (gọi nhân viên, xem lịch sử gọi món, yêu cầu tính tiền) kèm **Badge số bàn nổi bật**, nhường trọn vẹn không gian hiển thị hình ảnh món ăn sắc nét.
+- **Thực đơn trực quan & Bộ lọc nhanh**: Xem ảnh món, giá tiền, mô tả chi tiết, phân loại theo danh mục (Khai vị, Món chính, Tráng miệng, Đồ uống,...).
 - **Tùy chỉnh món linh hoạt**: Chọn size, mức đường/đá, thêm topping và ghi chú riêng cho đầu bếp.
-- **Giỏ hàng & Theo dõi trực tiếp**: Kiểm tra danh sách món đã gọi, tổng tiền tạm tính và cập nhật trạng thái chế biến theo thời gian thực.
+- **Thanh toán VietQR trực tuyến tại bàn**: Khách có thể tự bấm nút "Thanh toán QR", popup hiển thị mã VietQR động tự động điền sẵn số tiền chính xác, số bàn và mã đơn hàng. Hệ thống tự động đồng bộ trạng thái sang màn hình thu ngân ngay khi hoàn tất.
 
 ### 2. Phân Hệ Nhân Viên Phục Vụ (Waiter Floor Portal)
 - **Bản đồ bàn thông minh**: Hiển thị trạng thái màu sắc trực quan theo thời gian thực:
   - 🟢 **Xanh lá**: Bàn trống (Available).
   - 🔴 **Đỏ**: Bàn đang có khách dùng bữa (Occupied).
-  - 🟡 **Vàng**: Bàn đang chờ thanh toán (Pending Payment).
+  - 🟡 **Vàng**: Bàn đang gọi tính tiền (Waiting Payment).
   - ⚪ **Xám**: Bàn đang dọn dẹp (Cleaning).
 - **Nghiệp vụ phòng bàn linh hoạt**: Chuyển bàn, gộp bàn của hai nhóm khách, tách hóa đơn độc lập.
 - **Nhận order tại bàn**: Thêm món bổ sung, ghi chú hủy món hoặc yêu cầu ưu tiên cho bếp.
@@ -94,13 +99,14 @@ sequenceDiagram
 - **Cảnh báo trễ giờ**: Tự động chuyển màu cảnh báo vàng/đỏ và phát âm thanh chuông báo khi đơn hàng chờ quá thời gian quy định.
 
 ### 4. Phân Hệ Thu Ngân & Điểm Bán Hàng (Cashier & POS Portal)
+- **Mã VietQR động trên Hóa đơn K80**: Khi bấm **"In tạm tính"** hoặc in hóa đơn thanh toán, chân hóa đơn K80 tự động nhúng hình ảnh mã VietQR động chứa chính xác số tiền và số bàn để nhân viên mang ra bàn cho khách quét bằng mọi app ngân hàng (MB, VCB, Techcom, BIDV, MoMo,...).
+- **Màn hình thanh toán QR tại quầy**: Chọn phương thức **"Chuyển khoản QR"**, mã VietQR kích thước lớn lập tức hiện trên màn hình POS cho khách quét trực tiếp tại quầy thu ngân.
+- **Tự động giải phóng bàn ăn**: Ngay khi bấm "Xác nhận thanh toán", hóa đơn đổi trạng thái `Paid` và bàn ăn lập tức đổi sang màu xanh (Trống) trên sơ đồ.
 - **Quản lý ca làm việc (Shifts)**:
-  - Mở ca đầu ngày với số tiền tiền lẻ ban đầu.
-  - Kiểm đếm tiền mặt thực tế khi kết ca, tự động đối soát và tính khoản tiền chênh lệch (Thừa/Thiếu).
+  - Bắt buộc nhập tiền lẻ đầu ca khi mở ca (Clock-in).
+  - Kiểm đếm tiền mặt thực tế khi đóng ca (Clock-out), tự động đối soát và tính chênh lệch thừa/thiếu.
   - Ghi nhận giao dịch nộp tiền két hoặc rút tiền chi tiêu nội bộ.
-- **Thanh toán đa phương thức**: Hỗ trợ Tiền mặt, Quét mã QR Chuyển khoản, Thẻ ngân hàng, Mã giảm giá (Voucher).
-- **Khống chế giảm giá tối đa 50%**: Giao diện tự động phát hiện và hiển thị cảnh báo đỏ nổi bật nếu người dùng nhập mức chiết khấu vượt quá 50% tổng bill, đồng thời khóa thao tác thanh toán sai quy định.
-- **In hóa đơn chuyên nghiệp**: In hóa đơn tạm tính kiểm đồ tại bàn và hóa đơn quyết toán VAT.
+- **Khống chế giảm giá tối đa 50%**: Giao diện tự động phát hiện và hiển thị cảnh báo đỏ nổi bật nếu nhân viên nhập mức chiết khấu vượt quá 50% tổng bill, đồng thời khóa thao tác thanh toán sai quy định.
 
 ### 5. Trung Tâm Quản Trị Hệ Thống (Admin Management Hub)
 - **Quản lý Thực đơn & Danh mục**: Thêm mới, chỉnh sửa thông tin món ăn, hình ảnh, phân loại và giá bán.
@@ -114,12 +120,38 @@ sequenceDiagram
   - Tự động trừ kho tức thời khi món được chế biến xong.
   - Báo cáo hao hụt, hỏng hóc và điều chỉnh kiểm kê tồn kho.
 - **Báo cáo Tài chính & P&L (Profit & Loss)**: Báo cáo doanh thu, giá vốn bán hàng (COGS), chi phí phát sinh và lợi nhuận ròng theo ngày/tuần/tháng.
-- **Phân quyền & Kiểm toán**: Quản lý tài khoản nhân viên theo vai trò (RBAC) và ghi nhận toàn bộ lịch sử thao tác quan trọng vào Nhật ký kiểm toán (Audit Logs).
+- **Phân quyền & Kiểm toán (RBAC & Audit Logs)**: Quản lý tài khoản nhân viên theo vai trò và ghi nhận toàn bộ lịch sử thao tác quan trọng.
 
-### 6. Bảo Mật & Xác Thực (Security & Authentication)
-- **Cơ chế Token kép**: `access_token` (JWT hiệu lực ngắn hạn) + `refresh_token` (hiệu lực dài hạn dùng để cấp mới phiên đăng nhập).
-- **Mã hóa an toàn**: Mật khẩu người dùng được băm một chiều với thư viện `bcryptjs`.
-- **Auth Guard Middleware**: Bảo vệ toàn diện các API và giao diện nhân viên nội bộ, tự động chuyển hướng về trang Login nếu chưa đăng nhập hoặc hết phiên làm việc.
+---
+
+## ⚡ Kiến Trúc Máy Chủ Kép (Dual-Backend Architecture)
+
+Hệ thống sở hữu bộ điều phối máy chủ thông minh tại [`frontend/server.js`](file:///e:/Hocki5/NodeJS_Restful%20Web%20Service/POS_Restaurant/frontend/server.js) với cơ chế **Smart Proxy & Fallback**:
+
+```text
+                               ┌─────────────────────────────┐
+                               │   Trình duyệt (Browser)     │
+                               │   http://localhost:3000     │
+                               └──────────────┬──────────────┘
+                                              │
+                                              ▼
+                             ┌─────────────────────────────────┐
+                             │    Smart Proxy (server.js)      │
+                             │    Kiểm tra Backend Port 4000   │
+                             └────────┬───────────────┬────────┘
+                                      │               │
+                 [Nếu Port 4000 ONLINE]               [Nếu Port 4000 OFFLINE]
+                                      ▼               ▼
+                        ┌───────────────────┐   ┌───────────────────┐
+                        │  Node.js Express  │   │    JSON-Server    │
+                        │     Port 4000     │   │     Port 3000     │
+                        │   (MongoDB ORM)   │   │  (Mock Database)  │
+                        └───────────────────┘   └───────────────────┘
+```
+
+* **Chế độ 1 - Standalone Zero-Config (Cổng 3000)**: Chỉ cần chạy `npm start` trong thư mục `frontend/`. Server tự động đóng vai trò là Web Server phục vụ giao diện tĩnh, đồng thời kích hoạt `json-server` với dữ liệu đầy đủ trong `db.json` và cơ chế Mock Authentication. **Không cần cài đặt hay chạy MongoDB**, cực kỳ thuận tiện để nộp bài, chấm điểm và demo offline!
+* **Chế độ 2 - Full-Stack Production (Cổng 4000 + 3000)**: Khi khởi động thêm Backend Node.js tại cổng 4000, `server.js` tự động phát hiện trạng thái online và chuyển tiếp (proxy) toàn bộ API sang Backend thật kết nối MongoDB.
+* **Tối ưu tốc độ với SWR Caching**: Sử dụng kỹ thuật Stale-While-Revalidate tải dữ liệu từ bộ nhớ đệm trước rồi cập nhật nền, giúp mở trang và chuyển đổi tab mượt mà dưới 50ms.
 
 ---
 
@@ -129,7 +161,9 @@ sequenceDiagram
 | :--- | :--- | :--- |
 | **Backend** | `Node.js`, `Express.js` | RESTful API Server, xử lý nghiệp vụ trung tâm |
 | **Database** | `MongoDB`, `Mongoose ORM` | Lưu trữ dữ liệu tài liệu linh hoạt, quan hệ tham chiếu schema |
+| **Mock Database** | `JSON-Server`, `db.json` | Cung cấp backend độc lập cho môi trường demo và chấm bài |
 | **Frontend** | `TypeScript`, `Webpack 5` | SPA Architecture, biên dịch module và type-safe UI logic |
+| **Thanh toán** | `VietQR API`, `NAPAS 247` | Sinh mã QR động chuẩn ngân hàng theo đơn hàng và số bàn |
 | **Styling & Icons**| `TailwindCSS`, `FontAwesome 6` | Giao diện hiện đại, tối ưu hiển thị Mobile/Tablet/Desktop |
 | **Authentication** | `JSON Web Tokens (JWT)`, `Bcryptjs` | Xác thực người dùng, bảo mật mật khẩu và phân quyền RBAC |
 | **Automated Test** | `Python (Requests)`, `Node.js` | Kịch bản kiểm thử API tự động theo vai trò và vòng đời đơn |
@@ -140,44 +174,38 @@ sequenceDiagram
 
 ```text
 POS_Restaurant/
-├── backend/                              # Mã nguồn RESTful API Backend
+├── backend/                              # Mã nguồn RESTful API Backend (Port 4000)
 │   ├── bin/www                           # File khởi chạy HTTP Server
-│   ├── config/                           # Cấu hình kết nối MongoDB và thiết lập hệ thống
-│   ├── controllers/                      # Điều hướng nghiệp vụ
-│   │   ├── authController.js             # Đăng ký, đăng nhập bcrypt, refresh token
-│   │   ├── cashierController.js          # Mở/đóng ca, thanh toán bill, kiểm tiền két
-│   │   ├── orderController.js            # Vòng đời đơn hàng, gộp/tách/chuyển bàn
-│   │   ├── menuController.js             # Món ăn, danh mục, combo giới hạn 50%
-│   │   ├── inventoryController.js        # Quản lý kho thô, trừ nguyên liệu theo Recipe
-│   │   ├── tableController.js            # Sơ đồ và trạng thái phòng bàn
-│   │   ├── userController.js             # Quản lý danh sách nhân viên & vai trò
-│   │   └── extraController.js            # Báo cáo P&L, Audit log, Voucher, Chi nhánh
+│   ├── config/                           # Cấu hình kết nối MongoDB
+│   ├── controllers/                      # Điều hướng nghiệp vụ (Auth, Cashier, Order, Menu, Inventory...)
 │   ├── middleware/                       # Middleware authen.js (Xác thực JWT Token)
 │   ├── models/                           # 20 Mongoose Schemas & Models
 │   ├── routes/                           # Khai báo các API Endpoints
-│   ├── scripts/                          # Dữ liệu mẫu (seed_western_restaurant_full.js)
+│   ├── scripts/                          # Script khởi tạo dữ liệu mẫu (seed_western_restaurant_full.js)
 │   └── package.json
-├── frontend/                             # Mã nguồn Single Page Application
+├── frontend/                             # Giao diện & Máy chủ thông minh (Port 3000)
+│   ├── server.js                         # Máy chủ kép: Smart Proxy + JSON-Server fallback
+│   ├── db.json                           # Cơ sở dữ liệu mẫu độc lập cho JSON-Server
 │   ├── public/                           # Tài nguyên tĩnh & Trang giao diện HTML
 │   │   ├── css/                          # Stylesheets tùy chỉnh
 │   │   ├── js/                           # Bundle JavaScript đã biên dịch từ TypeScript
 │   │   ├── views/
 │   │   │   ├── auth/login.html           # Trang Đăng nhập & Đăng ký tài khoản
-│   │   │   ├── customer/index.html       # Cổng gọi món Khách hàng qua QR
-│   │   │   └── staff/                    # Cổng làm việc nhân viên nội bộ
+│   │   │   ├── customer/index.html       # Cổng gọi món Khách hàng qua QR (VietQR online)
+│   │   │   └── staff/
 │   │   │       ├── admin.html            # Bảng điều khiển Quản trị viên
-│   │   │       ├── cashier.html          # Bàn làm việc Thu ngân (POS)
+│   │   │       ├── cashier.html          # Bàn làm việc Thu ngân POS (VietQR in Bill)
 │   │   │       ├── waiter.html           # Ứng dụng Bồi bàn phục vụ tại bàn
 │   │   │       └── kitchen.html          # Màn hình điều phối Bếp (KDS)
 │   │   └── index.html                    # Trang điều hướng trung tâm
 │   ├── src/                              # Mã nguồn TypeScript gốc
-│   │   ├── admin.ts, admin_menu.ts...    # Logic giao diện Quản trị viên & Combo
-│   │   ├── cashier.ts                    # Logic Thu ngân, tính toán giảm giá & đối soát ca
+│   │   ├── admin.ts, admin_menu.ts...    # Logic Quản trị viên & Khống chế Combo <= 50%
+│   │   ├── cashier.ts                    # Logic Thu ngân, VietQR, chiết khấu & đối soát ca
 │   │   ├── waiter.ts                     # Sơ đồ bàn thời gian thực & đặt món
 │   │   ├── kitchen.ts                    # Hàng đợi FIFO & chuyển trạng thái bếp
-│   │   ├── customer.ts                   # Menu QR, giỏ hàng & theo dõi đơn hàng
+│   │   ├── customer.ts                   # Menu QR, giỏ hàng & modal thanh toán VietQR
 │   │   ├── login.ts, auth.ts             # Quản lý phiên làm việc & Auth Guards
-│   │   └── api.ts                        # HTTP Client kết nối Backend API
+│   │   └── api.ts                        # HTTP Client kết nối API
 │   ├── tsconfig.json                     # Cấu hình biên dịch TypeScript
 │   ├── webpack.config.js                 # Cấu hình Webpack 5 đóng gói SPA
 │   └── package.json
@@ -198,74 +226,63 @@ POS_Restaurant/
 
 ## 🚀 Hướng Dẫn Cài Đặt & Khởi Chạy
 
-### 1. Yêu Cầu Môi Trường
-- [Node.js](https://nodejs.org/) phiên bản **18.x** hoặc **20.x**.
-- [MongoDB Community Server](https://www.mongodb.com/try/download/community) phiên bản **6.0+** đang chạy trên máy (cổng mặc định `27017`).
-- Trình quản lý gói `npm` (đi kèm sẵn với Node.js).
-- [Python 3.x](https://www.python.org/) (nếu muốn chạy các script kiểm thử tự động).
+### 🌟 LỰA CHỌN 1: Khởi Chạy Nhanh Không Cần MongoDB (Khuyên Dùng Cho Demo / Chấm Bài)
+Hệ thống tích hợp sẵn Mock Server độc lập trong `frontend/server.js`. Bạn không cần cài đặt MongoDB hay chạy backend phức tạp:
 
-### 2. Cài Đặt Dependencies
-
-Mở 2 cửa sổ terminal riêng biệt cho **Backend** và **Frontend**:
-
-#### Cài đặt Backend:
 ```bash
-cd backend
-npm install
-```
-
-#### Cài đặt Frontend:
-```bash
+# 1. Di chuyển vào thư mục frontend
 cd frontend
+
+# 2. Cài đặt thư viện (nếu chưa cài)
 npm install
-```
 
-### 3. Khởi Tạo Dữ Liệu Mẫu (Database Seeding)
-Chạy script seeder để nạp đầy đủ thực đơn, bàn ăn, tài khoản mẫu, nguyên vật liệu và công thức vào MongoDB:
-```bash
-cd backend
-node scripts/seed_western_restaurant_full.js
-```
-*(Sau khi chạy, hệ thống sẽ tự động tạo cơ sở dữ liệu `restaurant_pos` với dữ liệu phong phú).*
-
-### 4. Biên Dịch Mã Nguồn Frontend (Webpack Build)
-Biên dịch các tệp TypeScript sang JavaScript:
-```bash
-cd frontend
-npm run build
-```
-*(Nếu muốn tự động biên dịch lại khi sửa mã nguồn, dùng lệnh: `npm run watch`)*
-
-### 5. Khởi Động Hệ Thống
-
-#### Khởi chạy Backend API Server (Cổng 4000):
-```bash
-cd backend
+# 3. Khởi chạy máy chủ (Tự động mở cổng 3000)
 npm start
 ```
-> Server API sẽ lắng nghe tại: `http://localhost:4000`
 
-#### Khởi chạy Frontend Web Server (Cổng 5000):
-Mở một terminal mới:
+> 🌐 **Truy cập ngay:** Mở trình duyệt vào đường dẫn: **`http://localhost:3000`** để sử dụng toàn bộ tính năng!
+
+---
+
+### 🛠️ LỰA CHỌN 2: Khởi Chạy Full-Stack Với MongoDB Thật
+
+Nếu muốn chạy toàn bộ hệ thống với cơ sở dữ liệu MongoDB thật:
+
+#### Bước 1: Khởi động MongoDB
+Đảm bảo dịch vụ MongoDB đang chạy tại máy cục bộ (`localhost:27017`).
+
+#### Bước 2: Cài đặt và Seeding dữ liệu cho Backend
+```bash
+cd backend
+npm install
+node scripts/seed_western_restaurant_full.js   # Nạp dữ liệu mẫu
+npm start                                      # Chạy Backend tại port 4000
+```
+> Backend API sẽ hoạt động tại: `http://localhost:4000`
+
+#### Bước 3: Khởi chạy Frontend
+Mở một cửa sổ Terminal thứ hai:
 ```bash
 cd frontend
-npx serve public -p 5000
+npm install
+npm run build                                  # Build TypeScript (nếu cần sửa code)
+npm start                                      # Chạy Frontend Server tại port 3000
 ```
-> Giao diện ứng dụng sẽ sẵn sàng tại: `http://localhost:5000`
+> Server tại cổng 3000 sẽ tự động phát hiện Backend cổng 4000 đang online và kết nối trực tiếp.
 
 ---
 
 ## 🔑 Tài Khoản Kiểm Thử Mẫu
 
-Hệ thống đã chuẩn bị sẵn tài khoản cho từng vai trò trong hệ thống (Mật khẩu chung cho tất cả tài khoản mẫu là `123456`):
+Hệ thống đã chuẩn bị sẵn tài khoản cho từng vai trò (Mật khẩu chung cho tất cả tài khoản mẫu là **`123456`**):
 
-| Vai trò | Email đăng nhập | Mật khẩu | Phân hệ / URL truy cập |
+| Vai trò | Tên đăng nhập / Email | Mật khẩu | Phân hệ / URL truy cập |
 | :--- | :--- | :---: | :--- |
-| 👑 **Quản trị viên (Admin)** | `admin@restaurant.com` | `123456` | `http://localhost:5000/views/staff/admin.html` |
-| 💵 **Thu ngân (Cashier)** | `cashier@restaurant.com` | `123456` | `http://localhost:5000/views/staff/cashier.html` |
-| 🧑‍🍳 **Bếp trưởng (Chef)** | `chef@restaurant.com` | `123456` | `http://localhost:5000/views/staff/kitchen.html` |
-| 🤵 **Bồi bàn (Waiter)** | `waiter@restaurant.com` | `123456` | `http://localhost:5000/views/staff/waiter.html` |
-| 📱 **Khách hàng (QR Code)** | *Không cần đăng nhập* | — | `http://localhost:5000/views/customer/index.html?table=1` |
+| 👑 **Quản trị viên (Admin)** | `admin` *(hoặc `admin@restaurant.com`)* | `123456` | `http://localhost:3000/views/staff/admin.html` |
+| 💵 **Thu ngân (Cashier)** | `cashier` *(hoặc `cashier@restaurant.com`)* | `123456` | `http://localhost:3000/views/staff/cashier.html` |
+| 🧑‍🍳 **Bếp trưởng (Chef)** | `chef` *(hoặc `chef@restaurant.com`)* | `123456` | `http://localhost:3000/views/staff/kitchen.html` |
+| 🤵 **Bồi bàn (Waiter)** | `waiter` *(hoặc `waiter@restaurant.com`)* | `123456` | `http://localhost:3000/views/staff/waiter.html` |
+| 📱 **Khách hàng (QR Code)** | *Không cần đăng nhập* | — | `http://localhost:3000/views/customer/index.html?table=01` |
 
 ---
 
@@ -289,7 +306,7 @@ Hệ thống cung cấp hệ thống API RESTful đầy đủ, trả về địn
 ### 3. Phòng bàn (`/api/tables`)
 - `GET /api/tables`: Lấy danh sách phòng bàn và trạng thái hiện tại.
 - `POST /api/tables`: Thêm bàn mới vào sơ đồ.
-- `PUT /api/tables/:id/status`: Cập nhật trạng thái bàn (`AVAILABLE`, `OCCUPIED`, `CLEANING`).
+- `PUT /api/tables/:id/status`: Cập nhật trạng thái bàn (`AVAILABLE`, `OCCUPIED`, `WAITING_PAYMENT`, `CLEANING`).
 
 ### 4. Đơn hàng & Chế biến (`/api/orders`)
 - `GET /api/orders`: Danh sách tất cả đơn hàng.
@@ -314,7 +331,7 @@ Hệ thống cung cấp hệ thống API RESTful đầy đủ, trả về địn
 
 ## 🧪 Kịch Bản Kiểm Thử Tự Động
 
-Dự án đi kèm bộ kịch bản kiểm thử tự động viết bằng Python và Node.js giúp kiểm tra tính toàn vẹn của toàn bộ hệ thống mà không cần thao tác tay:
+Dự án đi kèm bộ kịch bản kiểm thử tự động viết bằng Python và Node.js giúp kiểm tra tính toàn vẹn của toàn bộ hệ thống:
 
 ### 1. Kiểm tra luồng xác thực (Authentication Flow)
 Kiểm tra đăng ký, đăng nhập bằng mật khẩu mã hóa, cấp và đổi mới Token:
