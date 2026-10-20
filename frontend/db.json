@@ -3664,7 +3664,7 @@
       "name": "Bò bít tết Thăn nội Úc sốt tiêu đen",
       "quantity": 4,
       "price": 430000,
-      "status": "Pending",
+      "status": "Ready",
       "variantNote": "Tái vừa (Medium Rare) - Khuyên dùng, Sốt nấm Truffle đen quý phái (+35.000đ), Khoai tây nghiền bơ Pháp | Ít muối, xin thêm bơ tỏi",
       "variants_selected": [
         {
@@ -3692,7 +3692,7 @@
       "priceAtOrder": 430000,
       "notes": "[Tái vừa (Medium Rare) - Khuyên dùng, Sốt nấm Truffle đen quý phái, Khoai tây nghiền bơ Pháp] Thêm bơ tỏi, làm nóng đĩa",
       "variantNote": "[Tái vừa (Medium Rare) - Khuyên dùng, Sốt nấm Truffle đen quý phái, Khoai tây nghiền bơ Pháp] Thêm bơ tỏi, làm nóng đĩa",
-      "status": "Pending",
+      "status": "Ready",
       "incidentNote": "",
       "createdAt": "2026-10-20T15:19:08.583Z",
       "id": "Y1bMGA_"
