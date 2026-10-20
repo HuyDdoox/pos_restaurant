@@ -1091,13 +1091,13 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
             }
         }
 
-        // Format Ghi chú riêng biệt nổi bật màu cam
+        // Format Ghi chú riêng biệt nổi bật màu cam, nhỏ gọn cân đối
         let notesHtml = `<span class="text-xs text-slate-600 font-normal">-</span>`;
         if (actualNotes && actualNotes !== '-') {
             notesHtml = `
                 <div class="max-w-full">
-                    <span class="inline-flex items-start gap-1.5 text-xs font-bold text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-lg border border-amber-500/30 shadow-2xs leading-snug break-words">
-                        <i class="fa-solid fa-pen-to-square text-amber-400 text-[10px] mt-0.5 shrink-0"></i>
+                    <span class="inline-flex items-start gap-1 text-[11px] font-bold text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md border border-amber-500/30 shadow-2xs leading-tight break-words">
+                        <i class="fa-solid fa-pen-to-square text-amber-400 text-[9px] mt-0.5 shrink-0"></i>
                         <span>${actualNotes}</span>
                     </span>
                 </div>
@@ -1122,10 +1122,10 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
                 <!-- 2. Biến thể / Topping -->
                 <td class="py-3 px-3 align-middle">${variantHtml}</td>
                 <!-- 3. Ghi chú -->
-                <td class="py-3 px-3 align-middle">${notesHtml}</td>
+                <td class="py-3 px-2.5 align-middle">${notesHtml}</td>
                 <!-- 4. Số lượng -->
-                <td class="py-3 px-2 text-center align-middle">
-                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[#0f172a] text-white font-black text-xs border border-slate-700 shadow-2xs">${item.quantity}</span>
+                <td class="py-3 px-1 text-center align-middle">
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#0f172a] text-white font-black text-[11px] border border-slate-700 shadow-2xs">${item.quantity}</span>
                 </td>
                 <!-- 5. Thành tiền -->
                 <td class="py-3 px-3 text-right align-middle">
