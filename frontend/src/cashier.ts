@@ -2474,6 +2474,13 @@ const showInvoice = async (orderId: string, isTemp: boolean) => {
         rowChange?.classList.add('hidden');
     }
 
+    // Cập nhật mã VietQR động trên Bill in ra
+    const invQrImg = document.getElementById('inv-qr-img') as HTMLImageElement;
+    if (invQrImg) {
+        const numTable = getCashierOrderTableNumber(order, allTables) || getCashierOrderTableId(order);
+        invQrImg.src = `https://img.vietqr.io/image/MB-0901234567-compact2.png?amount=${grandTotal}&addInfo=Ban%20${numTable}%20Don%20${order.id}&accountName=FOODHUB%20RESTAURANT`;
+    }
+
     const overlay = document.getElementById('overlay-invoice');
     if (overlay) {
         overlay.classList.remove('hidden');
