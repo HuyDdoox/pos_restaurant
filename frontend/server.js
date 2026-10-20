@@ -1,15 +1,86 @@
 const jsonServer = require('json-server');
 const path = require('path');
 const fs = require('fs');
+const http = require('http');
 
 const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, 'db.json'));
 const middlewares = jsonServer.defaults();
 
 const PORT = 3000;
+const BACKEND_PORT = 4000; // Node.js Express backend
+
+// ========================================================
+// SMART PROXY: Forward tới backend port 4000 nếu đang chạy
+// Fallback về json-server (port 3000) nếu backend down
+// ========================================================
+let backendAlive = false;
+let lastCheck = 0;
+const CHECK_INTERVAL = 5000; // Kiểm tra backend mỗi 5 giây
+
+function checkBackend(callback) {
+    const now = Date.now();
+    if (now - lastCheck < CHECK_INTERVAL) {
+        return callback(backendAlive);
+    }
+    lastCheck = now;
+    const req = http.get({ hostname: 'localhost', port: BACKEND_PORT, path: '/api/menu', timeout: 1500 }, (res) => {
+        backendAlive = res.statusCode < 500;
+        callback(backendAlive);
+    });
+    req.on('error', () => { backendAlive = false; callback(false); });
+    req.on('timeout', () => { req.destroy(); backendAlive = false; callback(false); });
+}
+
+function proxyToBackend(req, res, next) {
+    checkBackend((alive) => {
+        if (!alive) return next();
+
+        let body = '';
+        const chunks = [];
+        // Collect already-parsed body from bodyParser
+        const rawBody = req.body ? JSON.stringify(req.body) : '';
+
+        const options = {
+            hostname: 'localhost',
+            port: BACKEND_PORT,
+            path: req.url, // đã có /api/ prefix
+            method: req.method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(rawBody),
+                ...(req.headers['authorization'] ? { 'Authorization': req.headers['authorization'] } : {})
+            },
+            timeout: 3000
+        };
+
+        const proxyReq = http.request(options, (proxyRes) => {
+            let data = '';
+            proxyRes.on('data', chunk => data += chunk);
+            proxyRes.on('end', () => {
+                try {
+                    const parsed = JSON.parse(data);
+                    return res.status(proxyRes.statusCode).json(parsed);
+                } catch {
+                    return res.status(proxyRes.statusCode).send(data);
+                }
+            });
+        });
+
+        proxyReq.on('error', () => { backendAlive = false; next(); });
+        proxyReq.on('timeout', () => { proxyReq.destroy(); backendAlive = false; next(); });
+
+        if (rawBody) proxyReq.write(rawBody);
+        proxyReq.end();
+    });
+}
 
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
+
+// Áp dụng smart proxy cho tất cả /api/* requests
+// (Custom routes bên dưới sẽ chỉ chạy nếu backend down)
+server.use('/api', proxyToBackend);
 
 // ========================================================
 // 1. CUSTOM AUTH ROUTES (LOGIN, REGISTER, REFRESH-TOKEN)
@@ -284,11 +355,20 @@ server.use(router);
 
 server.listen(PORT, () => {
     console.log(`=======================================================`);
-    console.log(`🚀 JSON-SERVER (MÔN TSC) ĐANG CHẠY TẠI: http://localhost:${PORT}`);
+    console.log(`🚀 JSON-SERVER ĐANG CHẠY TẠI: http://localhost:${PORT}`);
     console.log(`📦 DATABASE FILE: ${path.join(__dirname, 'db.json')}`);
-    console.log(`🌐 CỔNG TÁCH BIỆT:`);
-    console.log(`   - JSON-Server : http://localhost:${PORT}`);
-    console.log(`   - Frontend Web: http://localhost:5000`);
-    console.log(`   - Backend Node: http://localhost:4000 (Không cần bật)`);
+    console.log(`🔄 DUAL-BACKEND MODE:`);
+    console.log(`   - JSON-Server (fallback) : http://localhost:${PORT}`);
+    console.log(`   - Node.js Backend        : http://localhost:${BACKEND_PORT} (auto-detect)`);
+    console.log(`   - Frontend Web           : http://localhost:5000`);
+    console.log(`💡 Backend port 4000 sẽ được ưu tiên nếu đang chạy`);
     console.log(`=======================================================`);
+    // Kiểm tra backend lúc khởi động
+    checkBackend((alive) => {
+        if (alive) {
+            console.log(`✅ Backend Node.js port ${BACKEND_PORT} ĐANG ONLINE → dùng làm nguồn chính`);
+        } else {
+            console.log(`⚠️  Backend Node.js port ${BACKEND_PORT} offline → dùng JSON-Server`);
+        }
+    });
 });
