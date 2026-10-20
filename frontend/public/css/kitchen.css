@@ -1,0 +1,4 @@
+body { font-family: 'Be Vietnam Pro', system-ui, sans-serif; letter-spacing: -0.01em; }
+/* Ẩn hoàn toàn thanh cuộn (ngang & dọc) nhưng vẫn giữ chức năng cuộn/vuốt */
+::-webkit-scrollbar { display: none; width: 0; height: 0; }
+* { -ms-overflow-style: none; scrollbar-width: none; }

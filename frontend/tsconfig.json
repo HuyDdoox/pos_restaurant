@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "public/js",
+    "rootDir": "src/",
+    "target": "ES2022",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "tests"]
+}

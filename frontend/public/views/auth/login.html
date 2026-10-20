@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập hệ thống - FoodHub POS</title>
+
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4' },
+                            '50%': { opacity: '0.8' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+        }
+
+        .glass-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .glass-input:focus {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+
+        .mesh-bg {
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(249, 115, 22, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.5);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(249, 115, 22, 0.7);
+        }
+    </style>
+</head>
+
+<body class="bg-[#0b0f19] text-slate-200 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-x-hidden mesh-bg">
+
+    <!-- AMBIENT GLOWING ORBS -->
+    <div class="fixed top-10 left-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none animate-blob"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none animate-blob animation-delay-2000"></div>
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="w-full max-w-6xl relative z-10 my-auto">
+        
+        <!-- SESSION BANNER (HIỆN NẾU ĐÃ CÓ PHIÊN ĐĂNG NHẬP TRƯỚC ĐÓ) -->
+        <div id="session-banner" class="hidden mb-6 glass-card rounded-2xl p-4 border border-amber-500/30 bg-amber-500/10 flex-col sm:flex-row items-center justify-between gap-4 shadow-lg shadow-amber-500/5 transition-all">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-lg shrink-0 border border-amber-500/30">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-amber-300 font-bold uppercase tracking-wider">Phiên đăng nhập đang hoạt động</p>
+                    <p class="text-sm font-black text-white" id="session-user-name">Đang tải...</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button type="button" onclick="continueCurrentSession()" class="flex-1 sm:flex-none px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5">
+                    <span>Tiếp tục làm việc</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+                <button type="button" onclick="clearCurrentSession()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-bold rounded-xl border border-slate-700 transition" title="Đăng xuất tài khoản này">
+                    Đổi tài khoản
+                </button>
+            </div>
+        </div>
+
+        <!-- GRID 2 CỘT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- CỘT TRÁI: GIỚI THIỆU THƯƠNG HIỆU & HỆ THỐNG (ẨN TRÊN MOBILE, HIỆN TRÊN LG) -->
+            <div class="lg:col-span-6 space-y-6 lg:pr-8">
+                
+                <!-- Logo & Badge -->
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-3"></span>
+                    <span class="text-xs font-bold text-slate-300">FoodHub Enterprise POS • V2.5 Active</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 bg-gradient-to-tr from-orange-600 to-amber-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-orange-500/30">
+                            FH
+                        </div>
+                        <div>
+                            <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                                Food<span class="text-orange-500">Hub</span>
+                            </h1>
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Hospitality Platform</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                        Hệ thống điều hành Nhà hàng & Bán hàng đa phân hệ
+                    </h2>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Nền tảng tích hợp toàn diện từ POS Thu ngân, Màn hình điều phối Bếp KDS thời gian thực, Quản lý kho định lượng tự động cho đến Gọi món QR tại bàn.
+                    </p>
+                </div>
+
+                <!-- 4 Khối tính năng chính (Interactive cards) -->
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <div class="p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/40 hover:border-orange-500/40 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-black text-sm mb-2">
+                            <i class="fa-solid fa-cash-register"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Thu ngân & POS</h4>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Tách gộp bàn, in hóa đơn & mở/đóng ca tiền mặt</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/40 hover:border-blue-500/40 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-black text-sm mb-2">
+                            <i class="fa-solid fa-fire-burner"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Bếp thông minh KDS</h4>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Điều phối đơn hàng FIFO, kiểm soát tồn kho realtime</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/40 hover:border-emerald-500/40 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-sm mb-2">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Định lượng Kho</h4>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Trừ kho theo Recipe, tự động khóa món khi hết hàng</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-slate-800/40 border border-slate-700/40 hover:border-amber-500/40 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-sm mb-2">
+                            <i class="fa-solid fa-bell-concierge"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Bồi bàn & Order</h4>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Thêm món tại bàn, đồng bộ thông báo món nấu xong</p>
+                    </div>
+                </div>
+
+                <!-- Link dành cho thực khách -->
+                <div class="pt-2">
+                    <a href="../customer/index.html" class="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition-colors group">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <span>Thực khách xem Menu & Đặt món qua điện thoại</span>
+                        <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- CỘT PHẢI: FORM ĐĂNG NHẬP & ĐĂNG KÝ -->
+            <div class="lg:col-span-6">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+                    
+                    <!-- TAB NAVIGATION: ĐĂNG NHẬP vs ĐĂNG KÝ -->
+                    <div class="flex items-center p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 mb-6 gap-1 shadow-inner">
+                        <button type="button" id="tab-btn-login" class="flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 transition-all duration-200 bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20">
+                            <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                            <span>Đăng nhập</span>
+                        </button>
+                        <button type="button" id="tab-btn-register" class="flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60">
+                            <i class="fa-solid fa-user-plus text-xs"></i>
+                            <span>Đăng ký nhân sự</span>
+                        </button>
+                    </div>
+
+                    <!-- CONTAINER ĐĂNG NHẬP (TAB 1) -->
+                    <div id="container-login" class="transition-opacity duration-300">
+                        <!-- Decorative header inside login card -->
+                        <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-black text-white">Đăng nhập tài khoản</h3>
+                                <p class="text-xs text-slate-400 mt-1 font-medium">Chọn vai trò mẫu hoặc điền thông tin đăng nhập</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500 shrink-0">
+                                <i class="fa-solid fa-shield-halved text-lg"></i>
+                            </div>
+                        </div>
+
+                        <!-- QUICK DEMO SWITCHER (CHỌN NHANH VAI TRÒ ĐỂ CHẤM ĐIỂM/TEST) -->
+                        <div class="mb-5">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Chọn nhanh tài khoản mẫu:</span>
+                                <span class="text-[10px] text-orange-400 font-bold bg-orange-500/10 px-2 py-0.5 rounded-full border border-orange-500/20">Demo Click 1 chạm</span>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" data-role="Admin" class="btn-quick-role flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-700/60 hover:border-amber-500/50 text-slate-300 transition-all text-center group active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-crown text-amber-400 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-xs font-bold">Admin</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">admin_hcm</span>
+                                </button>
+
+                                <button type="button" data-role="Cashier" class="btn-quick-role flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-700/60 hover:border-emerald-500/50 text-slate-300 transition-all text-center group active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-cash-register text-emerald-400 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-xs font-bold">Thu ngân</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">cashier_lan</span>
+                                </button>
+
+                                <button type="button" data-role="Chef" class="btn-quick-role flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-700/60 hover:border-orange-500/50 text-slate-300 transition-all text-center group active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-fire-burner text-orange-400 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-xs font-bold">Bếp KDS</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">chef_wong</span>
+                                </button>
+
+                                <button type="button" data-role="Waiter" class="btn-quick-role flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-700/60 hover:border-blue-500/50 text-slate-300 transition-all text-center group active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-bell-concierge text-blue-400 text-base mb-1 group-hover:scale-110 transition-transform"></i>
+                                    <span class="text-xs font-bold">Phục vụ</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">waiter_nhat</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- FORM ĐĂNG NHẬP -->
+                        <form id="login-form" class="space-y-3.5">
+                            
+                            <!-- Chọn chi nhánh làm việc -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-store text-orange-500"></i>
+                                    <span>Chi nhánh làm việc</span>
+                                </label>
+                                <select id="select-branch" class="glass-input w-full px-4 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none cursor-pointer">
+                                    <option value="BR001">FoodHub Đồ Âu Quận 1 (BR001)</option>
+                                </select>
+                            </div>
+
+                            <!-- Tên đăng nhập -->
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-user text-orange-500"></i>
+                                    <span>Tên đăng nhập / Email / SĐT</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" id="input-username" placeholder="Nhập username (vd: admin_hcm)" autocomplete="username"
+                                        class="glass-input w-full pl-10 pr-4 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                        <i class="fa-solid fa-circle-user text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mật khẩu -->
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-lock text-orange-500"></i>
+                                        <span>Mật khẩu</span>
+                                    </label>
+                                    <a href="javascript:void(0)" onclick="alert('Gợi ý: Mật khẩu của tất cả tài khoản hệ thống là: 123456')" class="text-[11px] font-bold text-orange-400 hover:text-orange-300 transition-colors">
+                                        Quên mật khẩu?
+                                    </a>
+                                </div>
+                                <div class="relative">
+                                    <input type="password" id="input-password" placeholder="Nhập mật khẩu" autocomplete="current-password"
+                                        class="glass-input w-full pl-10 pr-11 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                                        <i class="fa-solid fa-key text-sm"></i>
+                                    </div>
+                                    <button type="button" id="btn-toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" title="Hiện/ẩn mật khẩu">
+                                        <i id="icon-password-eye" class="fa-solid fa-eye text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Ghi nhớ đăng nhập -->
+                            <div class="flex items-center justify-between pt-0.5">
+                                <label class="flex items-center gap-2 cursor-pointer group">
+                                    <input type="checkbox" id="check-remember" checked class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-orange-500 focus:ring-orange-500 focus:ring-offset-slate-900 accent-orange-500">
+                                    <span class="text-xs font-bold text-slate-400 group-hover:text-slate-300 transition-colors">Ghi nhớ đăng nhập</span>
+                                </label>
+                                <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-solid fa-shield text-[10px] mr-1 text-emerald-400"></i>Bảo mật SSL 256-bit</span>
+                            </div>
+
+                            <!-- Nút Đăng nhập Submit CTA -->
+                            <div class="pt-2">
+                                <button type="submit" id="btn-submit-login" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:from-orange-600 hover:to-amber-600 active:scale-[0.98] text-white font-black text-sm shadow-lg shadow-orange-500/25 transition-all flex items-center justify-center gap-2 group">
+                                    <i id="login-spinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+                                    <span id="login-btn-text">Đăng nhập hệ thống</span>
+                                    <i class="fa-solid fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                            </div>
+
+                            <!-- Chuyển sang Đăng ký -->
+                            <div class="text-center pt-2">
+                                <p class="text-xs text-slate-400">
+                                    Chưa có tài khoản nhân sự? 
+                                    <button type="button" id="link-goto-register" class="text-orange-400 hover:text-orange-300 font-bold underline ml-1 cursor-pointer">
+                                        Đăng ký ngay
+                                    </button>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- CONTAINER ĐĂNG KÝ (TAB 2) -->
+                    <div id="container-register" class="hidden transition-opacity duration-300">
+                        <!-- Decorative header inside register card -->
+                        <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-black text-white">Đăng ký nhân sự mới</h3>
+                                <p class="text-xs text-slate-400 mt-1 font-medium">Tạo tài khoản gia nhập đội ngũ vận hành FoodHub</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                                <i class="fa-solid fa-user-plus text-lg"></i>
+                            </div>
+                        </div>
+
+                        <!-- FORM ĐĂNG KÝ -->
+                        <form id="register-form" class="space-y-3">
+                            
+                            <!-- 2 cột: Họ tên & Username -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-id-card text-emerald-400"></i>
+                                        <span>Họ và tên *</span>
+                                    </label>
+                                    <input type="text" id="input-reg-fullname" placeholder="vd: Nguyễn Văn Minh" required
+                                        class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-at text-emerald-400"></i>
+                                        <span>Tên đăng nhập *</span>
+                                    </label>
+                                    <input type="text" id="input-reg-username" placeholder="vd: minh_nguyen" required
+                                        class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                </div>
+                            </div>
+
+                            <!-- 2 cột: Vai trò & Chi nhánh -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-briefcase text-emerald-400"></i>
+                                        <span>Vai trò công việc *</span>
+                                    </label>
+                                    <select id="select-reg-role" class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none cursor-pointer">
+                                        <option value="Waiter">Phục vụ / Bồi bàn (Waiter)</option>
+                                        <option value="Cashier">Thu ngân quầy (Cashier)</option>
+                                        <option value="Chef">Đầu bếp / KDS (Chef)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-store text-emerald-400"></i>
+                                        <span>Chi nhánh *</span>
+                                    </label>
+                                    <select id="select-reg-branch" class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none cursor-pointer">
+                                        <option value="BR001">FoodHub Đồ Âu Quận 1 (BR001)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 2 cột: Điện thoại & Email -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-phone text-emerald-400"></i>
+                                        <span>Số điện thoại</span>
+                                    </label>
+                                    <input type="tel" id="input-reg-phone" placeholder="vd: 0901234567"
+                                        class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-envelope text-emerald-400"></i>
+                                        <span>Email</span>
+                                    </label>
+                                    <input type="email" id="input-reg-email" placeholder="vd: minh@gmail.com"
+                                        class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                </div>
+                            </div>
+
+                            <!-- 2 cột: Mật khẩu & Nhập lại mật khẩu -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-lock text-emerald-400"></i>
+                                        <span>Mật khẩu *</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="password" id="input-reg-password" placeholder="Tối thiểu 6 ký tự" required autocomplete="new-password"
+                                            class="glass-input w-full pl-3.5 pr-10 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                        <button type="button" id="btn-toggle-reg-password" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 rounded transition-colors focus:outline-none" title="Hiện/ẩn mật khẩu">
+                                            <i id="icon-reg-password-eye" class="fa-solid fa-eye text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-shield-check text-emerald-400"></i>
+                                        <span>Nhập lại mật khẩu *</span>
+                                    </label>
+                                    <input type="password" id="input-reg-confirm-password" placeholder="Nhập lại mật khẩu" required autocomplete="new-password"
+                                        class="glass-input w-full px-3.5 py-2.5 rounded-xl text-white font-semibold text-sm focus:outline-none placeholder:text-slate-500">
+                                </div>
+                            </div>
+
+                            <!-- Điều khoản chấp thuận -->
+                            <div class="pt-1">
+                                <label class="flex items-start gap-2 cursor-pointer group">
+                                    <input type="checkbox" id="check-reg-agree" required checked class="w-4 h-4 mt-0.5 rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900 accent-emerald-500">
+                                    <span class="text-[11px] text-slate-400 leading-tight group-hover:text-slate-300 transition-colors">
+                                        Tôi cam kết tuân thủ quy chế vận hành nội bộ, bảo mật thông tin và trách nhiệm công việc tại nhà hàng.
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Nút Đăng ký Submit CTA -->
+                            <div class="pt-2">
+                                <button type="submit" id="btn-submit-register" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 active:scale-[0.98] text-white font-black text-sm shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 group">
+                                    <i id="reg-spinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+                                    <span id="reg-btn-text">Đăng ký tài khoản nhân viên</span>
+                                    <i class="fa-solid fa-user-check text-sm transform group-hover:scale-110 transition-transform"></i>
+                                </button>
+                            </div>
+
+                            <!-- Chuyển về Đăng nhập -->
+                            <div class="text-center pt-2">
+                                <p class="text-xs text-slate-400">
+                                    Đã có tài khoản nhân sự? 
+                                    <button type="button" id="link-goto-login" class="text-emerald-400 hover:text-emerald-300 font-bold underline ml-1 cursor-pointer">
+                                        Đăng nhập ngay
+                                    </button>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Footer nhỏ trong card -->
+                    <div class="mt-5 pt-3 border-t border-slate-800 text-center">
+                        <p class="text-[11px] text-slate-500 font-medium">
+                            FoodHub Hospitality OS • Hệ thống Quản trị & Vận hành Nhà hàng Thông minh
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST CONTAINER (THÔNG BÁO GÓC TRÊN BÊN PHẢI) -->
+    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- SCRIPT ĐÓNG GÓI TỪ WEBPACK -->
+    <script src="../../js/login.js"></script>
+
+</body>
+
+</html>

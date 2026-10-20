@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub Restaurant POS</title>
+    <script>
+        (function() {
+            var search = window.location.search;
+            // Nếu có tham số ?table= thì là thực khách quét QR gọi món tại bàn
+            if (search.includes('table=') || search.includes('tableId=')) {
+                window.location.replace("views/customer/index.html" + search);
+                return;
+            }
+            // Kiểm tra trạng thái đăng nhập hệ thống
+            var userStr = localStorage.getItem('currentUser') || localStorage.getItem('user');
+            var token = localStorage.getItem('access_token') || localStorage.getItem('token');
+            if (userStr && token) {
+                try {
+                    var user = JSON.parse(userStr);
+                    var role = (user.role || '').toLowerCase();
+                    if (role === 'cashier') {
+                        window.location.replace("views/staff/cashier.html");
+                        return;
+                    } else if (role === 'waiter') {
+                        window.location.replace("views/staff/waiter.html");
+                        return;
+                    } else if (role === 'chef') {
+                        window.location.replace("views/staff/kitchen.html");
+                        return;
+                    } else if (role === 'admin') {
+                        window.location.replace("views/staff/admin.html");
+                        return;
+                    }
+                } catch (e) {}
+            }
+            // Chưa đăng nhập -> Bắt buộc chuyển đến màn hình Đăng nhập
+            window.location.replace("views/auth/login.html");
+        })();
+    </script>
+</head>
+
+<body style="background-color: #0f172a; color: #94a3b8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p style="font-size: 14px; text-align: center;">
+        Đang khởi động FoodHub POS...<br>
+        <a href="views/auth/login.html" style="color: #f97316; font-weight: bold; text-decoration: underline; margin-top: 8px; display: inline-block;">
+            Bấm vào đây để đăng nhập
+        </a>
+    </p>
+</body>
+
+</html>
