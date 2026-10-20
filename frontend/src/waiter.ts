@@ -2961,9 +2961,10 @@ const initTransferItemModal = () => {
                 });
             }
 
+            const targetOrdId = targetOrder.id || targetOrder._id || (targetOrder.data && (targetOrder.data.id || targetOrder.data._id));
             const allSelectedIds = selectedOrderItemIds.flatMap(c => c.split(','));
             for (const id of allSelectedIds) {
-                await capNhatChiTietDonHang(id, { order_id: targetOrder.id });
+                await capNhatChiTietDonHang(id, { order_id: targetOrdId });
                 await new Promise(r => setTimeout(r, 80));
             }
 
@@ -3031,4 +3032,6 @@ setInterval(() => {
         updateServiceCenterBadge();
     }
 }, 3000);
+
+
 

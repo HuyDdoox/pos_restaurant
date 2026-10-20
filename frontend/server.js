@@ -180,8 +180,8 @@ server.post(['/api/orders', '/orders'], (req, res) => {
         table_id: body.table_id || '6ad6529312edf05c3d3ae3fa',
         customerInfo: body.customerInfo || 'Khách vãng lai',
         customerPhone: body.customerPhone || null,
-        status: 'pending',
-        paymentStatus: 'unpaid',
+        status: body.status || 'In_Progress',
+        paymentStatus: body.paymentStatus || 'unpaid',
         discountType: body.discountType || 'none',
         discountPercent: body.discountPercent || 0,
         discountAmount: body.discountAmount || 0,
@@ -189,6 +189,7 @@ server.post(['/api/orders', '/orders'], (req, res) => {
         notes: body.notes || '',
         items: formattedItems,
         total: (rawItems || []).reduce((s, it) => s + (it.price * it.quantity), 0) - (body.discountAmount || 0),
+        totalAmount: (rawItems || []).reduce((s, it) => s + (it.price * it.quantity), 0) - (body.discountAmount || 0),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };
