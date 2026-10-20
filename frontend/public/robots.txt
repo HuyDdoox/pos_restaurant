@@ -1,0 +1,14 @@
+# Robots.txt for FoodHub Restaurant POS
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /views/customer/
+Allow: /css/
+Allow: /js/
+
+# Disallow private staff and auth dashboards
+Disallow: /views/staff/
+Disallow: /views/auth/
+Disallow: /api/
+
+Sitemap: http://localhost:5000/sitemap.xml

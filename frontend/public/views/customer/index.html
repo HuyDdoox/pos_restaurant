@@ -6,7 +6,58 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>FoodHub - Trọn Vị Tinh Hoa, Đậm Đà Bản Sắc</title>
+    <title>FoodHub Restaurant - Thực Đơn Món Ăn & Đặt Món Trực Tuyến Tại Bàn</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <meta name="description" content="Khám phá thực đơn ẩm thực phong phú tại FoodHub Restaurant: Món Âu thượng hạng, Steak bò hảo hạng, Mì Ý, Set Combo gia đình và đồ uống pha chế độc đáo. Gọi món trực tuyến nhanh chóng qua mã QR tại bàn.">
+    <meta name="keywords" content="nhà hàng foodhub, thực đơn món âu, đặt món tại bàn, qr code menu, steak bò mỹ, ẩm thực châu âu, gọi món online, nhà hàng ngon">
+    <meta name="author" content="FoodHub Restaurant">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="http://localhost:5000/views/customer/index.html">
+
+    <!-- Open Graph / Facebook / Zalo -->
+    <meta property="og:type" content="restaurant.menu">
+    <meta property="og:title" content="FoodHub Restaurant - Thực Đơn Món Ăn & Đặt Món Trực Tuyến Tại Bàn">
+    <meta property="og:description" content="Thưởng thức trọn vị tinh hoa ẩm thực tại FoodHub. Xem menu phong phú, chọn topping tùy ý và đặt món trực tiếp tại bàn không cần chờ đợi.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&auto=format&fit=crop&q=80">
+    <meta property="og:url" content="http://localhost:5000/views/customer/index.html">
+    <meta property="og:site_name" content="FoodHub Restaurant">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FoodHub Restaurant - Thực Đơn Món Ăn & Đặt Món Trực Tuyến">
+    <meta name="twitter:description" content="Thực đơn ẩm thực Âu chuẩn vị tại FoodHub. Gọi món nhanh qua mã QR tại bàn.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&auto=format&fit=crop&q=80">
+
+    <!-- Schema.org JSON-LD Structured Data for Restaurant -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "FoodHub Restaurant",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&auto=format&fit=crop&q=80",
+      "description": "Nhà hàng ẩm thực phong cách Châu Âu phục vụ Steak, Mì Ý, Combo món ăn gia đình và đồ uống cao cấp.",
+      "servesCuisine": "European, Steakhouse, Contemporary",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Đường Ẩm Thực, Quận 1",
+        "addressLocality": "Hồ Chí Minh",
+        "addressCountry": "VN"
+      },
+      "telephone": "+84-911-223-344",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "09:00",
+          "closes": "23:00"
+        }
+      ],
+      "hasMenu": "http://localhost:5000/views/customer/index.html",
+      "acceptsReservations": "True"
+    }
+    </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -211,9 +262,9 @@
                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                                 <span>Ẩm thực thượng hạng 5 sao</span>
                             </div>
-                            <h1 class="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
+                            <h2 class="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
                                 Trọn Vị <span class="text-amber-300 font-extrabold">Tinh Hoa</span>, Đậm Đà <span class="text-amber-300 font-black">Bản Sắc</span>
-                            </h1>
+                            </h2>
                             <div class="flex items-center gap-2 pt-1">
                                 <button onclick="switchNavTab('menu')" class="flex-1 py-2.5 rounded-full bg-brand-red active:scale-95 text-white font-black text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-transform">
                                     <i class="fa-solid fa-book-open text-amber-300 text-xs"></i>
@@ -245,8 +296,8 @@
 
                         <div>
                             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white">
-                                Trọn Vị <span class="text-amber-300 font-extrabold">Tinh Hoa</span><br>
-                                Đậm Đà <span class="text-amber-300 font-black">Bản Sắc</span>
+                                FoodHub Restaurant<br>
+                                <span class="text-2xl sm:text-3xl lg:text-4xl text-amber-300 font-extrabold">Trọn Vị Tinh Hoa, Đậm Đà Bản Sắc</span>
                             </h1>
                             <p class="text-white/80 text-xs sm:text-sm font-medium mt-3 tracking-wide max-w-lg leading-relaxed">
                                 FoodHub Restaurant — Đánh thức mọi giác quan cùng những món ngon trứ danh được chế biến từ nguồn nguyên liệu thượng hạng.
