@@ -161,82 +161,74 @@
                 <!-- Desktop Navigation Tabs Pills -->
                 <nav class="hidden md:flex items-center gap-2">
                     <!-- Tab Home -->
-                    <button onclick="switchNavTab('home')" id="nav-btn-home" 
-                            class="nav-tab-btn px-4 py-2 rounded-full font-bold text-sm bg-brand-red text-white shadow-md shadow-brand-red/20 flex items-center gap-2 transition-all cursor-pointer">
-                        <i class="fa-solid fa-house text-xs"></i>
-                        <span>Trang chủ</span>
+                    <button onclick="switchNavTab('home')" id="nav-btn-home" title="Trang chủ"
+                            class="nav-tab-btn w-10 h-10 rounded-full font-bold text-sm bg-brand-red text-white shadow-md shadow-brand-red/20 flex items-center justify-center transition-all cursor-pointer">
+                        <i class="fa-solid fa-house text-sm"></i>
                     </button>
 
                     <!-- Tab Menu (Xem Thực Đơn) -->
-                    <button onclick="switchNavTab('menu')" id="nav-btn-menu" 
-                            class="nav-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-2 transition-all cursor-pointer">
-                        <i class="fa-solid fa-book-open text-xs"></i>
-                        <span>Thực đơn</span>
+                    <button onclick="switchNavTab('menu')" id="nav-btn-menu" title="Thực đơn"
+                            class="nav-tab-btn w-10 h-10 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center justify-center transition-all cursor-pointer">
+                        <i class="fa-solid fa-book-open text-sm"></i>
                     </button>
 
                     <!-- Tab About (Cuộn ngay đến mục Giới Thiệu trên trang chủ) -->
-                    <button onclick="goToAboutSection()" id="nav-btn-about" 
-                            class="nav-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-2 transition-all cursor-pointer">
-                        <i class="fa-solid fa-circle-info text-xs"></i>
-                        <span>Về chúng tôi</span>
+                    <button onclick="goToAboutSection()" id="nav-btn-about" title="Về chúng tôi"
+                            class="nav-tab-btn w-10 h-10 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center justify-center transition-all cursor-pointer">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
                     </button>
 
                     <!-- Nút Hội Viên / Tích Điểm -->
-                    <button onclick="openMemberModal()" id="nav-btn-member" 
-                            class="px-3.5 py-2 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/10 to-yellow-500/15 hover:from-amber-500/20 hover:to-yellow-500/25 text-amber-900 border border-amber-300/80 flex items-center gap-2 transition-all shadow-xs cursor-pointer">
-                        <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
-                        <span id="nav-lbl-member">Tích điểm / Hội viên</span>
+                    <button onclick="openMemberModal()" id="nav-btn-member" title="Tích điểm & Hội viên"
+                            class="w-10 h-10 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/10 to-yellow-500/15 hover:from-amber-500/20 hover:to-yellow-500/25 text-amber-900 border border-amber-300/80 flex items-center justify-center transition-all shadow-xs cursor-pointer">
+                        <i class="fa-solid fa-crown text-amber-500 text-sm"></i>
+                        <span id="nav-lbl-member" class="hidden"></span>
                     </button>
 
-                    <!-- Nút Bàn ăn -->
-                    <button onclick="openTablePickerModal()" 
-                            class="px-4 py-2 rounded-full font-bold text-sm text-slate-700 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-2 transition-all border border-warm-200 cursor-pointer">
-                        <i class="fa-solid fa-chair text-brand-red"></i>
-                        <span id="nav-lbl-table">Bàn 01</span>
+                    <!-- Nút Bàn ăn (Icon ghế + Số 1 kế bên) -->
+                    <button onclick="openTablePickerModal()" title="Bàn ăn"
+                            class="px-3 h-10 rounded-full font-black text-sm text-slate-700 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-1.5 transition-all border border-warm-200 cursor-pointer shadow-2xs">
+                        <i class="fa-solid fa-chair text-brand-red text-sm"></i>
+                        <span id="nav-lbl-table">1</span>
                     </button>
 
                     <!-- Nút Đã Order -->
-                    <button onclick="openOrderHistoryModal()" 
-                            class="px-4 py-2 rounded-full font-bold text-sm text-slate-700 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-2 transition-all cursor-pointer">
-                        <i class="fa-solid fa-receipt text-slate-400"></i>
-                        <span>Đã order</span>
+                    <button onclick="openOrderHistoryModal()" title="Đã order & Tiến độ món"
+                            class="w-10 h-10 rounded-full font-bold text-sm text-slate-700 hover:text-slate-900 hover:bg-warm-100 flex items-center justify-center transition-all border border-warm-200 hover:border-warm-300 cursor-pointer shadow-2xs">
+                        <i class="fa-solid fa-receipt text-slate-500 text-sm"></i>
                     </button>
 
                     <!-- Nút Thanh Toán VietQR Tức Thì -->
-                    <button onclick="openQRPaymentModal()" 
-                            class="px-4 py-2 rounded-full font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white flex items-center gap-2 transition-all shadow-sm shadow-emerald-600/25 active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-qrcode text-xs"></i>
-                        <span>Thanh toán QR</span>
+                    <button onclick="openQRPaymentModal()" title="Thanh toán VietQR"
+                            class="w-10 h-10 rounded-full font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white flex items-center justify-center transition-all shadow-sm shadow-emerald-600/25 active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-qrcode text-sm"></i>
                     </button>
 
                     <!-- Nút Giỏ hàng -->
-                    <button onclick="openCartDrawer()" 
-                            class="px-4 py-2 rounded-full font-bold text-sm text-slate-800 bg-warm-100 hover:bg-warm-200 flex items-center gap-2 transition-all cursor-pointer">
-                        <i class="fa-solid fa-cart-shopping text-brand-red"></i>
-                        <span>Giỏ hàng</span>
-                        <span id="nav-cart-badge" class="w-5 h-5 rounded-full bg-brand-red text-white text-[11px] font-black flex items-center justify-center">0</span>
+                    <button onclick="openCartDrawer()" title="Giỏ hàng"
+                            class="relative w-10 h-10 rounded-full bg-warm-100 hover:bg-warm-200 text-slate-800 flex items-center justify-center transition-all cursor-pointer">
+                        <i class="fa-solid fa-cart-shopping text-brand-red text-sm"></i>
+                        <span id="nav-cart-badge" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand-red text-white text-[10px] font-black flex items-center justify-center shadow-xs">0</span>
                     </button>
                 </nav>
 
                 <!-- Mobile Action Header: Sleek & Clean -->
                 <div class="flex items-center gap-2 md:hidden">
                     <!-- Member Quick Pill Mobile -->
-                    <button onclick="openMemberModal()" id="mobile-btn-member" class="px-2.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/20 border border-amber-300/80 flex items-center gap-1.5 text-xs font-bold text-amber-900 shadow-xs active:scale-95 transition-all cursor-pointer">
+                    <button onclick="openMemberModal()" id="mobile-btn-member" title="Hội viên" class="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/20 border border-amber-300/80 flex items-center justify-center text-xs font-bold text-amber-900 shadow-xs active:scale-95 transition-all cursor-pointer">
                         <i class="fa-solid fa-crown text-amber-500 text-[11px]"></i>
-                        <span id="mobile-lbl-member">Hội viên</span>
+                        <span id="mobile-lbl-member" class="hidden"></span>
                     </button>
 
                     <!-- Compact Table Status Pill -->
-                    <button onclick="openTablePickerModal()" class="px-3 py-1.5 rounded-full bg-warm-100 hover:bg-warm-200 border border-warm-200/80 flex items-center gap-2 text-xs font-bold text-slate-800 shadow-xs active:scale-95 transition-all cursor-pointer">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span id="mobile-lbl-table">Bàn 01</span>
-                        <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
+                    <button onclick="openTablePickerModal()" title="Bàn ăn" class="px-2.5 h-8 rounded-full bg-warm-100 hover:bg-warm-200 border border-warm-200/80 flex items-center gap-1.5 text-xs font-black text-slate-800 shadow-xs active:scale-95 transition-all cursor-pointer">
+                        <i class="fa-solid fa-chair text-brand-red text-[11px]"></i>
+                        <span id="mobile-lbl-table">1</span>
                     </button>
 
                     <!-- QR Pay Pill Mobile -->
-                    <button onclick="openQRPaymentModal()" class="px-2.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center gap-1.5 text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer" title="Thanh toán VietQR">
+                    <button onclick="openQRPaymentModal()" class="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center justify-center text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer" title="Thanh toán VietQR">
                         <i class="fa-solid fa-qrcode text-[11px]"></i>
-                        <span>Trả QR</span>
                     </button>
 
                     <!-- Cart Quick Access -->
@@ -1494,24 +1486,28 @@
             const mobLbl = document.getElementById('mobile-lbl-member');
 
             if (!currentMember) {
-                if (navLbl) navLbl.innerHTML = `Tích điểm / Hội viên`;
+                if (navLbl) navLbl.innerHTML = ``;
                 if (navBtn) {
-                    navBtn.className = "px-3.5 py-2 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/10 to-yellow-500/15 hover:from-amber-500/20 hover:to-yellow-500/25 text-amber-900 border border-amber-300/80 flex items-center gap-2 transition-all shadow-xs cursor-pointer";
+                    navBtn.className = "w-10 h-10 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/10 to-yellow-500/15 hover:from-amber-500/20 hover:to-yellow-500/25 text-amber-900 border border-amber-300/80 flex items-center justify-center transition-all shadow-xs cursor-pointer";
+                    navBtn.title = "Tích điểm & Hội viên";
                 }
-                if (mobLbl) mobLbl.innerText = `Hội viên`;
+                if (mobLbl) mobLbl.innerText = ``;
                 if (mobBtn) {
-                    mobBtn.className = "px-2.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/20 border border-amber-300/80 flex items-center gap-1.5 text-xs font-bold text-amber-900 shadow-xs active:scale-95 transition-all cursor-pointer";
+                    mobBtn.className = "w-8 h-8 rounded-full bg-gradient-to-r from-amber-500/15 to-yellow-500/20 border border-amber-300/80 flex items-center justify-center text-xs font-bold text-amber-900 shadow-xs active:scale-95 transition-all cursor-pointer";
+                    mobBtn.title = "Hội viên";
                 }
             } else {
                 const conf = TIER_CONFIG[currentMember.tier] || TIER_CONFIG['Bronze'];
                 const shortName = (currentMember.name || 'Khách').split(' ').slice(-1)[0];
-                if (navLbl) navLbl.innerHTML = `<span class="px-1.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${conf.badgeClass}">${conf.name}</span> <span class="truncate max-w-[120px]">${shortName}</span> <span class="text-amber-500 font-black">(${currentMember.points || 0}đ)</span>`;
+                if (navLbl) navLbl.innerHTML = ``;
                 if (navBtn) {
-                    navBtn.className = "px-3 py-1.5 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/15 to-yellow-500/20 hover:from-amber-500/25 hover:to-yellow-500/30 text-slate-900 border border-amber-400 flex items-center gap-2 transition-all shadow-sm shadow-amber-500/10 ring-2 ring-amber-400/30 cursor-pointer";
+                    navBtn.className = "w-10 h-10 rounded-full font-bold text-sm bg-gradient-to-r from-amber-500/20 to-yellow-500/30 text-slate-900 border border-amber-400 flex items-center justify-center transition-all shadow-sm shadow-amber-500/10 ring-2 ring-amber-400/40 cursor-pointer";
+                    navBtn.title = `Hội viên ${conf.name}: ${shortName} (${currentMember.points || 0}đ)`;
                 }
-                if (mobLbl) mobLbl.innerHTML = `<span class="text-[10px] text-amber-600 font-black">[${conf.name}]</span> ${shortName}`;
+                if (mobLbl) mobLbl.innerHTML = ``;
                 if (mobBtn) {
-                    mobBtn.className = "px-2.5 py-1.5 rounded-full bg-amber-100/90 border border-amber-400 flex items-center gap-1.5 text-xs font-black text-slate-900 shadow-xs active:scale-95 transition-all cursor-pointer";
+                    mobBtn.className = "w-8 h-8 rounded-full bg-amber-100/90 border border-amber-400 flex items-center justify-center text-xs font-black text-slate-900 shadow-xs active:scale-95 transition-all cursor-pointer";
+                    mobBtn.title = `Hội viên ${conf.name}: ${shortName}`;
                 }
             }
             renderMemberModalView();
@@ -1746,8 +1742,11 @@
 
         function updateTableUI() {
             const num = currentTable.tableNumber || currentTable.name || '01';
-            document.getElementById('nav-lbl-table').innerText = `Bàn ${num}`;
-            document.getElementById('mobile-lbl-table').innerText = `Bàn ${num}`;
+            const cleanNum = String(num).replace(/^(Bàn\s*|BAN\s*|bàn\s*|0+)/i, '') || num;
+            const navLbl = document.getElementById('nav-lbl-table');
+            if (navLbl) navLbl.innerText = cleanNum;
+            const mobLbl = document.getElementById('mobile-lbl-table');
+            if (mobLbl) mobLbl.innerText = cleanNum;
             document.getElementById('hero-table-number').innerText = `Bàn số: ${num}`;
             document.getElementById('hero-table-seats').innerText = `Số ghế: ${currentTable.capacity || 4} khách`;
             document.getElementById('cart-drawer-table-lbl').innerText = `Phục vụ: Bàn ${num}`;
@@ -2008,11 +2007,11 @@
             
             // Sync Desktop Nav Buttons
             document.querySelectorAll('.nav-tab-btn').forEach(b => {
-                b.className = "nav-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center gap-2 transition-all cursor-pointer";
+                b.className = "nav-tab-btn w-10 h-10 rounded-full font-bold text-sm text-slate-600 hover:text-slate-900 hover:bg-warm-100 flex items-center justify-center transition-all cursor-pointer";
             });
             const activeBtn = document.getElementById(`nav-btn-${tabName}`);
             if (activeBtn) {
-                activeBtn.className = "nav-tab-btn px-4 py-2 rounded-full font-bold text-sm bg-brand-red text-white shadow-md shadow-brand-red/20 flex items-center gap-2 transition-all cursor-pointer";
+                activeBtn.className = "nav-tab-btn w-10 h-10 rounded-full font-bold text-sm bg-brand-red text-white shadow-md shadow-brand-red/20 flex items-center justify-center transition-all cursor-pointer";
             }
 
             // Sync Mobile Bottom Nav Buttons
