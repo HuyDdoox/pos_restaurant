@@ -32,7 +32,7 @@
             var search = window.location.search;
             // Nếu có tham số ?table= thì là thực khách quét QR gọi món tại bàn
             if (search.includes('table=') || search.includes('tableId=')) {
-                window.location.replace("views/customer/index.html" + search);
+                window.location.replace("views/customer/" + search);
                 return;
             }
             // Kiểm tra trạng thái đăng nhập hệ thống

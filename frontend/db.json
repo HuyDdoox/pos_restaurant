@@ -940,7 +940,7 @@
       "tableNumber": "01",
       "max_capacity": 4,
       "zone": "Khu Trong Nhà (Tầng 1)",
-      "status": "Occupied",
+      "status": "occupied",
       "currentOrderId": "6ad6828f44ce483ecadd7815",
       "createdAt": "2026-10-18T18:29:58.817Z",
       "updatedAt": "2026-10-19T20:50:23.405Z",
@@ -948,7 +948,8 @@
       "current_pax": 0,
       "merged_with": null,
       "reservation": null,
-      "id": "6ad51026fee662a5d85df3e3"
+      "id": "6ad51026fee662a5d85df3e3",
+      "currentOrder_id": "1a159de11cb648ca5"
     },
     {
       "_id": "6ad540a5f9b227157295deca",
@@ -2307,6 +2308,52 @@
       "updatedAt": "2026-10-20T09:03:15.681Z",
       "__v": 0,
       "id": "6ad72e539746cc99d12a0750"
+    },
+    {
+      "_id": "1a159de11cb648ca5",
+      "id": "1a159de11cb648ca5",
+      "table_id": "6ad51026fee662a5d85df3e3",
+      "customerInfo": "Nguyễn Văn Nam - 0901234567 (Gold)",
+      "customerPhone": "0901234567",
+      "status": "pending",
+      "paymentStatus": "unpaid",
+      "discountType": "percent",
+      "discountPercent": 10,
+      "discountAmount": 172000,
+      "discountReason": "Ưu đãi Hội viên Vàng (Nguyễn Văn Nam)",
+      "notes": "Xin nhiều đá lạnh và khăn ướt",
+      "items": [
+        {
+          "menuItem_id": "6ad6529212edf05c3d3ae377",
+          "name": "Bò bít tết Thăn nội Úc sốt tiêu đen",
+          "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80",
+          "quantity": 4,
+          "price": 430000,
+          "variants_selected": [
+            {
+              "_id": "6ad6529312edf05c3d3ae3c8",
+              "name": "Tái vừa (Medium Rare) - Khuyên dùng",
+              "extra_price": 0
+            },
+            {
+              "_id": "6ad6529312edf05c3d3ae3cd",
+              "name": "Sốt nấm Truffle đen quý phái",
+              "extra_price": 35000
+            },
+            {
+              "_id": "6ad6529312edf05c3d3ae3d0",
+              "name": "Khoai tây nghiền bơ Pháp",
+              "extra_price": 0
+            }
+          ],
+          "variantNote": "Tái vừa (Medium Rare) - Khuyên dùng, Sốt nấm Truffle đen quý phái (+35.000đ), Khoai tây nghiền bơ Pháp | Ít muối, xin thêm bơ tỏi",
+          "status": "Pending",
+          "createdAt": "2026-10-20T15:11:28.203Z"
+        }
+      ],
+      "total": 1548000,
+      "createdAt": "2026-10-20T15:11:28.203Z",
+      "updatedAt": "2026-10-20T15:11:28.203Z"
     }
   ],
   "order-details": [
@@ -3534,6 +3581,35 @@
       "createdAt": "2026-10-20T09:03:15.590Z",
       "updatedAt": "2026-10-20T09:03:15.590Z",
       "id": "6ad72e539746cc99d12a0751"
+    },
+    {
+      "_id": "1a159de11cb71b36a",
+      "id": "1a159de11cb71b36a",
+      "order_id": "1a159de11cb648ca5",
+      "menuItem_id": "6ad6529212edf05c3d3ae377",
+      "name": "Bò bít tết Thăn nội Úc sốt tiêu đen",
+      "quantity": 4,
+      "price": 430000,
+      "status": "Pending",
+      "variantNote": "Tái vừa (Medium Rare) - Khuyên dùng, Sốt nấm Truffle đen quý phái (+35.000đ), Khoai tây nghiền bơ Pháp | Ít muối, xin thêm bơ tỏi",
+      "variants_selected": [
+        {
+          "_id": "6ad6529312edf05c3d3ae3c8",
+          "name": "Tái vừa (Medium Rare) - Khuyên dùng",
+          "extra_price": 0
+        },
+        {
+          "_id": "6ad6529312edf05c3d3ae3cd",
+          "name": "Sốt nấm Truffle đen quý phái",
+          "extra_price": 35000
+        },
+        {
+          "_id": "6ad6529312edf05c3d3ae3d0",
+          "name": "Khoai tây nghiền bơ Pháp",
+          "extra_price": 0
+        }
+      ],
+      "createdAt": "2026-10-20T15:11:28.203Z"
     }
   ],
   "variants": [
@@ -7521,6 +7597,27 @@
       "updatedAt": "2026-10-19T20:20:40.298Z",
       "__v": 0,
       "id": "6ad67b984f4ab266c84b1e2b"
+    },
+    {
+      "name": "Trần Quốc Bảo",
+      "phone": "0944556677",
+      "tier": "Bronze",
+      "points": 0,
+      "totalSpent": 0,
+      "id": "CAqR-io"
+    },
+    {
+      "_id": "1a159dde9ef61b5ad",
+      "id": "1a159dde9ef61b5ad",
+      "name": "Trần Quốc Bảo",
+      "phone": "0944556677",
+      "email": null,
+      "tier": "Bronze",
+      "points": 0,
+      "totalSpent": 0,
+      "registeredAt": "2026-10-20T15:11:17.999Z",
+      "createdAt": "2026-10-20T15:11:17.999Z",
+      "updatedAt": "2026-10-20T15:11:17.999Z"
     }
   ],
   "audit-logs": [
