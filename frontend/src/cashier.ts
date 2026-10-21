@@ -4,7 +4,7 @@ import {
     ketThucCaLamViec, layThongTinCaLamViec, layCaHienTai, layChiTietCuaDon, layDanhSachMonAn, layDanhSachHoaDonChuaThanhToan, 
     taoChiTietDonHang, layTatCaDonHang, layTatCaChiTietDon, capNhatChiTietDonHang, 
     xoaChiTietDonHang, taoDonHang, layDanhSachNguyenLieu, layTatCaCongThuc, layDanhSachDanhMuc,
-    layDanhSachCashTransactions, taoCashTransaction, chuyenBanDonHang 
+    layDanhSachCashTransactions, taoCashTransaction, chuyenBanDonHang, layDanhSachVouchers 
 } from './api';
 import { deductInventoryForOrder } from './inventory_engine';
 import { MenuItem } from './interfaces';
@@ -176,16 +176,37 @@ let calculatedServiceCharge = 0;
 let calculatedVatAmount = 0;
 let calculatedFinalTotal = 0;
 
-// Voucher mẫu sẵn có trong hệ thống
-const AVAILABLE_VOUCHERS = [
-    { code: 'VIP10', name: 'Thành viên VIP Bạc', type: 'percent', value: 10, minOrder: 0, desc: 'Giảm 10% tổng hóa đơn' },
-    { code: 'VIP15', name: 'Thành viên VIP Vàng', type: 'percent', value: 15, minOrder: 300000, desc: 'Giảm 15% cho đơn từ 300k' },
-    { code: 'VIP20', name: 'Thành viên VIP Kim Cương', type: 'percent', value: 20, minOrder: 500000, desc: 'Giảm 20% cho đơn từ 500k' },
-    { code: 'GIAM50K', name: 'Voucher Chào Bạn Mới', type: 'amount', value: 50000, minOrder: 200000, desc: 'Giảm 50.000 đ đơn từ 200k' },
-    { code: 'GIAM100K', name: 'Tri ân khách hàng', type: 'amount', value: 100000, minOrder: 600000, desc: 'Giảm 100.000 đ đơn từ 600k' },
-    { code: 'SINHNHAT', name: 'Ưu đãi Sinh nhật', type: 'percent', value: 15, minOrder: 0, desc: 'Giảm 15% mừng sinh nhật khách' },
-    { code: 'HAPPYHOUR', name: 'Khung giờ Vàng (14h-17h)', type: 'percent', value: 10, minOrder: 150000, desc: 'Giảm 10% khung giờ trưa' }
-];
+// Danh sách Voucher khuyến mãi tải động từ MongoDB
+let availableVouchers: any[] = [];
+
+export const loadAvailableVouchers = async () => {
+    try {
+        const list = await layDanhSachVouchers();
+        const now = new Date();
+        availableVouchers = (list || []).filter((v: any) => {
+            if (v.status && v.status !== 'Active') return false;
+            // Kiểm tra ngày bắt đầu nếu có
+            if (v.startDate) {
+                const s = new Date(v.startDate);
+                if (!isNaN(s.getTime()) && now < s) return false;
+            }
+            // Kiểm tra ngày kết thúc nếu có
+            if (v.endDate) {
+                const e = new Date(v.endDate);
+                if (!isNaN(e.getTime()) && now > e) return false;
+            }
+            // Kiểm tra giới hạn lượt dùng nếu có
+            if (v.usageLimit && v.usedCount && Number(v.usedCount) >= Number(v.usageLimit)) {
+                return false;
+            }
+            return true;
+        });
+        return availableVouchers;
+    } catch (e) {
+        console.error("Lỗi khi tải danh sách voucher từ MongoDB:", e);
+        return [];
+    }
+};
 
 // State cho Chuyển Bàn
 let selectedTransferTargetTableId: string | null = null;
@@ -377,15 +398,22 @@ const calculateBillTotals = () => {
     } else if (currentDiscountType === 'amount') {
         calculatedDiscountAmount = Math.min(calculatedSubtotal, currentDiscountFixedAmount);
     } else if (currentDiscountType === 'voucher') {
-        const matched = AVAILABLE_VOUCHERS.find(v => v.code === currentDiscountVoucherCode);
+        const matched = availableVouchers.find(v => v.code === currentDiscountVoucherCode);
         if (matched) {
-            if (matched.type === 'percent') {
-                calculatedDiscountAmount = Math.round(calculatedSubtotal * (matched.value / 100));
+            const isPercent = matched.type === 'percent' || matched.type === 'percentage';
+            const val = Number(matched.value) || 0;
+            const maxDisc = Number(matched.maxDiscount) || 0;
+            if (isPercent) {
+                let disc = Math.round(calculatedSubtotal * (val / 100));
+                if (maxDisc > 0) disc = Math.min(disc, maxDisc);
+                calculatedDiscountAmount = disc;
             } else {
-                calculatedDiscountAmount = Math.min(calculatedSubtotal, matched.value);
+                calculatedDiscountAmount = Math.min(calculatedSubtotal, val);
             }
-        } else {
+        } else if (currentDiscountPercent > 0) {
             calculatedDiscountAmount = Math.round(calculatedSubtotal * (currentDiscountPercent / 100));
+        } else if (currentDiscountFixedAmount > 0) {
+            calculatedDiscountAmount = Math.min(calculatedSubtotal, currentDiscountFixedAmount);
         }
     }
     calculatedDiscountAmount = Math.max(0, Math.min(calculatedSubtotal, calculatedDiscountAmount));
@@ -517,15 +545,39 @@ const setupDiscountModalEvents = () => {
         }
     };
 
-    const renderVouchers = () => {
+    const renderVouchers = async () => {
         if (!voucherListEl) return;
+        
+        voucherListEl.innerHTML = `
+            <div class="col-span-full py-6 text-center text-slate-400 text-xs">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải danh sách voucher từ hệ thống...
+            </div>
+        `;
+
+        await loadAvailableVouchers();
         const subtotal = calculatedSubtotal;
 
+        if (availableVouchers.length === 0) {
+            voucherListEl.innerHTML = `
+                <div class="col-span-full py-8 text-center text-slate-500 text-xs">
+                    <i class="fa-solid fa-ticket-simple text-2xl mb-2 block opacity-40"></i>
+                    Không có voucher khuyến mãi nào đang khả dụng.
+                </div>
+            `;
+            return;
+        }
+
         let html = '';
-        AVAILABLE_VOUCHERS.forEach(v => {
-            const isEligible = subtotal >= v.minOrder;
+        availableVouchers.forEach((v: any) => {
+            const isPercent = v.type === 'percent' || v.type === 'percentage';
+            const val = Number(v.value) || 0;
+            const minOrder = Number(v.minOrderValue ?? v.minOrder ?? 0);
+            const maxDisc = Number(v.maxDiscount) || 0;
+
+            const isEligible = subtotal >= minOrder;
             const isApplied = currentDiscountVoucherCode === v.code;
-            const valDisplay = v.type === 'percent' ? `Giảm ${v.value}%` : `Giảm ${formatMoney(v.value)} đ`;
+            const valDisplay = isPercent ? `Giảm ${val}%` : `Giảm ${formatMoney(val)} đ`;
+            const maxDisplay = (isPercent && maxDisc > 0) ? ` (tối đa ${formatMoney(maxDisc)} đ)` : '';
 
             html += `
                 <div class="voucher-card p-3 rounded-2xl border transition-all cursor-pointer relative ${
@@ -540,12 +592,12 @@ const setupDiscountModalEvents = () => {
                             <span class="inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
                                 isApplied ? 'bg-orange-500 text-white' : 'bg-slate-800 text-orange-400 border border-orange-500/30'
                             }">${v.code}</span>
-                            <h5 class="text-xs font-bold text-white mt-1">${v.name}</h5>
+                            <h5 class="text-xs font-bold text-white mt-1">${v.name || v.code}</h5>
                         </div>
-                        <span class="text-xs font-black text-emerald-400">${valDisplay}</span>
+                        <span class="text-xs font-black text-emerald-400">${valDisplay}${maxDisplay}</span>
                     </div>
-                    <p class="text-[11px] text-slate-400">${v.desc}</p>
-                    ${v.minOrder > 0 ? `<p class="text-[10px] text-slate-500 mt-1 italic">Đơn tối thiểu: ${formatMoney(v.minOrder)} đ</p>` : ''}
+                    ${v.desc ? `<p class="text-[11px] text-slate-400">${v.desc}</p>` : ''}
+                    ${minOrder > 0 ? `<p class="text-[10px] text-slate-500 mt-1 italic">Đơn tối thiểu: ${formatMoney(minOrder)} đ</p>` : ''}
                     ${isApplied ? '<div class="absolute top-2 right-2 text-orange-400 text-xs"><i class="fa-solid fa-circle-check"></i> Đang dùng</div>' : ''}
                 </div>
             `;
@@ -555,22 +607,26 @@ const setupDiscountModalEvents = () => {
         voucherListEl.querySelectorAll('.voucher-card').forEach(card => {
             card.addEventListener('click', () => {
                 const code = card.getAttribute('data-voucher-code');
-                const v = AVAILABLE_VOUCHERS.find(item => item.code === code);
+                const v = availableVouchers.find((item: any) => item.code === code);
                 if (!v) return;
 
-                if (calculatedSubtotal < v.minOrder) {
-                    showWarningToast(`Hóa đơn cần tối thiểu ${formatMoney(v.minOrder)} đ để dùng voucher này!`);
+                const minOrder = Number(v.minOrderValue ?? v.minOrder ?? 0);
+                if (calculatedSubtotal < minOrder) {
+                    showWarningToast(`Hóa đơn cần tối thiểu ${formatMoney(minOrder)} đ để dùng voucher này!`);
                     return;
                 }
 
+                const isPercent = v.type === 'percent' || v.type === 'percentage';
+                const val = Number(v.value) || 0;
+
                 currentDiscountType = 'voucher';
                 currentDiscountVoucherCode = v.code;
-                currentDiscountReason = v.name;
-                if (v.type === 'percent') {
-                    currentDiscountPercent = v.value;
+                currentDiscountReason = v.name || v.code;
+                if (isPercent) {
+                    currentDiscountPercent = val;
                     currentDiscountFixedAmount = 0;
                 } else {
-                    currentDiscountFixedAmount = v.value;
+                    currentDiscountFixedAmount = val;
                     currentDiscountPercent = 0;
                 }
 
@@ -588,15 +644,15 @@ const setupDiscountModalEvents = () => {
         });
     };
 
-    const openModal = () => {
+    const openModal = async () => {
         if (!selectedOrder) {
             showWarningToast("Vui lòng chọn bàn có đơn hàng trước!");
             return;
         }
         updateDiscountSummary();
-        renderVouchers();
         overlay?.classList.remove('hidden');
         overlay?.classList.add('flex');
+        await renderVouchers();
     };
 
     const closeModal = () => {
@@ -1227,6 +1283,7 @@ document.querySelectorAll('.filter-table-btn').forEach(btn => {
 
 const loadDashboard = async () => {
     if (menuItems.length === 0) menuItems = await layDanhSachMonAn();
+    await loadAvailableVouchers();
     setupDiscountAndTaxListeners();
     setupDiscountModalEvents();
     setupTransferTableEvents();

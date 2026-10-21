@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Order, OrderDetail, Table, MenuItem, AuditLog, Customer } = require('../models');
+const { Order, OrderDetail, Table, MenuItem, AuditLog, Customer, Voucher } = require('../models');
 
 // ==========================================
 // 1. QUẢN LÝ ĐƠN HÀNG (ORDERS)
@@ -341,6 +341,18 @@ exports.updateOrder = async (req, res) => {
                     status: 'Available',
                     currentOrderId: null
                 });
+            }
+        }
+
+        // Tự động tăng lượt sử dụng voucher khi đơn thanh toán thành công
+        if ((updated.status === 'Completed' || updated.paymentStatus === 'Paid') && updated.voucherCode) {
+            try {
+                await Voucher.findOneAndUpdate(
+                    { code: updated.voucherCode.trim().toUpperCase() },
+                    { $inc: { usedCount: 1 } }
+                );
+            } catch (vErr) {
+                console.warn("Không thể cập nhật usedCount cho voucher:", vErr.message);
             }
         }
 

@@ -82,6 +82,7 @@ exports.updateVoucher = async (req, res) => {
         if (maxDiscount !== undefined) updateData.maxDiscount = Number(maxDiscount);
         if (minOrderValue !== undefined) updateData.minOrderValue = Number(minOrderValue);
         if (usageLimit !== undefined) updateData.usageLimit = Number(usageLimit);
+        if (req.body.usedCount !== undefined) updateData.usedCount = Number(req.body.usedCount);
         if (startDate !== undefined) updateData.startDate = startDate;
         if (endDate !== undefined) updateData.endDate = endDate;
         if (status !== undefined) updateData.status = status;

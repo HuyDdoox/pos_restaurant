@@ -18,9 +18,10 @@ router.get('/', extraCtrl.getAllVouchers);
 // Tạo mã voucher mới: { code, discount_type, value, min_order, max_discount, valid_until }
 router.post('/', extraCtrl.createVoucher);
 
-// PUT http://localhost:4000/vouchers/:id
+// PUT / PATCH http://localhost:4000/vouchers/:id
 // Cập nhật thông tin mã voucher
 router.put('/:id', extraCtrl.updateVoucher);
+router.patch('/:id', extraCtrl.updateVoucher);
 
 // DELETE http://localhost:4000/vouchers/:id
 // Xóa voucher
