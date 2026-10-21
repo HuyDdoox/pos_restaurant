@@ -1,4 +1,4 @@
-import { API_INGREDIENTS_URL } from './config';
+import { API_INGREDIENTS_URL, API_BACKEND_URL } from './config';
 import { showSuccessToast, showConfirmModal, showWarningToast } from './utils/ui';
 
 let allIngredientsCache: any[] = [];
@@ -227,7 +227,7 @@ function renderLowStockAlerts() {
 
 async function loadLossReports() {
     try {
-        const res = await fetch("http://localhost:4000/api/loss-reports");
+        const res = await fetch(`${API_BACKEND_URL}/loss-reports`);
         if (!res.ok) return;
         const json = await res.json();
         let data = Array.isArray(json) ? json : (json.data || []);
@@ -526,7 +526,7 @@ async function handleBatchLossSubmit(e: Event) {
             
             // Save report
             promises.push(
-                fetch("http://localhost:4000/api/loss-reports", {
+                fetch(`${API_BACKEND_URL}/loss-reports`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(report)

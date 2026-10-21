@@ -1,7 +1,7 @@
 import { showSuccessToast, showConfirmModal, showWarningToast } from './utils/ui';
-import { API_INGREDIENTS_URL } from './config';
+import { API_INGREDIENTS_URL, API_BACKEND_URL } from './config';
 
-const API_VARIANT_RECIPES_URL = 'http://localhost:4000/api/variant-recipes';
+const API_VARIANT_RECIPES_URL = `${API_BACKEND_URL}/variant-recipes`;
 let currentVariantId: string | null = null;
 let allIngredients: any[] = [];
 

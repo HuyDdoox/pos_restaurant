@@ -350,6 +350,15 @@ server.use((req, res, next) => {
     } else if (req.url === '/api') {
         req.url = '/';
     }
+
+    // Alias mapping for case-sensitivity or legacy names
+    if (req.url.startsWith('/Ingredients')) {
+        req.url = req.url.replace(/^\/Ingredients/, '/inventory');
+    } else if (req.url.startsWith('/MenuItems')) {
+        req.url = req.url.replace(/^\/MenuItems/, '/menu');
+    } else if (req.url.startsWith('/Recipes')) {
+        req.url = req.url.replace(/^\/Recipes/, '/recipes');
+    }
     next();
 });
 

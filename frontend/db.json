@@ -931,6 +931,14 @@
       "updatedAt": "2026-10-19T17:39:10.790Z",
       "__v": 0,
       "id": "6ad655afa42d9095ffe2b8ca"
+    },
+    {
+      "name": "Pizza Pineapple",
+      "description": "Dị giáo",
+      "icon": "fa-pizza-slice",
+      "displayOrder": 9,
+      "status": "Active",
+      "id": "5odKHNj"
     }
   ],
   "tables": [
@@ -10534,5 +10542,7 @@
       "__v": 0,
       "id": "6ad72e6d9746cc99d12a075b"
     }
-  ]
+  ],
+  "loss-reports": [],
+  "variant-recipes": []
 }

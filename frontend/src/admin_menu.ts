@@ -1,5 +1,5 @@
 import { layDanhSachMonAn, layDanhSachDanhMuc, suaMonAn, taoMonAn, layDanhSachVariants } from './api';
-import { API_URL, API_VARIANTS_URL } from './config';
+import { API_URL, API_VARIANTS_URL, API_BACKEND_URL } from './config';
 import { showSuccessToast, showConfirmModal } from './utils/ui';
 import { openVariantRecipeModal } from './admin_variant_recipe';
 
@@ -1886,7 +1886,7 @@ const loadVariants = async (menuItemId: string) => {
         
         let allRecipes: any[] = [];
         try {
-            const recipeRes = await fetch(`http://localhost:4000/api/variant-recipes`);
+            const recipeRes = await fetch(`${API_BACKEND_URL}/variant-recipes`);
             if(recipeRes.ok) allRecipes = await recipeRes.json();
         } catch (e) {}
 

@@ -1,8 +1,9 @@
 import { showConfirmModal, showSuccessToast, showNumberPromptModal } from './utils/ui';
 import { syncMenuItemsStockStatus } from './inventory_engine';
+import { API_BACKEND_URL } from './config';
 
 // API URL
-const JSON_SERVER = 'http://localhost:4000/api';
+const JSON_SERVER = API_BACKEND_URL;
 
 // State Management (Cache data)
 let inventoryIngredients: any[] = [];
@@ -145,7 +146,7 @@ async function handleExcelImport(e: Event) {
         btnImportExcel.disabled = true;
 
         await Promise.all(validIngredients.map(ing => 
-            fetch(`${JSON_SERVER}/Ingredients`, {
+            fetch(`${JSON_SERVER}/inventory`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(ing)
@@ -291,7 +292,7 @@ async function handleInventoryDblClick(e: Event) {
             }
             
             try {
-                const res = await fetch(`${JSON_SERVER}/Ingredients/${id}`, {
+                const res = await fetch(`${JSON_SERVER}/inventory/${id}`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ [field]: newVal })
@@ -389,7 +390,7 @@ async function handleInventoryDblClick(e: Event) {
         const finalQty = convertToBaseUnit(newQty, newUnit, baseUnit);
         
         try {
-            const res = await fetch(`${JSON_SERVER}/Recipes/${recipeId}`, {
+            const res = await fetch(`${JSON_SERVER}/recipes/${recipeId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -509,7 +510,7 @@ async function handleInventoryClick(e: Event) {
 // ----------------------------------------------------
 async function loadIngredients() {
     try {
-        const res = await fetch(`${JSON_SERVER}/Ingredients`);
+        const res = await fetch(`${JSON_SERVER}/inventory`);
         const resJson = await res.json();
         const raw = Array.isArray(resJson) ? resJson : (resJson.data || []);
         inventoryIngredients = raw.map((ing: any) => ({
@@ -710,7 +711,7 @@ async function saveBatchIngredients() {
 
         // Chạy Promise.all để gửi đồng loạt
         await Promise.all(validIngredients.map(ing => 
-            fetch(`${JSON_SERVER}/Ingredients`, {
+            fetch(`${JSON_SERVER}/inventory`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(ing)
@@ -739,7 +740,7 @@ async function toggleIngredientStatus(id: string, newStatus: string) {
     const isConfirmed = await showConfirmModal("Xác nhận", `Bạn có chắc muốn ${newStatus === 'Inactive' ? 'ngừng dùng' : 'mở lại'} nguyên liệu này?`);
     if(!isConfirmed) return;
     try {
-        const res = await fetch(`${JSON_SERVER}/Ingredients/${id}`, {
+        const res = await fetch(`${JSON_SERVER}/inventory/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus })
@@ -765,7 +766,7 @@ async function handleStockAdjustment(id: string, action: 'import') {
     let newStock = ing.stock_quantity + result.value;
 
     try {
-        const res = await fetch(`${JSON_SERVER}/Ingredients/${id}`, {
+        const res = await fetch(`${JSON_SERVER}/inventory/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ stock_quantity: newStock })
@@ -791,7 +792,7 @@ async function handleStockAdjustment(id: string, action: 'import') {
 // ----------------------------------------------------
 async function loadMenuItemsForRecipe() {
     try {
-        const res = await fetch(`${JSON_SERVER}/MenuItems`);
+        const res = await fetch(`${JSON_SERVER}/menu`);
         const resJson = await res.json();
         const raw = Array.isArray(resJson) ? resJson : (resJson.data || []);
         inventoryMenuItems = raw.filter((m: any) => !m.is_combo).map((m: any) => ({
@@ -855,7 +856,7 @@ function selectMenuItemForRecipe(id: string, name: string) {
 
 async function loadRecipeForMenu(menuItemId: string) {
     try {
-        const res = await fetch(`${JSON_SERVER}/Recipes?menuItem_id=${menuItemId}`);
+        const res = await fetch(`${JSON_SERVER}/recipes?menuItem_id=${menuItemId}`);
         const resJson = await res.json();
         const raw = Array.isArray(resJson) ? resJson : (resJson.data || []);
         const recipes = raw.map((r: any) => ({
@@ -999,7 +1000,7 @@ async function addRecipe() {
     const quantity_required = convertToBaseUnit(raw_qty, selectedUnit, baseUnit);
 
     try {
-        await fetch(`${JSON_SERVER}/Recipes`, {
+        await fetch(`${JSON_SERVER}/recipes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1027,7 +1028,7 @@ async function addRecipe() {
 
 async function deleteRecipe(id: string) {
     try {
-        await fetch(`${JSON_SERVER}/Recipes/${id}`, { method: 'DELETE' });
+        await fetch(`${JSON_SERVER}/recipes/${id}`, { method: 'DELETE' });
         if (selectedRecipeMenuItemId) {
             loadRecipeForMenu(selectedRecipeMenuItemId);
         }
