@@ -1337,6 +1337,112 @@ const applyMenuFilters = () => {
     renderMenuItemsTable(filtered);
 };
 
+let currentMenuFilteredList: any[] = [];
+let currentMenuRenderedCount = 0;
+const MENU_ITEMS_PAGE_SIZE = 15;
+let menuSentinelObserver: IntersectionObserver | null = null;
+
+const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => {
+    const cat = allCategories.find(c => String(c.id) === String(item.category_id));
+    let statusHtml = '';
+    
+    if (item.status === 'Available') {
+        statusHtml = `<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full text-xs font-black border border-emerald-500/30">Đang bán</span>`;
+    } else if (item.status === 'Out_of_stock') {
+        statusHtml = `<span class="bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full text-xs font-black border border-orange-500/30">Hết nguyên liệu</span>`;
+    } else {
+        statusHtml = `<span class="bg-slate-500/20 text-slate-400 px-2 py-0.5 rounded-full text-xs font-black border border-slate-500/30">Đã ẩn</span>`;
+    }
+    
+    const btnToggleAction = item.status === 'Archived' 
+        ? `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Mở lại món ${item.name}"><i class="fa-solid fa-eye text-xs"></i></button>`
+        : `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Ẩn món ${item.name}"><i class="fa-solid fa-eye-slash text-xs"></i></button>`;
+
+    const actionHtml = `
+        <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
+            ${canUpdate ? `<button data-id="${item.id}" class="btn-edit-price w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa món ${item.name}"><i class="fa-solid fa-pen text-xs"></i></button>` : ''}
+            ${canUpdate ? btnToggleAction : ''}
+        </div>
+    `;
+
+    const variantConfigBtn = item.is_combo 
+        ? `<button data-id="${item.id}" class="btn-view-combo-details px-3 py-1.5 rounded-xl border border-amber-500/60 bg-amber-500/10 text-amber-400 text-xs font-bold hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center gap-1.5 cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95" title="Xem và sửa món thành phần trong Combo"><i class="fa-solid fa-boxes-stacked text-xs"></i><span>Món (${item.combo_items ? item.combo_items.length : 0})</span></button>`
+        : `<button data-id="${item.id}" data-name="${item.name}" class="btn-config-variants px-3 py-1.5 rounded-xl border border-orange-500/60 bg-orange-500/10 text-orange-400 text-xs font-bold hover:bg-orange-500 hover:text-white transition-all shadow-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95" title="Cấu hình biến thể cho ${item.name}"><i class="fa-solid fa-sliders text-xs mr-1"></i>Cấu hình</button>`;
+    
+    let tagsHtml = '';
+    if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
+        tagsHtml = `<div class="flex flex-wrap gap-1 mt-1.5">` + 
+            item.tags.map((t: string) => {
+                let bg = 'bg-slate-700 text-slate-300 border-slate-600';
+                const tagUpper = t.toUpperCase();
+                if (tagUpper.includes('BESTSELLER') || tagUpper.includes('BEST SELLER')) {
+                    bg = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                } else if (tagUpper.includes('MUST TRY')) {
+                    bg = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+                } else if (tagUpper.includes('CAY') || tagUpper.includes('SPICY')) {
+                    bg = 'bg-red-500/20 text-red-400 border-red-500/30';
+                    t = '<i class="fa-solid fa-pepper-hot mr-1"></i>' + t;
+                } else if (tagUpper.includes('CHAY') || tagUpper.includes('VEGAN')) {
+                    bg = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                    t = '<i class="fa-solid fa-leaf mr-1"></i>' + t;
+                }
+                return `<span class="${bg} border text-[10px] px-1.5 py-0.5 rounded-md whitespace-nowrap leading-none">${t}</span>`;
+            }).join('') + 
+            `</div>`;
+    }
+
+    return `
+        <tr class="hover:bg-slate-700/10 border-b border-slate-800/60">
+            <td class="px-6 py-4 whitespace-nowrap">
+                <img src="${item.image || 'https://placehold.co/150x150/orange/white?text=Food'}" alt="${item.name}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-700 bg-slate-800">
+            </td>
+            <td class="px-6 py-4 font-bold text-white whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                    <span class="whitespace-nowrap">${item.name}</span>
+                    ${item.is_combo ? `<span class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-boxes-stacked mr-1"></i>Combo</span>` : ''}
+                </div>
+                <p class="text-xs text-slate-400 font-semibold mb-0.5 whitespace-nowrap">${cat ? cat.name : ''} ${item.serving_size ? `• Khẩu phần: ${item.serving_size}` : ''}</p>
+                ${tagsHtml}
+            </td>
+            <td class="px-6 py-4 text-orange-400 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>
+            <td class="px-6 py-4 whitespace-nowrap">${variantConfigBtn}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${statusHtml}</td>
+            <td class="px-6 py-4 text-right whitespace-nowrap">${actionHtml}</td>
+        </tr>
+    `;
+};
+
+const renderNextMenuItemsBatch = () => {
+    const tbody = document.getElementById('menu-table-body');
+    if (!tbody || currentMenuRenderedCount >= currentMenuFilteredList.length) return;
+    
+    const oldSentinel = document.getElementById('menu-lazy-sentinel');
+    if (oldSentinel) oldSentinel.remove();
+
+    const batch = currentMenuFilteredList.slice(currentMenuRenderedCount, currentMenuRenderedCount + MENU_ITEMS_PAGE_SIZE);
+    currentMenuRenderedCount += batch.length;
+    
+    const rowsHtml = batch.map(it => createMenuItemRowHtml(it, true)).join('');
+    tbody.insertAdjacentHTML('beforeend', rowsHtml);
+
+    if (currentMenuRenderedCount < currentMenuFilteredList.length) {
+        const sentinel = document.createElement('tr');
+        sentinel.id = 'menu-lazy-sentinel';
+        sentinel.innerHTML = `<td colspan="6" class="px-6 py-4 text-center text-xs text-slate-500 font-bold"><i class="fa-solid fa-spinner fa-spin mr-2 text-orange-500"></i>Đang cuộn tải thêm (${currentMenuRenderedCount}/${currentMenuFilteredList.length} món)...</td>`;
+        tbody.appendChild(sentinel);
+
+        if (!menuSentinelObserver) {
+            menuSentinelObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    renderNextMenuItemsBatch();
+                }
+            }, { root: document.querySelector('main'), threshold: 0.1 });
+        }
+        menuSentinelObserver.disconnect();
+        menuSentinelObserver.observe(sentinel);
+    }
+};
+
 const renderMenuItemsTable = (data: any[]) => {
     const tbody = document.getElementById('menu-table-body');
     if (!tbody) return;
@@ -1346,77 +1452,10 @@ const renderMenuItemsTable = (data: any[]) => {
         return;
     }
     
-    const canUpdate = true;
+    currentMenuFilteredList = data;
+    currentMenuRenderedCount = 0;
     tbody.innerHTML = '';
-    data.forEach(item => {
-        const cat = allCategories.find(c => String(c.id) === String(item.category_id));
-        let statusHtml = '';
-        
-        if (item.status === 'Available') {
-            statusHtml = `<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full text-xs font-black border border-emerald-500/30">Đang bán</span>`;
-        } else if (item.status === 'Out_of_stock') {
-            statusHtml = `<span class="bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-full text-xs font-black border border-orange-500/30">Hết nguyên liệu</span>`;
-        } else {
-            statusHtml = `<span class="bg-slate-500/20 text-slate-400 px-2 py-0.5 rounded-full text-xs font-black border border-slate-500/30">Đã ẩn</span>`;
-        }
-        
-        const btnToggleAction = item.status === 'Archived' 
-            ? `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Mở lại món ${item.name}"><i class="fa-solid fa-eye text-xs"></i></button>`
-            : `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Ẩn món ${item.name}"><i class="fa-solid fa-eye-slash text-xs"></i></button>`;
-
-        const actionHtml = `
-            <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
-                ${canUpdate ? `<button data-id="${item.id}" class="btn-edit-price w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa món ${item.name}"><i class="fa-solid fa-pen text-xs"></i></button>` : ''}
-                ${canUpdate ? btnToggleAction : ''}
-            </div>
-        `;
-
-        const variantConfigBtn = item.is_combo 
-            ? `<button data-id="${item.id}" class="btn-view-combo-details px-3 py-1.5 rounded-xl border border-amber-500/60 bg-amber-500/10 text-amber-400 text-xs font-bold hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center gap-1.5 cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95" title="Xem và sửa món thành phần trong Combo"><i class="fa-solid fa-boxes-stacked text-xs"></i><span>Món (${item.combo_items ? item.combo_items.length : 0})</span></button>`
-            : `<button data-id="${item.id}" data-name="${item.name}" class="btn-config-variants px-3 py-1.5 rounded-xl border border-orange-500/60 bg-orange-500/10 text-orange-400 text-xs font-bold hover:bg-orange-500 hover:text-white transition-all shadow-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95" title="Cấu hình biến thể cho ${item.name}"><i class="fa-solid fa-sliders text-xs mr-1"></i>Cấu hình</button>`;
-        
-        let tagsHtml = '';
-        if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
-            tagsHtml = `<div class="flex flex-wrap gap-1 mt-1.5">` + 
-                item.tags.map((t: string) => {
-                    let bg = 'bg-slate-700 text-slate-300 border-slate-600';
-                    const tagUpper = t.toUpperCase();
-                    if (tagUpper.includes('BESTSELLER') || tagUpper.includes('BEST SELLER')) {
-                        bg = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-                    } else if (tagUpper.includes('MUST TRY')) {
-                        bg = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
-                    } else if (tagUpper.includes('CAY') || tagUpper.includes('SPICY')) {
-                        bg = 'bg-red-500/20 text-red-400 border-red-500/30';
-                        t = '<i class="fa-solid fa-pepper-hot mr-1"></i>' + t;
-                    } else if (tagUpper.includes('CHAY') || tagUpper.includes('VEGAN')) {
-                        bg = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-                        t = '<i class="fa-solid fa-leaf mr-1"></i>' + t;
-                    }
-                    return `<span class="${bg} border text-[10px] px-1.5 py-0.5 rounded-md whitespace-nowrap leading-none">${t}</span>`;
-                }).join('') + 
-                `</div>`;
-        }
-
-        tbody.innerHTML += `
-            <tr class="hover:bg-slate-700/10 border-b border-slate-800/60">
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <img src="${item.image || 'https://placehold.co/150x150/orange/white?text=Food'}" alt="${item.name}" class="w-12 h-12 rounded-xl object-cover border border-slate-700">
-                </td>
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">
-                    <div class="flex items-center gap-2">
-                        <span class="whitespace-nowrap">${item.name}</span>
-                        ${item.is_combo ? `<span class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-boxes-stacked mr-1"></i>Combo</span>` : ''}
-                    </div>
-                    <p class="text-xs text-slate-400 font-semibold mb-0.5 whitespace-nowrap">${cat ? cat.name : ''} ${item.serving_size ? `• Khẩu phần: ${item.serving_size}` : ''}</p>
-                    ${tagsHtml}
-                </td>
-                <td class="px-6 py-4 text-orange-400 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>
-                <td class="px-6 py-4 whitespace-nowrap">${variantConfigBtn}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${statusHtml}</td>
-                <td class="px-6 py-4 text-right whitespace-nowrap">${actionHtml}</td>
-            </tr>
-        `;
-    });
+    renderNextMenuItemsBatch();
 };
 
 const toggleMenuItemStatus = async (id: string, newStatus: string) => {

@@ -213,7 +213,7 @@ const renderDanhSachMonAn = (idDanhMuc: string = currentCategoryFilter) => {
                 ${badgeHtml}
                 ${tagsHtml}
                 <div class="h-40 overflow-hidden rounded-xl mb-3 bg-slate-100 relative cursor-pointer btn-open-detail" data-id="${mon.id}">
-                    <img src="${mon.image}" alt="${mon.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}">
+                    <img src="${mon.image}" alt="${mon.name}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'opacity-50 grayscale' : ''}">
                 </div>
                 <div class="flex flex-col flex-1">
                     <h3 class="text-base font-bold text-slate-800 leading-tight mb-1 line-clamp-2 cursor-pointer btn-open-detail" data-id="${mon.id}">${mon.name}</h3>
@@ -429,7 +429,7 @@ const hienThiModalFoodDetail = (mon: MenuItem, variants: Variant[]) => {
             upsellList.innerHTML = suggestions.map(s => `
                 <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 hover:border-orange-200 transition-colors">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${s.image}" alt="${s.name}" class="w-11 h-11 rounded-xl object-cover shrink-0">
+                        <img src="${s.image}" alt="${s.name}" loading="lazy" decoding="async" class="w-11 h-11 rounded-xl object-cover shrink-0">
                         <div class="min-w-0">
                             <p class="text-xs font-bold text-slate-800 truncate">${s.name}</p>
                             <p class="text-xs font-black text-orange-600">${s.base_price.toLocaleString('vi-VN')} ₫</p>
@@ -634,7 +634,7 @@ const renderLiveCart = () => {
         
         html += `
             <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex gap-3">
-                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover shrink-0">
+                <img src="${item.image}" alt="${item.name}" loading="lazy" decoding="async" class="w-16 h-16 rounded-xl object-cover shrink-0">
                 <div class="flex-grow min-w-0 flex flex-col">
                     <h4 class="font-bold text-slate-800 text-sm truncate">${item.name}</h4>
                     ${variantText}
@@ -1093,7 +1093,7 @@ const initOrderHistory = () => {
                     <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs space-y-2.5">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3 min-w-0">
-                                <img src="${img}" alt="${name}" class="w-12 h-12 rounded-xl object-cover shrink-0">
+                                <img src="${img}" alt="${name}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover shrink-0">
                                 <div class="min-w-0">
                                     <h4 class="font-bold text-sm text-slate-800 truncate">${name}</h4>
                                     <p class="text-xs text-slate-500">Số lượng: <span class="font-black text-slate-700">${item.quantity}</span></p>

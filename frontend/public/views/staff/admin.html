@@ -30,7 +30,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/admin.css?v=20261021_01">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -577,7 +577,7 @@
                     </div>
 
                     <!-- Top món bán chạy -->
-                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 overflow-hidden shadow-lg">
+                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 shadow-lg">
                         <div class="px-6 py-4 border-b border-slate-700/50 flex justify-between items-center bg-[#0f172a]/40">
                             <h3 class="font-black text-white" id="report-top-title">Top món bán chạy</h3>
                             <span id="report-top-badge" class="text-xs text-orange-400 font-bold bg-orange-500/10 border border-orange-500/20 px-3 py-1 rounded-lg">Toàn thời gian</span>
@@ -893,7 +893,7 @@
                 </div>
 
                 <!-- Thanh Tìm kiếm và Lọc -->
-                <div class="flex flex-col lg:flex-row gap-4 mb-6" id="tab-roles">
+                <div class="admin-sticky-filter flex flex-col lg:flex-row gap-4 mb-6" id="tab-roles">
                     <!-- Ô Input Tìm kiếm -->
                     <div class="flex-1 relative">
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none"
@@ -1057,7 +1057,7 @@
                 </div>
 
                 <!-- Thanh tìm kiếm & lọc (MENU) -->
-                <div class="flex flex-col lg:flex-row justify-between items-center gap-4 mb-4">
+                <div class="admin-sticky-filter flex flex-col lg:flex-row justify-between items-center gap-4 mb-4">
                     <!-- Ô Input Tìm kiếm -->
                     <div class="flex-1 w-full lg:max-w-md relative">
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none"
@@ -1083,10 +1083,10 @@
                     </div>
                 </div>
                 <div class="space-y-6">
-                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 overflow-hidden shadow-lg">
+                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 shadow-lg">
                         <table class="w-full text-left text-sm">
                             <thead
-                                class="text-slate-500 text-xs font-bold uppercase border-b border-slate-700 bg-[#0f172a]/30">
+                                class="admin-sticky-thead text-slate-400 text-xs font-bold uppercase border-b border-slate-700 bg-[#1e293b]">
                                 <tr>
                                     <th class="px-6 py-4 whitespace-nowrap">Ảnh</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Tên món</th>
@@ -1769,7 +1769,7 @@
                 </div>
 
                 <!-- Thanh tìm kiếm & lọc -->
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1e293b]/60 p-4 rounded-2xl border border-slate-700/40">
+                <div class="admin-sticky-filter flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
                     <div class="w-full sm:max-w-md relative">
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -1790,10 +1790,10 @@
                 </div>
 
                 <!-- Bảng danh mục -->
-                <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 overflow-hidden shadow-xl">
+                <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 shadow-xl">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm">
-                            <thead class="text-slate-400 text-xs font-black uppercase tracking-wider border-b border-slate-700 bg-[#0f172a]/40">
+                            <thead class="admin-sticky-thead text-slate-400 text-xs font-black uppercase tracking-wider border-b border-slate-700 bg-[#1e293b]">
                                 <tr>
                                     <th class="px-6 py-4 whitespace-nowrap">Danh mục</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Mô tả</th>
@@ -2188,7 +2188,7 @@
                     <!-- TAB 1: THẤT THOÁT & KIỂM KÊ -->
                     <div id="tab-loss" class="flex-1 flex flex-col min-h-0">
                         <!-- Toolbar Tìm kiếm & Lọc Thất thoát -->
-                        <div class="flex flex-col lg:flex-row justify-between items-center gap-3 mb-4 shrink-0">
+                        <div class="admin-sticky-filter flex flex-col lg:flex-row justify-between items-center gap-3 mb-4 shrink-0">
                             <!-- Ô Tìm kiếm -->
                             <div class="flex-1 w-full lg:max-w-md relative">
                                 <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none"
@@ -2272,7 +2272,7 @@
                     <!-- TAB 2: CẢNH BÁO TỒN KHO -->
                     <div id="tab-alert" class="hidden flex-1 flex flex-col min-h-0">
                         <!-- Toolbar Tìm kiếm & Lọc Cảnh báo kho -->
-                        <div class="flex flex-col lg:flex-row justify-between items-center gap-3 mb-4 shrink-0">
+                        <div class="admin-sticky-filter flex flex-col lg:flex-row justify-between items-center gap-3 mb-4 shrink-0">
                             <!-- Ô Tìm kiếm -->
                             <div class="flex-1 w-full lg:max-w-md relative">
                                 <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none"
@@ -2412,7 +2412,7 @@
                     </div>
 
                     <!-- Filter & Action Bar -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
+                    <div class="admin-sticky-filter flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
                         <div class="relative w-full sm:w-96">
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             <input type="text" id="input-voucher-search" placeholder="Tìm theo mã voucher hoặc tên..."
@@ -2509,7 +2509,7 @@
                     </div>
 
                     <!-- Filter & Action Bar -->
-                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
+                    <div class="admin-sticky-filter flex flex-col sm:flex-row justify-between items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
                         <div class="relative w-full sm:w-96">
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                             <input type="text" id="input-cust-search" placeholder="Tìm theo họ tên, SĐT, email..."
@@ -2632,7 +2632,7 @@
                 </div>
 
                 <!-- Filter & Search Bar -->
-                <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
+                <div class="admin-sticky-filter flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-[#1e293b] p-4 rounded-2xl border border-slate-700/50 shadow-md">
                     <div class="flex flex-wrap items-center gap-2">
                         <button class="btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20 cursor-pointer" data-cat="all">
                             Tất cả
@@ -2788,7 +2788,7 @@
         const initialPage = window.location.hash.replace('#', '') || 'overview';
         switchPage(initialPage);
     </script>
-    <script src="../../js/admin.js?v=20261021_01"></script>
+    <script src="../../js/admin.js?v=20261021_02"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Toggle Sidebar

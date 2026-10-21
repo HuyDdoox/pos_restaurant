@@ -819,7 +819,7 @@ function renderRecipeMenuItems(data: any[] = inventoryMenuItems) {
 
     container.innerHTML = data.map(item => `
         <div data-id="${item.id}" data-name="${item.name}" class="recipe-menu-item p-3 rounded-xl border border-slate-700/50 bg-[#0f172a]/50 hover:bg-slate-700/50 cursor-pointer transition-colors flex items-center gap-3">
-            <img src="${item.image || 'https://placehold.co/50x50/orange/white?text=Food'}" class="w-10 h-10 rounded-lg object-cover">
+            <img src="${item.image || 'https://placehold.co/50x50/orange/white?text=Food'}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover">
             <div class="flex-1">
                 <p class="font-bold text-white text-sm">${item.name}</p>
                 <p class="text-xs text-slate-400 font-medium">${item.category_id ? 'Món chính' : 'Khác'}</p>

@@ -536,7 +536,7 @@ const renderDishesInModal = () => {
             <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0f172a] border border-slate-800 hover:border-slate-700 transition-all group">
                 <div class="flex items-center gap-3.5 min-w-0">
                     <span class="text-xs font-mono font-bold text-slate-500 w-5 text-center shrink-0">#${index + 1}</span>
-                    <img src="${imgSrc}" class="w-12 h-12 rounded-xl object-cover border border-slate-700/80 shrink-0 bg-slate-800" onerror="this.src='${fallbackImg}'">
+                    <img src="${imgSrc}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-700/80 shrink-0 bg-slate-800" onerror="this.src='${fallbackImg}'">
                     <div class="min-w-0">
                         <div class="flex items-center gap-2">
                             <h4 class="font-bold text-white text-sm truncate">${dish.name}</h4>

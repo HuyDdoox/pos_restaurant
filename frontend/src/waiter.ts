@@ -1112,7 +1112,7 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
                 <!-- 1. Món ăn -->
                 <td class="py-3 px-4 align-middle">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${img}" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-700/60 shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80'">
+                        <img src="${img}" loading="lazy" decoding="async" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-700/60 shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80'">
                         <div class="min-w-0">
                             <div class="text-sm font-black text-white leading-snug break-words">${name}</div>
                             ${item.is_combo ? '<span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-black bg-purple-500/20 text-purple-300 border border-purple-500/30">Set Combo</span>' : ''}
@@ -1591,7 +1591,7 @@ const getWaiterCategoryIcon = (name: string, icon?: string): string => {
         menuGrid.innerHTML += `
             <div class="bg-[#0f172a] rounded-xl border border-slate-700/50 p-3 hover:border-orange-500 transition-colors group flex flex-col shadow-sm hover:shadow-md relative">
                 <div class="h-28 overflow-hidden rounded-lg mb-3 bg-slate-800 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">
-                    <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <img src="${item.image}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                 </div>
                 <h4 class="text-white font-bold text-sm mb-1 line-clamp-2 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">${item.name}</h4>
                 <div class="text-xs text-emerald-500 font-bold mb-2">Còn ${item.stock_quantity || 0} phần</div>
@@ -1982,7 +1982,7 @@ const renderMenuTab = () => {
             <div class="bg-[#0f172a] rounded-2xl border border-slate-700/50 flex flex-col overflow-hidden group relative">
                 ${tagsHtml}
                 <div class="h-32 overflow-hidden bg-slate-800">
-                    <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ${!isAvailable ? 'opacity-40 grayscale' : ''}">
+                    <img src="${item.image}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ${!isAvailable ? 'opacity-40 grayscale' : ''}">
                 </div>
                 <div class="p-4 flex flex-col flex-1">
                     <h3 class="text-white font-bold text-sm leading-tight mb-1">${item.name}</h3>
@@ -2165,7 +2165,7 @@ const loadOrders = async () => {
                 <tr class="border-b border-slate-800/50 last:border-0">
                     <td class="py-3">
                         <div class="flex items-center gap-3">
-                            <img src="${(mon && mon.image) ? mon.image : ((item.menuItem_id && item.menuItem_id.image) ? item.menuItem_id.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80')}" class="w-10 h-10 rounded-md object-cover bg-slate-800 shrink-0">
+                            <img src="${(mon && mon.image) ? mon.image : ((item.menuItem_id && item.menuItem_id.image) ? item.menuItem_id.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80')}" loading="lazy" decoding="async" class="w-10 h-10 rounded-md object-cover bg-slate-800 shrink-0">
                             <div>
                                 <span class="text-white font-bold text-sm">${monName}</span>
                                 ${notesHtml}
@@ -2580,7 +2580,7 @@ const loadPickupBoard = async () => {
             html += `
                 <div class="bg-[#0f172a] border border-slate-700/80 hover:border-emerald-500/50 rounded-2xl p-4 flex items-center justify-between gap-4 transition shadow-md">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${itemImg}" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-700">
+                        <img src="${itemImg}" loading="lazy" decoding="async" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-700">
                         <div class="min-w-0">
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap">

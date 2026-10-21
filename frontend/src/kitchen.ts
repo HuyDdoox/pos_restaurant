@@ -1554,7 +1554,7 @@ const renderRecallModalList = () => {
         html += `
             <div class="bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all shadow-sm">
                 <div class="flex items-center gap-3.5 flex-1 min-w-0">
-                    <img src="${mon?.image || 'https://via.placeholder.com/150'}" class="w-12 h-12 object-cover rounded-xl border border-slate-700 shrink-0" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${mon?.image || 'https://via.placeholder.com/150'}" loading="lazy" decoding="async" class="w-12 h-12 object-cover rounded-xl border border-slate-700 shrink-0" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-2 mb-0.5">
                             <span class="text-xs font-bold text-slate-400">${tableName}</span>
@@ -1971,7 +1971,7 @@ const renderKitchenFilteredGrid = () => {
         html += `
             <div class="rounded-2xl p-4 shadow-lg border ${cardBg} flex flex-col items-center text-center transition-all duration-200 relative group">
                 <div class="relative mb-3">
-                    <img src="${mon.image}" class="w-20 h-20 object-cover rounded-full shadow-md border-2 ${isOut ? 'border-red-500/50 grayscale' : 'border-slate-700'}" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${mon.image}" loading="lazy" decoding="async" class="w-20 h-20 object-cover rounded-full shadow-md border-2 ${isOut ? 'border-red-500/50 grayscale' : 'border-slate-700'}" onerror="this.src='https://via.placeholder.com/150'">
                     ${isOut ? '<span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">ĐÃ KHÓA</span>' : ''}
                 </div>
                 <h4 class="font-black text-white text-base mb-1 leading-tight line-clamp-2 min-h-[2.5rem]">${mon.name}</h4>

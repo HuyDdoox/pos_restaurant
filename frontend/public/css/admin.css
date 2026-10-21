@@ -107,3 +107,28 @@ input[type="checkbox"]:not(.sr-only)::before {
 input[type="checkbox"]:not(.sr-only):checked::before {
     transform: scale(1);
 }
+
+/* Sticky filter bars & table headers when scrolling main content */
+.admin-sticky-filter {
+    position: sticky;
+    top: -32px;
+    z-index: 30;
+    background-color: #0f172a;
+    padding-top: 14px;
+    padding-bottom: 12px;
+    margin-left: -32px;
+    margin-right: -32px;
+    padding-left: 32px;
+    padding-right: 32px;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.admin-sticky-thead {
+    position: sticky;
+    top: 36px;
+    z-index: 20;
+    background-color: #1e293b;
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

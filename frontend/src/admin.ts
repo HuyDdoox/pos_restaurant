@@ -147,7 +147,7 @@ const renderOverviewPreviewTables = (menuItems: any[], users: any[]) => {
         menuTbody.innerHTML = top4Menu.map(m => `
             <tr>
                 <td class="py-3 flex items-center gap-2">
-                    <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" class="w-7 h-7 rounded-lg object-cover shrink-0" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" />
+                    <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" loading="lazy" decoding="async" class="w-7 h-7 rounded-lg object-cover shrink-0" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" />
                     <span class="truncate max-w-[120px] sm:max-w-none">${m.name}</span>
                 </td>
                 <td class="py-3 text-slate-400 whitespace-nowrap">${Number(m.base_price || 0).toLocaleString('vi-VN')} đ</td>

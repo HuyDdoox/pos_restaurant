@@ -3026,6 +3026,7 @@ export const renderMenuGrid = () => {
                 <div>
                     <div class="relative overflow-hidden rounded-xl mb-3">
                         <img src="${item.image}" 
+                            loading="lazy" decoding="async"
                             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300'" 
                             class="w-full h-36 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300 ${!isAvailable ? 'grayscale opacity-60' : ''}">
                         
