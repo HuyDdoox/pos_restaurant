@@ -243,17 +243,17 @@ async function handleInventoryDblClick(e: Event) {
         if (field === 'name') {
             editableIngCell.innerHTML = `
                 <div class="flex items-center gap-2">
-                    <input type="text" class="edit-ing-input w-full bg-[#0f172a] border border-slate-700 text-white rounded px-2 py-1 text-sm focus:outline-none focus:border-orange-500" value="${origValue}">
-                    <button class="btn-save-ing p-1 text-emerald-400 hover:bg-emerald-500/20 rounded"><i class="fa-solid fa-circle-info text-sm"></i></button>
-                    <button class="btn-cancel-ing p-1 text-slate-400 hover:bg-slate-500/20 rounded"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
+                    <input type="text" class="edit-ing-input w-full bg-slate-50 border border-slate-200 text-slate-900 rounded px-2 py-1 text-sm focus:outline-none focus:border-orange-500 focus:bg-white" value="${origValue}">
+                    <button class="btn-save-ing p-1 text-emerald-600 hover:bg-emerald-50 rounded"><i class="fa-solid fa-circle-info text-sm"></i></button>
+                    <button class="btn-cancel-ing p-1 text-slate-400 hover:bg-slate-100 rounded"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
                 </div>
             `;
         } else if (field === 'cost_per_unit') {
             editableIngCell.innerHTML = `
                 <div class="flex items-center justify-end gap-2">
-                    <input type="number" class="edit-ing-input w-24 bg-[#0f172a] border border-slate-700 text-white rounded px-2 py-1 text-right text-sm focus:outline-none focus:border-orange-500" value="${origValue}">
-                    <button class="btn-save-ing p-1 text-emerald-400 hover:bg-emerald-500/20 rounded"><i class="fa-solid fa-circle-info text-sm"></i></button>
-                    <button class="btn-cancel-ing p-1 text-slate-400 hover:bg-slate-500/20 rounded"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
+                    <input type="number" class="edit-ing-input w-24 bg-slate-50 border border-slate-200 text-slate-900 rounded px-2 py-1 text-right text-sm focus:outline-none focus:border-orange-500 focus:bg-white" value="${origValue}">
+                    <button class="btn-save-ing p-1 text-emerald-600 hover:bg-emerald-50 rounded"><i class="fa-solid fa-circle-info text-sm"></i></button>
+                    <button class="btn-cancel-ing p-1 text-slate-400 hover:bg-slate-100 rounded"><i class="fa-solid fa-pen-to-square text-sm"></i></button>
                 </div>
             `;
         }
@@ -341,14 +341,14 @@ async function handleInventoryDblClick(e: Event) {
 
     editableCell.innerHTML = `
         <div class="flex justify-end items-center gap-1">
-            <input type="number" step="0.01" class="edit-qty w-16 bg-[#0f172a] border border-slate-700 text-white rounded px-1 py-[1px] text-right text-xs focus:outline-none focus:border-orange-500" value="${origQty}">
-            <select class="edit-unit bg-[#0f172a] border border-slate-700 text-white rounded px-0.5 py-[1px] text-xs focus:outline-none focus:border-orange-500">
+            <input type="number" step="0.01" class="edit-qty w-16 bg-slate-50 border border-slate-200 text-slate-900 rounded px-1 py-[1px] text-right text-xs focus:outline-none focus:border-orange-500 focus:bg-white" value="${origQty}">
+            <select class="edit-unit bg-slate-50 border border-slate-200 text-slate-900 rounded px-0.5 py-[1px] text-xs focus:outline-none focus:border-orange-500 focus:bg-white">
                 ${options}
             </select>
-            <button class="btn-save-inline text-emerald-500 hover:text-emerald-400 ml-1 p-0.5">
+            <button class="btn-save-inline text-emerald-600 hover:text-emerald-500 ml-1 p-0.5">
                 <i class="fa-solid fa-circle-info text-sm"></i>
             </button>
-            <button class="btn-cancel-inline text-slate-500 hover:text-red-400 ml-0.5 p-0.5">
+            <button class="btn-cancel-inline text-slate-400 hover:text-red-500 ml-0.5 p-0.5">
                 <i class="fa-solid fa-pen-to-square text-sm"></i>
             </button>
         </div>
@@ -620,16 +620,16 @@ function addIngredientRow() {
     if (!container) return;
     
     const newRow = document.createElement('div');
-    newRow.className = 'ingredient-row grid grid-cols-12 gap-2 items-center bg-slate-800/30 p-2 rounded-xl border border-slate-700/50';
+    newRow.className = 'ingredient-row grid grid-cols-12 gap-2 items-center bg-slate-50 p-2 rounded-xl border border-slate-200';
     newRow.innerHTML = `
         <div class="col-span-4">
-            <input type="text" class="ing-name-input w-full bg-[#0f172a] border border-slate-700 rounded-lg px-2 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500" placeholder="VD: Thịt bò">
+            <input type="text" class="ing-name-input w-full bg-white border border-slate-200 rounded-lg px-2 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500" placeholder="VD: Thịt bò">
         </div>
         <div class="col-span-2">
-            <input type="number" min="0" step="0.1" class="ing-stock-input w-full bg-[#0f172a] border border-slate-700 rounded-lg px-2 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500" placeholder="0">
+            <input type="number" min="0" step="0.1" class="ing-stock-input w-full bg-white border border-slate-200 rounded-lg px-2 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500" placeholder="0">
         </div>
         <div class="col-span-2">
-            <select class="ing-unit-input w-full bg-[#0f172a] border border-slate-700 rounded-lg px-2 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+            <select class="ing-unit-input w-full bg-white border border-slate-200 rounded-lg px-2 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500">
                 <option value="kg">kg</option>
                 <option value="g">g</option>
                 <option value="lít">lít</option>
@@ -638,10 +638,10 @@ function addIngredientRow() {
             </select>
         </div>
         <div class="col-span-3">
-            <input type="text" class="currency-input ing-cost-input w-full bg-[#0f172a] border border-slate-700 rounded-lg px-2 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500 text-right" placeholder="VD: 50000">
+            <input type="text" class="currency-input ing-cost-input w-full bg-white border border-slate-200 rounded-lg px-2 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 text-right" placeholder="VD: 50000">
         </div>
         <div class="col-span-1 flex justify-center">
-            <button type="button" class="btn-remove-ing-row text-slate-500 hover:text-red-500 transition-colors" title="Xóa dòng này">
+            <button type="button" class="btn-remove-ing-row text-slate-400 hover:text-red-500 transition-colors" title="Xóa dòng này">
                 <i class="fa-solid fa-trash text-sm"></i>
             </button>
         </div>
@@ -818,13 +818,13 @@ function renderRecipeMenuItems(data: any[] = inventoryMenuItems) {
     }
 
     container.innerHTML = data.map(item => `
-        <div data-id="${item.id}" data-name="${item.name}" class="recipe-menu-item p-3 rounded-xl border border-slate-700/50 bg-[#0f172a]/50 hover:bg-slate-700/50 cursor-pointer transition-colors flex items-center gap-3">
+        <div data-id="${item.id}" data-name="${item.name}" class="recipe-menu-item p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition-colors flex items-center gap-3">
             <img src="${item.image || 'https://placehold.co/50x50/orange/white?text=Food'}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover">
             <div class="flex-1">
-                <p class="font-bold text-white text-sm">${item.name}</p>
-                <p class="text-xs text-slate-400 font-medium">${item.category_id ? 'Món chính' : 'Khác'}</p>
+                <p class="font-bold text-slate-900 text-sm">${item.name}</p>
+                <p class="text-xs text-slate-500 font-medium">${item.category_id ? 'Món chính' : 'Khác'}</p>
             </div>
-            <i class="fa-solid fa-circle-info text-slate-500 text-sm"></i>
+            <i class="fa-solid fa-circle-info text-slate-400 text-sm"></i>
         </div>
     `).join('');
 }
@@ -835,11 +835,11 @@ function selectMenuItemForRecipe(id: string, name: string) {
     // Highlight
     document.querySelectorAll('.recipe-menu-item').forEach(el => {
         if (el.getAttribute('data-id') === id) {
-            el.classList.add('bg-orange-500/20', 'border-orange-500/50');
-            el.classList.remove('bg-[#0f172a]/50');
+            el.classList.add('bg-orange-50', 'border-orange-300');
+            el.classList.remove('bg-white');
         } else {
-            el.classList.remove('bg-orange-500/20', 'border-orange-500/50');
-            el.classList.add('bg-[#0f172a]/50');
+            el.classList.remove('bg-orange-50', 'border-orange-300');
+            el.classList.add('bg-white');
         }
     });
 

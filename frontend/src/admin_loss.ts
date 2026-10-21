@@ -338,22 +338,22 @@ function openLossModal() {
     const container = document.getElementById('batch-loss-container');
     if (container) {
         container.innerHTML = allIngredientsCache.map(ing => `
-            <div class="batch-loss-row grid grid-cols-12 gap-4 items-center p-3 border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors" data-id="${ing.id}" data-name="${ing.name}" data-sys-stock="${ing.stock_quantity}" data-unit="${ing.unit}" data-cost="${ing.cost_per_unit || 0}">
-                <div class="col-span-3 font-bold text-white text-sm flex items-center">
+            <div class="batch-loss-row grid grid-cols-12 gap-4 items-center p-3 border-b border-slate-100 hover:bg-slate-50 transition-colors" data-id="${ing.id}" data-name="${ing.name}" data-sys-stock="${ing.stock_quantity}" data-unit="${ing.unit}" data-cost="${ing.cost_per_unit || 0}">
+                <div class="col-span-3 font-bold text-slate-900 text-sm flex items-center">
                     <div class="w-2 h-2 rounded-full ${ing.stock_quantity > 0 ? 'bg-emerald-500' : 'bg-red-500'} mr-2"></div>
                     ${ing.name}
                 </div>
-                <div class="col-span-2 text-right font-black text-slate-400 text-sm">
+                <div class="col-span-2 text-right font-black text-slate-600 text-sm">
                     ${ing.stock_quantity} <span class="text-xs font-normal">${ing.unit}</span>
                 </div>
                 <div class="col-span-2 text-right">
-                    <input type="number" step="0.01" min="0" class="actual-stock-input w-full bg-[#0f172a] border border-slate-600 rounded px-2 py-1.5 text-white text-right text-sm font-bold focus:outline-none focus:border-red-500" placeholder="${ing.stock_quantity}">
+                    <input type="number" step="0.01" min="0" class="actual-stock-input w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-slate-900 text-right text-sm font-bold focus:outline-none focus:border-red-500 focus:bg-white" placeholder="${ing.stock_quantity}">
                 </div>
                 <div class="col-span-2 text-right">
-                    <span class="diff-text text-slate-500 text-sm font-bold">0</span>
+                    <span class="diff-text text-slate-400 text-sm font-bold">0</span>
                 </div>
                 <div class="col-span-3">
-                    <input type="text" class="reason-input w-full bg-[#0f172a] border border-slate-600 rounded px-2 py-1.5 text-white text-xs focus:outline-none focus:border-red-500" placeholder="Lý do...">
+                    <input type="text" class="reason-input w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-slate-900 text-xs focus:outline-none focus:border-red-500 focus:bg-white" placeholder="Lý do...">
                 </div>
             </div>
         `).join('');
@@ -411,18 +411,18 @@ function calculateBatchDifference(inputEl: HTMLElement) {
         
         if (isAbnormal) {
             row.classList.add('bg-red-500/10', 'border-red-500/50');
-            row.classList.remove('border-slate-700/50');
+            row.classList.remove('border-slate-100');
             row.setAttribute('data-warning', 'true');
             reasonInput.placeholder = "BẮT BUỘC NHẬP LÝ DO (Vượt định mức 5%)";
             reasonInput.classList.add('border-red-500', 'bg-red-500/10');
-            reasonInput.classList.remove('border-slate-600', 'bg-[#0f172a]');
+            reasonInput.classList.remove('border-slate-200', 'bg-slate-50');
         } else {
             row.classList.remove('bg-red-500/10', 'border-red-500/50');
-            row.classList.add('border-slate-700/50');
+            row.classList.add('border-slate-100');
             row.removeAttribute('data-warning');
             reasonInput.placeholder = "Lý do...";
             reasonInput.classList.remove('border-red-500', 'bg-red-500/10');
-            reasonInput.classList.add('border-slate-600', 'bg-[#0f172a]');
+            reasonInput.classList.add('border-slate-200', 'bg-slate-50');
         }
 
     } else if (diff < 0) {
@@ -431,11 +431,11 @@ function calculateBatchDifference(inputEl: HTMLElement) {
         row.setAttribute('data-loss', diff.toString()); // negative diff means surplus
         row.setAttribute('data-loss-cost', '0');
         row.classList.remove('bg-red-500/10', 'border-red-500/50');
-        row.classList.add('border-slate-700/50');
+        row.classList.add('border-slate-100');
         row.removeAttribute('data-warning');
         reasonInput.placeholder = "Lý do...";
         reasonInput.classList.remove('border-red-500', 'bg-red-500/10');
-        reasonInput.classList.add('border-slate-600', 'bg-[#0f172a]');
+        reasonInput.classList.add('border-slate-200', 'bg-slate-50');
     } else {
         diffEl.innerText = '0';
         diffEl.className = 'diff-text text-slate-500 text-sm font-bold';

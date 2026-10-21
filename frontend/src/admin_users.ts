@@ -237,8 +237,8 @@ const updateCardStyles = () => {
         const dot = el.querySelector('.card-active-dot') as HTMLElement;
         const isActive = currentQuickFilter === c.type;
 
-        el.className = 'user-stat-card cursor-pointer rounded-2xl p-5 border shadow-md flex items-center justify-between gap-4 transition-all duration-200 hover:scale-105 active:scale-95 select-none group ' + 
-            (isActive ? c.activeBorder : 'bg-[#1e293b] border-slate-700/50 hover:border-slate-600');
+        el.className = 'user-stat-card cursor-pointer rounded-2xl p-5 border shadow-sm flex items-center justify-between gap-4 transition-all duration-200 hover:scale-105 active:scale-95 select-none group ' + 
+            (isActive ? c.activeBorder : 'bg-white border-slate-200 hover:border-slate-400');
         
         if (dot) {
             if (isActive) dot.classList.remove('hidden');
@@ -376,10 +376,10 @@ const renderNextUsersBatch = () => {
     if (currentRenderedUsersCount < filteredUsers.length) {
         const sentinel = document.createElement('tr');
         sentinel.id = 'users-lazy-sentinel';
-        sentinel.className = 'cursor-pointer hover:bg-slate-800/40 transition-colors';
+        sentinel.className = 'cursor-pointer hover:bg-slate-50 transition-colors';
         sentinel.innerHTML = `
-            <td colspan="7" class="px-6 py-4 text-center text-xs text-slate-400 font-bold bg-[#1e293b]/60">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 shadow-sm text-slate-300">
+            <td colspan="7" class="px-6 py-4 text-center text-xs text-slate-500 font-bold bg-slate-50">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-slate-700">
                     <i class="fa-solid fa-spinner fa-spin text-orange-500 text-xs"></i>
                     <span>Đang cuộn tải thêm (${currentRenderedUsersCount}/${filteredUsers.length} tài khoản)...</span>
                 </div>
@@ -588,7 +588,7 @@ const showToast = (message: string) => {
     }
     
     const toast = document.createElement('div');
-    toast.className = 'bg-[#1e293b] border-l-4 border-emerald-500 text-white px-5 py-4 rounded-lg font-bold text-sm flex items-center gap-3 shadow-2xl transition-all duration-300';
+    toast.className = 'bg-white border-l-4 border-emerald-500 text-slate-900 border border-slate-200 px-5 py-4 rounded-xl font-bold text-sm flex items-center gap-3 shadow-xl transition-all duration-300';
     toast.style.animation = 'slideInRight 0.3s ease-out forwards';
     toast.innerHTML = `
         <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">

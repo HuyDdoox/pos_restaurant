@@ -415,10 +415,10 @@ const setupEventListeners = () => {
     if (btnAddVariant && variantsContainer) {
         btnAddVariant.addEventListener('click', () => {
             const row = document.createElement('div');
-            row.className = 'flex items-center gap-2 p-2 rounded-xl bg-slate-900 border border-slate-700 variant-entry-row';
+            row.className = 'flex items-center gap-2 p-2 rounded-xl bg-slate-50 border border-slate-200 variant-entry-row';
             row.innerHTML = `
-                <input type="text" placeholder="Tên biến thể (vd: Size L, Cay...)" class="variant-name-input flex-1 bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-2 text-white font-bold text-xs focus:outline-none focus:border-orange-500">
-                <input type="text" placeholder="Giá cộng thêm (đ)" class="currency-input variant-price-input w-28 bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-2 text-white font-bold text-xs focus:outline-none focus:border-orange-500">
+                <input type="text" placeholder="Tên biến thể (vd: Size L, Cay...)" class="variant-name-input flex-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 font-bold text-xs focus:outline-none focus:border-orange-500">
+                <input type="text" placeholder="Giá cộng thêm (đ)" class="currency-input variant-price-input w-28 bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 font-bold text-xs focus:outline-none focus:border-orange-500">
                 <button type="button" class="btn-remove-variant-entry text-slate-500 hover:text-red-400 p-2 transition shrink-0" title="Xóa">
                     <i class="fa-solid fa-trash text-xs"></i>
                 </button>
@@ -725,10 +725,10 @@ const setupEventListeners = () => {
                     <div class="variant-items-container space-y-2">
                         <div class="new-variant-row flex items-end gap-3">
                             <div class="flex-1">
-                                <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                             </div>
                             <div class="w-28">
-                                <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                             </div>
                             <button type="button" class="btn-remove-variant-row text-slate-500 hover:text-red-400 p-2 transition shrink-0" title="Xóa dòng">
                                 <i class="fa-solid fa-trash text-sm"></i>
@@ -791,10 +791,10 @@ const setupEventListeners = () => {
                     const rowHtml = `
                         <div class="new-variant-row flex items-end gap-3">
                             <div class="flex-1">
-                                <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                             </div>
                             <div class="w-28">
-                                <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                             </div>
                             <button type="button" class="btn-remove-variant-row text-slate-500 hover:text-red-400 p-2 transition shrink-0" title="Xóa dòng">
                                 <i class="fa-solid fa-trash text-sm"></i>
@@ -908,10 +908,10 @@ const setupEventListeners = () => {
                                 <div class="variant-items-container space-y-2">
                                     <div class="new-variant-row flex items-end gap-3">
                                         <div class="flex-1">
-                                            <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                            <input type="text" placeholder="Tên lựa chọn (VD: Size L)" class="variant-name-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                                         </div>
                                         <div class="w-28">
-                                            <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-[#0f172a] border border-slate-700 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500">
+                                            <input type="text" placeholder="Giá (+đ)" class="currency-input variant-price-input w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-sm focus:outline-none focus:border-orange-500 focus:bg-white">
                                         </div>
                                         <button type="button" class="btn-remove-variant-row text-slate-500 hover:text-red-400 p-2 transition shrink-0" title="Xóa dòng">
                                             <i class="fa-solid fa-trash text-sm"></i>
@@ -1266,15 +1266,15 @@ export const updateMenuCardStyles = () => {
         const indicator = el.querySelector('.menu-card-indicator');
 
         if (isSelected) {
-            el.className = `menu-stat-card cursor-pointer rounded-2xl p-5 border ${cfg.activeBorder} bg-slate-800/90 shadow-lg transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
+            el.className = `menu-stat-card cursor-pointer rounded-2xl p-5 border ${cfg.activeBorder} bg-orange-50/50 shadow-sm transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'menu-card-indicator text-[10px] font-bold text-orange-400 flex items-center gap-1';
+                indicator.className = 'menu-card-indicator text-[10px] font-bold text-orange-500 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Đang lọc';
             }
         } else {
-            el.className = `menu-stat-card cursor-pointer bg-[#1e293b] rounded-2xl p-5 border border-slate-700/50 shadow-md transition-all duration-200 hover:scale-[1.02] hover:border-slate-500/60 active:scale-95 select-none group flex flex-col justify-between`;
+            el.className = `menu-stat-card cursor-pointer bg-white rounded-2xl p-5 border border-slate-200 shadow-sm transition-all duration-200 hover:scale-[1.02] hover:border-slate-400 active:scale-95 select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'menu-card-indicator text-[10px] font-bold text-slate-500 group-hover:text-slate-300 flex items-center gap-1';
+                indicator.className = 'menu-card-indicator text-[10px] font-bold text-slate-400 group-hover:text-slate-600 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-filter text-[9px]"></i> Lọc';
             }
         }
@@ -2018,11 +2018,11 @@ const loadVariants = async (menuItemId: string) => {
                     : `<span class="px-1.5 py-0.5 bg-slate-700/50 text-slate-400 border border-slate-600 rounded text-[9px] font-bold ml-2">⚠️ Trống</span>`;
 
                 groupHtml += `
-                    <div class="variant-item-container flex flex-col p-3 rounded-xl border ${isArchived ? 'border-slate-700 bg-slate-800/30 opacity-50' : 'border-slate-700 bg-[#0f172a]'} transition-all">
+                    <div class="variant-item-container flex flex-col p-3 rounded-xl border ${isArchived ? 'border-slate-200 bg-slate-50 opacity-60' : 'border-slate-200 bg-white shadow-sm'} transition-all">
                         <div class="variant-view-mode flex items-center justify-between w-full">
                             <div>
-                                <p class="text-sm font-bold text-white ${isArchived ? 'line-through text-slate-500' : ''}">${v.name} ${recipeBadge}</p>
-                                <p class="text-xs font-black text-orange-400">+ ${Number(v.extra_price).toLocaleString('vi-VN')} đ</p>
+                                <p class="text-sm font-bold text-slate-900 ${isArchived ? 'line-through text-slate-400' : ''}">${v.name} ${recipeBadge}</p>
+                                <p class="text-xs font-black text-orange-500">+ ${Number(v.extra_price).toLocaleString('vi-VN')} đ</p>
                             </div>
                             <div class="flex gap-1.5">
                                 ${!isArchived ? `
@@ -2366,12 +2366,12 @@ const renderComboItemsList = () => {
             </div>
             <div class="flex items-center gap-3 shrink-0 ml-2">
                 <!-- Nút Tăng / Giảm số lượng -->
-                <div class="flex items-center bg-[#0f172a] border border-slate-700 rounded-lg overflow-hidden">
-                    <button type="button" data-index="${idx}" data-action="dec" class="btn-qty-combo-item px-2 py-1 text-slate-400 hover:text-white hover:bg-slate-700/50 transition font-bold" title="Giảm số lượng">-</button>
-                    <span class="px-2 font-black text-amber-400 text-xs min-w-[20px] text-center">${it.quantity}</span>
-                    <button type="button" data-index="${idx}" data-action="inc" class="btn-qty-combo-item px-2 py-1 text-slate-400 hover:text-white hover:bg-slate-700/50 transition font-bold" title="Tăng số lượng">+</button>
+                <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg overflow-hidden">
+                    <button type="button" data-index="${idx}" data-action="dec" class="btn-qty-combo-item px-2 py-1 text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition font-bold" title="Giảm số lượng">-</button>
+                    <span class="px-2 font-black text-amber-600 text-xs min-w-[20px] text-center">${it.quantity}</span>
+                    <button type="button" data-index="${idx}" data-action="inc" class="btn-qty-combo-item px-2 py-1 text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition font-bold" title="Tăng số lượng">+</button>
                 </div>
-                <span class="font-black text-slate-200 text-right min-w-[75px]">${it.original_price.toLocaleString('vi-VN')} đ</span>
+                <span class="font-black text-slate-900 text-right min-w-[75px]">${it.original_price.toLocaleString('vi-VN')} đ</span>
                 <button type="button" data-index="${idx}" class="btn-remove-combo-item text-slate-400 hover:text-red-400 hover:bg-red-500/10 p-1.5 rounded-lg transition cursor-pointer" title="Xóa món này khỏi Combo">
                     <i class="fa-solid fa-trash-can text-xs"></i>
                 </button>

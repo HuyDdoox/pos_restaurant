@@ -65,15 +65,15 @@ export const updateVoucherCardStyles = () => {
         const indicator = el.querySelector('.v-card-indicator');
 
         if (isSelected) {
-            el.className = `voucher-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-slate-800/90 shadow-lg transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
+            el.className = `voucher-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-orange-50/50 shadow-sm transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'v-card-indicator text-[10px] font-bold text-orange-400 flex items-center gap-1';
+                indicator.className = 'v-card-indicator text-[10px] font-bold text-orange-500 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Đang lọc';
             }
         } else {
-            el.className = `voucher-stat-card cursor-pointer bg-[#1e293b] p-5 rounded-2xl border border-slate-700/50 shadow-md transition-all duration-200 hover:scale-[1.02] hover:border-slate-500/60 active:scale-95 select-none group flex flex-col justify-between`;
+            el.className = `voucher-stat-card cursor-pointer bg-white p-5 rounded-2xl border border-slate-200 shadow-sm transition-all duration-200 hover:scale-[1.02] hover:border-slate-400 active:scale-95 select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'v-card-indicator text-[10px] font-bold text-slate-500 group-hover:text-slate-300 flex items-center gap-1';
+                indicator.className = 'v-card-indicator text-[10px] font-bold text-slate-400 group-hover:text-slate-600 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-filter text-[9px]"></i> Lọc';
             }
         }
@@ -316,15 +316,15 @@ export const updateCustomerCardStyles = () => {
         const indicator = el.querySelector('.cust-card-indicator');
 
         if (isSelected) {
-            el.className = `cust-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-slate-800/90 shadow-lg transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
+            el.className = `cust-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-orange-50/50 shadow-sm transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'cust-card-indicator text-[10px] font-bold text-orange-400 flex items-center gap-1';
+                indicator.className = 'cust-card-indicator text-[10px] font-bold text-orange-500 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Đang lọc';
             }
         } else {
-            el.className = `cust-stat-card cursor-pointer bg-[#1e293b] p-5 rounded-2xl border border-slate-700/50 shadow-md transition-all duration-200 hover:scale-[1.02] hover:border-slate-500/60 active:scale-95 select-none group flex flex-col justify-between`;
+            el.className = `cust-stat-card cursor-pointer bg-white p-5 rounded-2xl border border-slate-200 shadow-sm transition-all duration-200 hover:scale-[1.02] hover:border-slate-400 active:scale-95 select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'cust-card-indicator text-[10px] font-bold text-slate-500 group-hover:text-slate-300 flex items-center gap-1';
+                indicator.className = 'cust-card-indicator text-[10px] font-bold text-slate-400 group-hover:text-slate-600 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-filter text-[9px]"></i> Lọc';
             }
         }

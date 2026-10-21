@@ -49,9 +49,9 @@ const renderPresetIcons = () => {
     if (!grid) return;
 
     grid.innerHTML = PRESET_ICONS.map(p => `
-        <button type="button" class="btn-preset-icon p-2 rounded-xl bg-[#0f172a] hover:bg-orange-500/20 text-slate-300 hover:text-orange-400 border border-slate-700/80 hover:border-orange-500/50 flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group" data-icon="${p.icon}" title="${p.label}">
+        <button type="button" class="btn-preset-icon p-2 rounded-xl bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-600 border border-slate-200 hover:border-orange-300 flex flex-col items-center justify-center gap-1 transition-all cursor-pointer group" data-icon="${p.icon}" title="${p.label}">
             <i class="fa-solid ${p.icon} text-base group-hover:scale-110 transition-transform"></i>
-            <span class="text-[9px] font-medium text-slate-400 group-hover:text-slate-200 truncate w-full text-center">${p.label}</span>
+            <span class="text-[9px] font-medium text-slate-500 group-hover:text-slate-800 truncate w-full text-center">${p.label}</span>
         </button>
     `).join('');
 
@@ -310,15 +310,15 @@ export const updateCategoryCardStyles = () => {
         const indicator = el.querySelector('.cat-card-indicator');
 
         if (isSelected) {
-            el.className = `cat-stat-card cursor-pointer rounded-2xl p-5 border ${cfg.activeBorder} bg-slate-800/90 shadow-lg transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
+            el.className = `cat-stat-card cursor-pointer rounded-2xl p-5 border ${cfg.activeBorder} bg-orange-50/50 shadow-sm transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'cat-card-indicator text-[10px] font-bold text-orange-400 flex items-center gap-1';
+                indicator.className = 'cat-card-indicator text-[10px] font-bold text-orange-500 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Đang lọc';
             }
         } else {
-            el.className = 'cat-stat-card cursor-pointer bg-[#1e293b] rounded-2xl p-5 border border-slate-700/50 shadow-md transition-all duration-200 hover:scale-[1.02] hover:border-slate-500/60 active:scale-95 select-none group flex flex-col justify-between';
+            el.className = 'cat-stat-card cursor-pointer bg-white rounded-2xl p-5 border border-slate-200 shadow-sm transition-all duration-200 hover:scale-[1.02] hover:border-slate-400 active:scale-95 select-none group flex flex-col justify-between';
             if (indicator) {
-                indicator.className = 'cat-card-indicator text-[10px] font-bold text-slate-500 group-hover:text-slate-300 flex items-center gap-1';
+                indicator.className = 'cat-card-indicator text-[10px] font-bold text-slate-400 group-hover:text-slate-600 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-filter text-[9px]"></i> Lọc';
             }
         }
@@ -403,7 +403,7 @@ const renderCategoriesTable = () => {
 
                 <!-- Thứ tự -->
                 <td class="px-6 py-4 text-center whitespace-nowrap">
-                    <span class="inline-block px-2.5 py-1 rounded-lg bg-[#0f172a] text-slate-300 font-mono font-bold text-xs border border-slate-700/60">
+                    <span class="inline-block px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono font-bold text-xs border border-slate-200">
                         ${cat.displayOrder || 0}
                     </span>
                 </td>
@@ -557,14 +557,14 @@ const renderDishesInModal = () => {
         const imgSrc = dish.image || fallbackImg;
 
         return `
-            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0f172a] border border-slate-800 hover:border-slate-700 transition-all group">
+            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all group">
                 <div class="flex items-center gap-3.5 min-w-0">
-                    <span class="text-xs font-mono font-bold text-slate-500 w-5 text-center shrink-0">#${index + 1}</span>
-                    <img src="${imgSrc}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-700/80 shrink-0 bg-slate-800" onerror="this.src='${fallbackImg}'">
+                    <span class="text-xs font-mono font-bold text-slate-400 w-5 text-center shrink-0">#${index + 1}</span>
+                    <img src="${imgSrc}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0 bg-slate-100" onerror="this.src='${fallbackImg}'">
                     <div class="min-w-0">
                         <div class="flex items-center gap-2">
-                            <h4 class="font-bold text-white text-sm truncate">${dish.name}</h4>
-                            ${dish.is_combo ? '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-black border border-amber-500/30 shrink-0">COMBO</span>' : ''}
+                            <h4 class="font-bold text-slate-900 text-sm truncate">${dish.name}</h4>
+                            ${dish.is_combo ? '<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-black border border-amber-200 shrink-0">COMBO</span>' : ''}
                         </div>
                         <div class="flex items-center gap-2.5 mt-1 text-xs">
                             <span class="font-black text-orange-400">${formatMoney(dish.base_price)}</span>

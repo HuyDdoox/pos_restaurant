@@ -115,15 +115,15 @@ const renderOverviewRevenueChart = (orders: any[], details: any[]) => {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(255,255,255,0.1)' },
+                    grid: { color: 'rgba(226, 232, 240, 0.8)' },
                     ticks: {
-                        color: '#94a3b8',
+                        color: '#64748b',
                         callback: (v: number) => v.toLocaleString('vi-VN') + ' đ'
                     }
                 },
                 x: {
                     grid: { display: false },
-                    ticks: { color: '#94a3b8' }
+                    ticks: { color: '#64748b' }
                 }
             },
             plugins: {
@@ -147,12 +147,12 @@ const renderOverviewPreviewTables = (menuItems: any[], users: any[]) => {
         menuTbody.innerHTML = top4Menu.map(m => `
             <tr>
                 <td class="py-3 flex items-center gap-2">
-                    <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" loading="lazy" decoding="async" class="w-7 h-7 rounded-lg object-cover shrink-0" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" />
-                    <span class="truncate max-w-[120px] sm:max-w-none">${m.name}</span>
+                    <img src="${m.image || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'}" loading="lazy" decoding="async" class="w-7 h-7 rounded-lg object-cover shrink-0 border border-slate-200" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'" />
+                    <span class="truncate max-w-[120px] sm:max-w-none text-slate-800 font-bold">${m.name}</span>
                 </td>
-                <td class="py-3 text-slate-400 whitespace-nowrap">${Number(m.base_price || 0).toLocaleString('vi-VN')} đ</td>
+                <td class="py-3 text-slate-600 font-medium whitespace-nowrap">${Number(m.base_price || 0).toLocaleString('vi-VN')} đ</td>
                 <td class="py-3 text-right">
-                    <span class="${m.status === 'Available' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'} px-2 py-0.5 rounded-full text-xs font-black">
+                    <span class="${m.status === 'Available' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'} px-2 py-0.5 rounded-full text-xs font-bold">
                         ${m.status === 'Available' ? 'Còn hàng' : 'Hết hàng'}
                     </span>
                 </td>
@@ -188,12 +188,12 @@ const renderOverviewPreviewTables = (menuItems: any[], users: any[]) => {
             return `
                 <tr>
                     <td class="py-3 flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-full ${bgClass} flex items-center justify-center text-white font-black text-xs shrink-0">${initials}</div>
-                        <span class="truncate max-w-[120px] sm:max-w-none">${displayName}</span>
+                        <div class="w-7 h-7 rounded-full ${bgClass} flex items-center justify-center text-white font-bold text-xs shrink-0">${initials}</div>
+                        <span class="truncate max-w-[120px] sm:max-w-none text-slate-800 font-bold">${displayName}</span>
                     </td>
-                    <td class="py-3 text-slate-400 text-xs sm:text-sm whitespace-nowrap">${roleName}</td>
+                    <td class="py-3 text-slate-600 text-xs sm:text-sm font-medium whitespace-nowrap">${roleName}</td>
                     <td class="py-3 text-right">
-                        <span class="${isOnline ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'} px-2 py-0.5 rounded-full text-xs font-black">
+                        <span class="${isOnline ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'} px-2 py-0.5 rounded-full text-xs font-bold">
                             ${isOnline ? 'Online' : 'Khóa'}
                         </span>
                     </td>

@@ -111,14 +111,14 @@ export const scanAndRenderLiveOpsAlerts = async () => {
         }
 
         alertBanner.innerHTML = `
-            <div class="flex flex-wrap items-center justify-between gap-3 bg-[#1e293b]/90 border border-slate-700/80 p-3.5 px-5 rounded-2xl shadow-lg mb-6 backdrop-blur">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white/95 border border-slate-200 p-3.5 px-5 rounded-2xl shadow-sm mb-6 backdrop-blur">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">
+                    <div class="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold text-sm">
                         <i class="fa-solid fa-tower-broadcast animate-pulse"></i>
                     </div>
                     <div>
-                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Giám sát Vận hành Trực tiếp</div>
-                        <div class="text-sm font-black text-white">Tình trạng Quán Hiện tại</div>
+                        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Giám sát Vận hành Trực tiếp</div>
+                        <div class="text-sm font-black text-slate-900">Tình trạng Quán Hiện tại</div>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
@@ -314,15 +314,15 @@ export const updateAuditCardStyles = () => {
         const indicator = el.querySelector('.audit-card-indicator');
 
         if (isSelected) {
-            el.className = `audit-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-slate-800/90 shadow-lg transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
+            el.className = `audit-stat-card cursor-pointer p-5 rounded-2xl border ${cfg.activeBorder} bg-orange-50/50 shadow-sm transition-all duration-200 scale-[1.02] select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'audit-card-indicator text-[10px] font-bold text-orange-400 flex items-center gap-1';
+                indicator.className = 'audit-card-indicator text-[10px] font-bold text-orange-500 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-check text-[9px]"></i> Đang lọc';
             }
         } else {
-            el.className = `audit-stat-card cursor-pointer bg-[#1e293b] p-5 rounded-2xl border border-slate-700/50 shadow-md transition-all duration-200 hover:scale-[1.02] hover:border-slate-500/60 active:scale-95 select-none group flex flex-col justify-between`;
+            el.className = `audit-stat-card cursor-pointer bg-white p-5 rounded-2xl border border-slate-200 shadow-sm transition-all duration-200 hover:scale-[1.02] hover:border-slate-400 active:scale-95 select-none group flex flex-col justify-between`;
             if (indicator) {
-                indicator.className = 'audit-card-indicator text-[10px] font-bold text-slate-500 group-hover:text-slate-300 flex items-center gap-1';
+                indicator.className = 'audit-card-indicator text-[10px] font-bold text-slate-400 group-hover:text-slate-600 flex items-center gap-1';
                 indicator.innerHTML = '<i class="fa-solid fa-filter text-[9px]"></i> Lọc';
             }
         }
