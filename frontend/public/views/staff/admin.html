@@ -2811,6 +2811,21 @@
             }
 
             // Chart.js được khởi tạo và đồng bộ dữ liệu động 100% từ MongoDB qua admin.ts
+
+            // Tự động đóng modal khi click ra bên ngoài (backdrop)
+            document.querySelectorAll('[id^="modal-"], [id^="admin-overlay-"]').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        const closeBtn = modal.querySelector('button[id^="btn-close-"], button[id*="close"]');
+                        if (closeBtn) {
+                            closeBtn.click();
+                        } else {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                        }
+                    }
+                });
+            });
         });
     </script>
     <!-- MODAL THÊM/SỬA USER -->

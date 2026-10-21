@@ -735,7 +735,7 @@
     <!-- ========================================================================= -->
     <!-- 8. SLIDE-OVER CART DRAWER (TỶ LỆ 70/30 THEO CHUẨN BRD 1.4) -->
     <!-- ========================================================================= -->
-    <div id="cart-drawer-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300">
+    <div id="cart-drawer-backdrop" onclick="if(event.target === this) closeCartDrawer()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300">
         <div id="cart-drawer" class="absolute right-0 top-0 bottom-0 w-full max-w-2xl lg:max-w-3xl bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
             
             <!-- Drawer Header -->
@@ -868,7 +868,7 @@
     <!-- 9. MODAL HỘI VIÊN, CHỌN BÀN & LỊCH SỬ ĐÃ ORDER -->
     <!-- ========================================================================= -->
     <!-- Modal Hội Viên & Tích Điểm (Cách 1: Nhập SĐT nhanh) -->
-    <div id="modal-member-crm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+    <div id="modal-member-crm" onclick="if(event.target === this) closeMemberModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl relative overflow-hidden flex flex-col">
             <!-- Modal Header -->
             <div class="flex items-center justify-between pb-3.5 border-b border-warm-200 mb-4 shrink-0">
@@ -1016,7 +1016,7 @@
     </div>
 
     <!-- Modal Chọn Bàn -->
-    <div id="modal-table-picker" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
+    <div id="modal-table-picker" onclick="if(event.target === this) closeTablePickerModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[110] hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl">
             <div class="flex items-center justify-between pb-3 border-b border-warm-200 mb-4">
                 <div class="flex items-center gap-2">

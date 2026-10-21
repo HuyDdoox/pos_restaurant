@@ -841,5 +841,22 @@
         }
     </script>
     <script src="../../js/waiter.js?v=20261020_04"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        const closeBtn = modal.querySelector('button[id*="close"], button[id*="cancel"]');
+                        if (closeBtn) {
+                            closeBtn.click();
+                        } else {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
