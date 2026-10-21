@@ -10541,6 +10541,15 @@
       "updatedAt": "2026-10-20T09:03:41.060Z",
       "__v": 0,
       "id": "6ad72e6d9746cc99d12a075b"
+    },
+    {
+      "id": "LOG_1792563302427_4jue",
+      "timestamp": "2026-10-21T06:15:02.427Z",
+      "category": "system",
+      "actor": "Quản trị viên (Admin)",
+      "action": "Phát loa thông báo toàn hệ thống",
+      "detail": "[URGENT] Gấp gấp: không có gì á báo chơi",
+      "severity": "danger"
     }
   ],
   "loss-reports": [],

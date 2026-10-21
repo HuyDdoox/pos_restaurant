@@ -736,72 +736,75 @@
     <!-- 8. SLIDE-OVER CART DRAWER (TỶ LỆ 70/30 THEO CHUẨN BRD 1.4) -->
     <!-- ========================================================================= -->
     <div id="cart-drawer-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden opacity-0 transition-opacity duration-300">
-        <div id="cart-drawer" class="absolute right-0 top-0 bottom-0 w-full max-w-2xl bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
+        <div id="cart-drawer" class="absolute right-0 top-0 bottom-0 w-full max-w-2xl lg:max-w-3xl bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
             
             <!-- Drawer Header -->
-            <div class="p-4 sm:p-5 border-b border-warm-200 flex items-center justify-between bg-warm-50 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-brand-red text-white flex items-center justify-center font-bold text-base shadow-sm">
+            <div class="p-3.5 sm:p-4 border-b border-warm-200 flex items-center justify-between bg-warm-50 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-brand-red text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </div>
-                    <div>
-                        <h3 class="text-base sm:text-lg font-black text-slate-900">Giỏ Hàng Của Bạn</h3>
-                        <p class="text-xs text-slate-500" id="cart-drawer-table-lbl">Phục vụ: Bàn 01</p>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-black text-slate-900 truncate">Giỏ Hàng Của Bạn</h3>
+                        <p class="text-xs text-slate-500 truncate" id="cart-drawer-table-lbl">Phục vụ: Bàn 01</p>
                     </div>
                 </div>
-                <button onclick="closeCartDrawer()" class="w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center font-bold active:scale-95 transition-all cursor-pointer">
-                    <i class="fa-solid fa-xmark"></i>
+                <button onclick="closeCartDrawer()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center font-bold active:scale-95 transition-all cursor-pointer shrink-0">
+                    <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
 
             <!-- Drawer Content (70% món / 30% chốt đơn theo BRD) -->
             <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
                 
-                <!-- Left 70%: Danh sách món -->
-                <div class="flex-1 md:w-[68%] overflow-y-auto p-4 space-y-3 bg-slate-50/50" id="cart-items-container">
+                <!-- Left: Danh sách món -->
+                <div class="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3 bg-slate-50/50" id="cart-items-container">
                     <!-- Dynamic Cart Items -->
                 </div>
 
-                <!-- Right 30%: Panel tổng tiền & Xác nhận đặt món -->
-                <div class="md:w-[32%] min-w-[240px] p-4 bg-white border-t md:border-t-0 md:border-l border-warm-200 flex flex-col justify-between shrink-0 shadow-lg md:shadow-none">
-                    <div class="space-y-3">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Chi tiết thanh toán</h4>
+                <!-- Right: Panel tổng tiền & Xác nhận đặt món -->
+                <div class="w-full md:w-[275px] lg:w-[295px] p-3.5 sm:p-4 bg-white border-t md:border-t-0 md:border-l border-warm-200 flex flex-col justify-between shrink-0 shadow-lg md:shadow-none">
+                    <div class="space-y-2.5 sm:space-y-3">
+                        <div class="flex items-center justify-between text-slate-400 pb-0.5">
+                            <h4 class="text-[11px] sm:text-xs font-bold uppercase tracking-wider whitespace-nowrap">Chi tiết thanh toán</h4>
+                            <i class="fa-solid fa-receipt text-xs"></i>
+                        </div>
                         
                         <!-- Banner Hội Viên trong giỏ hàng -->
-                        <div id="cart-member-banner" class="rounded-xl border transition-all p-2.5 bg-amber-50/70 border-amber-200">
+                        <div id="cart-member-banner" class="rounded-xl border transition-all p-2 bg-amber-50/70 border-amber-200/90">
                             <!-- Injected by JavaScript -->
                         </div>
 
-                        <div class="flex justify-between text-xs text-slate-600">
-                            <span>Tạm tính món:</span>
-                            <span id="cart-subtotal-val" class="font-bold">0 đ</span>
+                        <div class="flex justify-between items-center text-xs text-slate-600">
+                            <span class="whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-calculator text-[10px] text-slate-400"></i>Tạm tính:</span>
+                            <span id="cart-subtotal-val" class="font-bold whitespace-nowrap">0 đ</span>
                         </div>
 
                         <!-- Dòng Chiết Khấu Hội Viên -->
-                        <div id="cart-discount-row" class="hidden flex justify-between text-xs text-emerald-600 font-bold">
-                            <span id="cart-discount-label">Ưu đãi Hội viên:</span>
-                            <span id="cart-discount-val">-0 đ</span>
+                        <div id="cart-discount-row" class="hidden flex justify-between items-center text-xs text-emerald-600 font-bold">
+                            <span id="cart-discount-label" class="whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-tag text-[10px]"></i>Ưu đãi:</span>
+                            <span id="cart-discount-val" class="font-bold whitespace-nowrap">-0 đ</span>
                         </div>
 
-                        <div class="pt-2 border-t border-slate-100 flex justify-between items-baseline">
-                            <div>
-                                <span class="text-xs font-bold text-slate-800 block">Tổng thanh toán:</span>
-                                <span id="cart-points-reward" class="text-[10px] text-amber-600 font-bold hidden">+0 điểm tích lũy</span>
+                        <div class="pt-2 border-t border-slate-100 flex justify-between items-baseline gap-2">
+                            <div class="min-w-0">
+                                <span class="text-xs font-bold text-slate-800 block whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-wallet text-[10px] text-slate-500"></i>Tổng tiền:</span>
+                                <span id="cart-points-reward" class="text-[10px] text-amber-600 font-bold hidden whitespace-nowrap">+0 điểm</span>
                             </div>
-                            <span id="cart-total-val" class="text-xl font-black text-brand-red">0 đ</span>
+                            <span id="cart-total-val" class="text-lg sm:text-xl font-black text-brand-red whitespace-nowrap shrink-0">0 đ</span>
                         </div>
 
-                        <div class="pt-2">
-                            <label class="block text-[11px] font-bold text-slate-500 mb-1">Ghi chú cho bếp:</label>
-                            <input type="text" id="order-notes-input" placeholder="VD: Ít cay, mang đồ uống trước..." 
-                                   class="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-brand-red">
+                        <div class="pt-1.5">
+                            <label class="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1"><i class="fa-solid fa-pen-to-square text-[10px] text-slate-400"></i>Ghi chú:</label>
+                            <input type="text" id="order-notes-input" placeholder="VD: Ít cay, mang nước trước..." 
+                                   class="w-full text-xs p-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-brand-red">
                         </div>
                     </div>
 
-                    <div class="pt-4 mt-4 border-t border-slate-100">
+                    <div class="pt-3 mt-3 border-t border-slate-100">
                         <button onclick="submitCustomerOrder()" id="btn-submit-order" 
-                                class="w-full py-3.5 bg-brand-red hover:bg-[#72151b] active:scale-95 text-white font-black text-sm rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer">
-                            <i class="fa-solid fa-paper-plane" id="submit-icon"></i>
+                                class="w-full py-3 bg-brand-red hover:bg-[#72151b] active:scale-95 text-white font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-paper-plane text-xs" id="submit-icon"></i>
                             <span id="submit-text">Xác Nhận Đặt Món</span>
                         </button>
                     </div>
@@ -822,11 +825,11 @@
                 <span id="floating-cart-count" class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-slate-900 font-black text-[10px] flex items-center justify-center shadow-xs">0</span>
             </div>
             <div>
-                <div class="text-[10px] text-white/70 uppercase tracking-wider font-bold">Giỏ hàng đã chọn</div>
-                <div id="floating-cart-total" class="text-base font-black text-amber-300">0 đ</div>
+                <div class="text-[10px] text-white/70 uppercase tracking-wider font-bold whitespace-nowrap">Giỏ hàng</div>
+                <div id="floating-cart-total" class="text-sm sm:text-base font-black text-amber-300 whitespace-nowrap">0 đ</div>
             </div>
         </div>
-        <button onclick="openCartDrawer()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-900 rounded-xl font-black text-xs flex items-center gap-1.5 shadow-md transition-all cursor-pointer">
+        <button onclick="openCartDrawer()" class="px-3.5 py-2 bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-900 rounded-xl font-black text-xs flex items-center gap-1.5 shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0">
             <span>Xem giỏ & Đặt</span>
             <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </button>
@@ -1690,36 +1693,37 @@
             if (!banner) return;
 
             if (!currentMember) {
-                banner.className = "rounded-xl border transition-all p-2.5 bg-amber-50/70 border-amber-200/90";
+                banner.className = "rounded-xl border transition-all p-2 bg-amber-50/70 border-amber-200/90";
                 banner.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-700 flex items-center justify-center text-xs font-bold">
+                    <div class="flex items-center justify-between gap-1.5 min-w-0">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">
                                 <i class="fa-solid fa-crown text-amber-600"></i>
                             </div>
-                            <div>
-                                <span class="text-xs font-black text-amber-900 block leading-tight">Ưu đãi Hội Viên</span>
-                                <span class="text-[10px] text-slate-500">Giảm đến 15% & tích điểm</span>
+                            <div class="min-w-0">
+                                <span class="text-xs font-black text-amber-900 block leading-tight whitespace-nowrap">Hội Viên</span>
+                                <span class="text-[10px] text-amber-700/80 font-medium block leading-tight whitespace-nowrap">Giảm 15% • Tích điểm</span>
                             </div>
                         </div>
-                        <button type="button" onclick="openMemberModal()" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold text-[11px] rounded-lg transition-transform cursor-pointer">
-                            Nhập SĐT →
+                        <button type="button" onclick="openMemberModal()" class="px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold text-[11px] rounded-lg transition-transform cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs">
+                            <i class="fa-solid fa-phone text-[9px]"></i>
+                            <span>Nhập SĐT</span>
                         </button>
                     </div>
                 `;
             } else {
                 const conf = TIER_CONFIG[currentMember.tier] || TIER_CONFIG['Bronze'];
-                banner.className = "rounded-xl border transition-all p-2.5 bg-gradient-to-r from-amber-50 to-orange-50/60 border-amber-300";
+                banner.className = "rounded-xl border transition-all p-2 bg-gradient-to-r from-amber-50 to-orange-50/60 border-amber-300";
                 banner.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase ${conf.badgeClass}">${conf.name}</span>
-                            <span class="text-xs font-black text-slate-800 truncate max-w-[110px]">${currentMember.name}</span>
+                    <div class="flex items-center justify-between gap-1.5 min-w-0">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase whitespace-nowrap shrink-0 ${conf.badgeClass}">${conf.name}</span>
+                            <span class="text-xs font-black text-slate-800 truncate" title="${currentMember.name}">${currentMember.name}</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            ${conf.discountPercent > 0 ? `<span class="text-xs font-black text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded">-${conf.discountPercent}%</span>` : `<span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">Tích 1%</span>`}
-                            <button type="button" onclick="openMemberModal()" class="text-slate-400 hover:text-slate-700 text-xs cursor-pointer" title="Xem thẻ"><i class="fa-solid fa-id-card"></i></button>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            ${conf.discountPercent > 0 ? `<span class="text-xs font-black text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">-${conf.discountPercent}%</span>` : `<span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">Tích 1%</span>`}
+                            <button type="button" onclick="openMemberModal()" class="w-6 h-6 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 flex items-center justify-center text-[10px] cursor-pointer shrink-0 transition-colors" title="Xem thẻ"><i class="fa-solid fa-id-card"></i></button>
                         </div>
                     </div>
                 `;
@@ -2992,7 +2996,7 @@
             if (discountRow && discountLbl && discountVal) {
                 if (discountAmount > 0) {
                     discountRow.classList.remove('hidden');
-                    discountLbl.innerText = `Ưu đãi Hội viên (${conf.name} -${discountPercent}%):`;
+                    discountLbl.innerHTML = `<span class="flex items-center gap-1.5 whitespace-nowrap"><i class="fa-solid fa-tag text-[10px]"></i>Ưu đãi (-${discountPercent}%):</span>`;
                     discountVal.innerText = `-${discountAmount.toLocaleString('vi-VN')} đ`;
                 } else {
                     discountRow.classList.add('hidden');
@@ -3003,7 +3007,7 @@
             if (pointsReward) {
                 if (currentMember && pointsToGain > 0) {
                     pointsReward.classList.remove('hidden');
-                    pointsReward.innerText = `+${pointsToGain} điểm tích lũy`;
+                    pointsReward.innerText = `+${pointsToGain} điểm`;
                 } else {
                     pointsReward.classList.add('hidden');
                 }
