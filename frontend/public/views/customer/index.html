@@ -1386,7 +1386,7 @@
     <!-- 11. JAVASCRIPT LOGIC CLIENT -->
     <!-- ========================================================================= -->
     <script>
-        const API_PORT = "3000"; // JSON-Server (Môn TSC: 3000)
+        const API_PORT = "4000"; // Kết nối trực tiếp NodeJS Express & MongoDB (Port 4000)
         const API_BASE = `http://localhost:${API_PORT}/api`;
         
         let allMenuItems = [];
@@ -3088,10 +3088,12 @@
                     discountReason: currentMember ? `Ưu đãi Hội viên ${conf.name} (${currentMember.name})` : null,
                     notes: notes ? notes.value.trim() : "",
                     items: cart.map(c => ({
-                        menuItem_id: c.dish._id,
+                        menuItem_id: c.dish._id || c.dish.id,
                         quantity: c.quantity,
                         price: c.unitPrice,
-                        variants_selected: c.selectedVariants ? c.selectedVariants.map(v => ({ _id: v._id, name: v.name, extra_price: v.extra_price })) : [],
+                        priceAtOrder: c.unitPrice,
+                        status: 'Unconfirmed',
+                        variants_selected: c.selectedVariants ? c.selectedVariants.map(v => ({ _id: v._id || v.id, name: v.name, extra_price: v.extra_price })) : [],
                         variantNote: [c.variantLabel, c.note].filter(Boolean).join(' | ')
                     }))
                 };

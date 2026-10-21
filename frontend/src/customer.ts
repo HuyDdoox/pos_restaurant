@@ -38,7 +38,9 @@ const hienThiDanhMuc = async () => {
 
     let html = `<button data-id="all" class="btn-filter shrink-0 px-6 py-2.5 rounded-xl bg-orange-500 text-white font-bold shadow-md transition-colors">Tất cả</button>`;
     
-    mangDanhMuc.forEach(dm => {
+    // Chỉ hiển thị các danh mục đang hoạt động (không hiển thị danh mục bị ẩn)
+    const activeCategories = mangDanhMuc.filter(dm => dm.status !== 'Inactive' && dm.status !== 'Archived' && dm.status !== 'Hidden');
+    activeCategories.forEach(dm => {
         html += `<button data-id="${dm.id}" class="btn-filter shrink-0 px-6 py-2.5 rounded-xl bg-white text-slate-600 font-bold border border-slate-200 hover:border-orange-500 hover:text-orange-500 transition-colors">${dm.name}</button>`;
     });
 
@@ -70,7 +72,12 @@ const renderDanhSachMonAn = (idDanhMuc: string = currentCategoryFilter) => {
     const container = document.getElementById('menu-list') as HTMLDivElement;
     if (!container) return;
 
-    let danhSachLoc = mangMonAn;
+    let danhSachLoc = mangMonAn.filter(mon => {
+        if (mon.status === 'Archived' || mon.status === 'Inactive' || mon.status === 'Hidden') return false;
+        const parentCat = mangDanhMuc.find(c => String(c.id || (c as any)._id) === String(mon.category_id));
+        if (parentCat && (parentCat.status === 'Inactive' || parentCat.status === 'Archived' || parentCat.status === 'Hidden')) return false;
+        return true;
+    });
     
     // 1. Lọc theo danh mục
     if (currentCategoryFilter !== 'all') {

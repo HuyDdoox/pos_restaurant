@@ -20,8 +20,9 @@ let currentSearchTerm = '';
 let currentFilterBranch = '';
 let currentQuickFilter: 'total' | 'online' | 'admin' | 'locked' = 'total';
 let currentFilterStatus: 'All' | 'Active' | 'Locked' = 'All';
-let currentPage = 1;
-const itemsPerPage = 6;
+const USERS_PAGE_SIZE = 8;
+let currentRenderedUsersCount = 0;
+let userSentinelObserver: IntersectionObserver | null = null;
 let userToLockId: string | null = null;
 
 // ==========================================
@@ -57,6 +58,18 @@ const setupEventListeners = () => {
             }
         });
     }
+
+    // 1b. Lắng nghe sự kiện cuộn trang để tự động Lazy Load người dùng
+    const mainEl = document.querySelector('main');
+    const scrollTarget = mainEl || window;
+    scrollTarget.addEventListener('scroll', () => {
+        const sentinel = document.getElementById('users-lazy-sentinel');
+        if (!sentinel) return;
+        const rect = sentinel.getBoundingClientRect();
+        if (rect.top <= window.innerHeight + 250) {
+            renderNextUsersBatch();
+        }
+    }, { passive: true });
 
     // 2. Tìm kiếm
     const searchInput = document.getElementById('search-user') as HTMLInputElement;
@@ -296,18 +309,118 @@ const applyFilters = () => {
     });
     
     updateDashboardCards();
-    currentPage = 1;
     renderTable();
 };
 
 // ==========================================
-// 3. RENDER BẢNG & BADGES
+// 3. RENDER BẢNG & LAZY LOADING (KHÔNG CHUYỂN TRANG)
 // ==========================================
+const createUserRowHtml = (user: IUser): string => {
+    const fullName = user.fullname || user.name || 'Không tên';
+    const userName = user.username || user.email || 'Không có email';
+    const isActive = user.status !== 'Locked';
+
+    const roleBadge = getRoleBadge(user.role);
+    const roleInitial = getRoleInitialBadge(user.role, fullName);
+    
+    const statusBadge = isActive 
+        ? `<span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-black border border-emerald-500/30"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>Active</span>`
+        : `<span class="inline-flex items-center gap-1.5 bg-slate-700/50 text-slate-400 px-3 py-1 rounded-full text-xs font-black border border-slate-600"><span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>Locked</span>`;
+        
+    const opacityClass = isActive ? '' : 'opacity-50 grayscale-[50%]';
+
+    return `
+        <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50 last:border-0 ${opacityClass}">
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                    ${roleInitial}
+                    <div>
+                        <p class="font-bold text-white whitespace-nowrap">${fullName}</p>
+                        <p class="text-xs text-slate-400 whitespace-nowrap">${userName}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 font-bold text-slate-300 whitespace-nowrap">${user.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td>
+            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Theo ca</td>
+            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Vừa xong</td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">${statusBadge}</td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+                <button data-id="${user.id}" data-status="${user.status || 'Active'}" 
+                    class="btn-toggle-status w-8 h-8 rounded-xl ${isActive ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} inline-flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
+                    title="${isActive ? 'Khóa tài khoản ' + fullName : 'Mở khóa tài khoản ' + fullName}">
+                    <i class="fa-solid ${isActive ? 'fa-lock' : 'fa-lock-open'} text-xs"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+};
+
+const renderNextUsersBatch = () => {
+    const tbody = document.getElementById('users-table-body');
+    if (!tbody || currentRenderedUsersCount >= filteredUsers.length) return;
+
+    // Gỡ sentinel cũ
+    const oldSentinel = document.getElementById('users-lazy-sentinel');
+    if (oldSentinel) oldSentinel.remove();
+
+    const batch = filteredUsers.slice(currentRenderedUsersCount, currentRenderedUsersCount + USERS_PAGE_SIZE);
+    currentRenderedUsersCount += batch.length;
+
+    const rowsHtml = batch.map(u => createUserRowHtml(u)).join('');
+    tbody.insertAdjacentHTML('beforeend', rowsHtml);
+
+    updatePaginationInfo();
+
+    // Thêm sentinel nếu vẫn còn người dùng chưa render
+    if (currentRenderedUsersCount < filteredUsers.length) {
+        const sentinel = document.createElement('tr');
+        sentinel.id = 'users-lazy-sentinel';
+        sentinel.className = 'cursor-pointer hover:bg-slate-800/40 transition-colors';
+        sentinel.innerHTML = `
+            <td colspan="7" class="px-6 py-4 text-center text-xs text-slate-400 font-bold bg-[#1e293b]/60">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 shadow-sm text-slate-300">
+                    <i class="fa-solid fa-spinner fa-spin text-orange-500 text-xs"></i>
+                    <span>Đang cuộn tải thêm (${currentRenderedUsersCount}/${filteredUsers.length} tài khoản)...</span>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(sentinel);
+
+        sentinel.addEventListener('click', () => {
+            renderNextUsersBatch();
+        });
+
+        if (!userSentinelObserver) {
+            userSentinelObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    renderNextUsersBatch();
+                }
+            }, { 
+                root: null,
+                rootMargin: '160px', 
+                threshold: 0.05 
+            });
+        }
+        userSentinelObserver.disconnect();
+        userSentinelObserver.observe(sentinel);
+    } else {
+        if (userSentinelObserver) {
+            userSentinelObserver.disconnect();
+        }
+    }
+};
+
 const renderTable = () => {
     const tbody = document.getElementById('users-table-body');
     if (!tbody) return;
 
+    if (userSentinelObserver) {
+        userSentinelObserver.disconnect();
+    }
+
     tbody.innerHTML = '';
+    currentRenderedUsersCount = 0;
     
     if (filteredUsers.length === 0) {
         tbody.innerHTML = `
@@ -337,63 +450,18 @@ const renderTable = () => {
                 applyFilters();
             });
         }
-        updatePaginationInfo(0, 0, 0);
+        updatePaginationInfo();
         return;
     }
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const pageUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
-
-    pageUsers.forEach(user => {
-        const fullName = user.fullname || user.name || 'Không tên';
-        const userName = user.username || user.email || 'Không có email';
-        const isActive = user.status !== 'Locked';
-
-        const roleBadge = getRoleBadge(user.role);
-        const roleInitial = getRoleInitialBadge(user.role, fullName);
-        
-        const statusBadge = isActive 
-            ? `<span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-black border border-emerald-500/30"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>Active</span>`
-            : `<span class="inline-flex items-center gap-1.5 bg-slate-700/50 text-slate-400 px-3 py-1 rounded-full text-xs font-black border border-slate-600"><span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>Locked</span>`;
-            
-        const actionText = isActive ? 'Khóa' : 'Mở khóa';
-        const actionColor = isActive ? 'text-slate-400 hover:text-red-400' : 'text-emerald-400 hover:text-emerald-300';
-        const opacityClass = isActive ? '' : 'opacity-50 grayscale-[50%]';
-
-        tbody.innerHTML += `
-            <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50 last:border-0 ${opacityClass}">
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center gap-3">
-                        ${roleInitial}
-                        <div>
-                            <p class="font-bold text-white whitespace-nowrap">${fullName}</p>
-                            <p class="text-xs text-slate-400 whitespace-nowrap">${userName}</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 font-bold text-slate-300 whitespace-nowrap">${user.id}</td>
-                <td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td>
-                <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Theo ca</td>
-                <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Vừa xong</td>
-                <td class="px-6 py-4 text-center whitespace-nowrap">${statusBadge}</td>
-                <td class="px-6 py-4 text-center whitespace-nowrap">
-                    <button data-id="${user.id}" data-status="${user.status || 'Active'}" 
-                        class="btn-toggle-status w-8 h-8 rounded-xl ${isActive ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} inline-flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
-                        title="${isActive ? 'Khóa tài khoản ' + fullName : 'Mở khóa tài khoản ' + fullName}">
-                        <i class="fa-solid ${isActive ? 'fa-lock' : 'fa-lock-open'} text-xs"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
-
-    updatePaginationInfo(startIndex + 1, Math.min(startIndex + itemsPerPage, filteredUsers.length), filteredUsers.length);
+    renderNextUsersBatch();
 };
 
-const updatePaginationInfo = (start: number, end: number, total: number) => {
+const updatePaginationInfo = () => {
     const infoEl = document.getElementById('users-pagination-info');
     if (!infoEl) return;
     
+    const total = filteredUsers.length;
     if (total === 0) {
         infoEl.innerHTML = `Không có tài khoản nào`;
     } else {
@@ -406,11 +474,15 @@ const updatePaginationInfo = (start: number, end: number, total: number) => {
             filterLabel += ` • <span class="text-orange-400 font-semibold">Vai trò: ${currentFilterRole}</span>`;
         }
 
-        infoEl.innerHTML = `Hiển thị <span class="text-white font-bold">${start}-${end}</span> trên tổng số <span class="text-white font-bold">${total}</span> tài khoản${filterLabel}`;
+        const isComplete = currentRenderedUsersCount >= total;
+        infoEl.innerHTML = `Đã tải <span class="text-white font-bold">${currentRenderedUsersCount}</span> trên tổng số <span class="text-white font-bold">${total}</span> tài khoản${filterLabel} ${
+            isComplete 
+                ? '<span class="ml-2 text-xs font-semibold text-emerald-400"><i class="fa-solid fa-circle-check text-[11px] mr-1"></i>Đã tải toàn bộ</span>' 
+                : '<span class="ml-2 text-xs font-medium text-slate-400 italic">(Cuộn chuột xuống để tự động tải tiếp)</span>'
+        }`;
     }
 
-    // Pagination controls
-    const totalPages = Math.ceil(total / itemsPerPage);
+    // Xóa bỏ hoàn toàn nút chuyển trang (< Trước Trang 1/6 Sau >)
     let controls = document.getElementById('users-pagination-controls');
     if (!controls) {
         const parent = infoEl.parentElement;
@@ -421,31 +493,23 @@ const updatePaginationInfo = (start: number, end: number, total: number) => {
             parent.appendChild(controls);
         }
     }
+
     if (controls) {
-        if (totalPages <= 1) {
-            controls.innerHTML = '';
-        } else {
+        if (currentRenderedUsersCount < total) {
             controls.innerHTML = `
-                <button id="btn-prev-user-page" ${currentPage === 1 ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-bold ${currentPage === 1 ? 'text-slate-600 bg-slate-800/40 cursor-not-allowed' : 'text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white cursor-pointer'} transition flex items-center gap-1">
-                    <i class="fa-solid fa-chevron-left text-[10px]"></i> Trước
-                </button>
-                <span class="text-xs font-bold text-slate-400 px-2">Trang ${currentPage} / ${totalPages}</span>
-                <button id="btn-next-user-page" ${currentPage === totalPages ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-bold ${currentPage === totalPages ? 'text-slate-600 bg-slate-800/40 cursor-not-allowed' : 'text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white cursor-pointer'} transition flex items-center gap-1">
-                    Sau <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                <button id="btn-manual-load-more" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95" title="Bấm để tải thêm tài khoản">
+                    <i class="fa-solid fa-arrow-down text-[10px]"></i> Tải thêm
                 </button>
             `;
-            document.getElementById('btn-prev-user-page')?.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
+            document.getElementById('btn-manual-load-more')?.addEventListener('click', () => {
+                renderNextUsersBatch();
             });
-            document.getElementById('btn-next-user-page')?.addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
+        } else {
+            controls.innerHTML = `
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1">
+                    <i class="fa-solid fa-check text-emerald-400"></i> Hết danh sách
+                </span>
+            `;
         }
     }
 };

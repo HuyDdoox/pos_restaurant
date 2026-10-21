@@ -64,12 +64,25 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span id="global-date">26/09/2026</span> | <span id="global-time">02:41</span>
             </div>
-            <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition">
-                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-black shadow-inner">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <div class="relative" id="waiter-user-container">
+                <button type="button" id="btn-waiter-user-toggle" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-slate-700/50 transition cursor-pointer select-none">
+                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-black shadow-inner">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <span class="text-sm font-bold text-white hidden sm:block" id="global-user-name">Nguyễn Văn T</span>
+                    <i class="fa-solid fa-chevron-down text-slate-400 text-xs hidden sm:block"></i>
+                </button>
+                <!-- Menu con xổ xuống -->
+                <div id="waiter-user-dropdown" class="absolute right-0 top-full mt-2 w-48 bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-2 hidden z-50">
+                    <div class="px-3 py-2 border-b border-slate-700/60 mb-1">
+                        <p class="text-[11px] text-slate-400 font-semibold">Nhân viên phục vụ</p>
+                        <p class="text-xs font-bold text-white truncate" id="waiter-dropdown-user-name">Nguyễn Văn T</p>
+                    </div>
+                    <button type="button" onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 font-bold text-xs transition-colors cursor-pointer text-left">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Đăng xuất</span>
+                    </button>
                 </div>
-                <span class="text-sm font-bold text-white hidden sm:block" id="global-user-name">Nguyễn Văn T</span>
-                <svg class="w-4 h-4 text-slate-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
         </div>
     </header>
@@ -856,6 +869,29 @@
                     }
                 });
             });
+
+            // Toggle Dropdown Menu con cho Waiter User
+            const btnWaiter = document.getElementById('btn-waiter-user-toggle');
+            const menuWaiter = document.getElementById('waiter-user-dropdown');
+            const nameEl = document.getElementById('waiter-dropdown-user-name');
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                if (nameEl && (storedUser.name || storedUser.username)) {
+                    nameEl.innerText = storedUser.name || storedUser.username;
+                }
+            } catch(e) {}
+
+            if (btnWaiter && menuWaiter) {
+                btnWaiter.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menuWaiter.classList.toggle('hidden');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!btnWaiter.contains(e.target) && !menuWaiter.contains(e.target)) {
+                        menuWaiter.classList.add('hidden');
+                    }
+                });
+            }
         });
     </script>
 </body>

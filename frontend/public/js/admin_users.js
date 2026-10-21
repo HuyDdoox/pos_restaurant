@@ -1,0 +1,530 @@
+import { showConfirmModal } from './utils/ui';
+import { API_USERS_URL } from './config';
+let allUsers = [];
+let filteredUsers = [];
+let currentFilterRole = 'All';
+let currentSearchTerm = '';
+let currentFilterBranch = '';
+let currentQuickFilter = 'total';
+let currentFilterStatus = 'All';
+const USERS_PAGE_SIZE = 8;
+let currentRenderedUsersCount = 0;
+let userSentinelObserver = null;
+let userToLockId = null;
+export const initAdminUsers = async () => {
+    setupEventListeners();
+    await fetchAndRenderUsers();
+};
+const setupEventListeners = () => {
+    const statCardsContainer = document.getElementById('user-stat-cards');
+    if (statCardsContainer) {
+        statCardsContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('.user-stat-card');
+            if (!card)
+                return;
+            const filterType = card.getAttribute('data-filter');
+            if (!filterType)
+                return;
+            handleQuickFilterClick(filterType);
+        });
+        statCardsContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const card = e.target.closest('.user-stat-card');
+                if (card) {
+                    e.preventDefault();
+                    card.click();
+                }
+            }
+        });
+    }
+    const mainEl = document.querySelector('main');
+    const scrollTarget = mainEl || window;
+    scrollTarget.addEventListener('scroll', () => {
+        const sentinel = document.getElementById('users-lazy-sentinel');
+        if (!sentinel)
+            return;
+        const rect = sentinel.getBoundingClientRect();
+        if (rect.top <= window.innerHeight + 250) {
+            renderNextUsersBatch();
+        }
+    }, { passive: true });
+    const searchInput = document.getElementById('search-user');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value.toLowerCase().trim();
+            applyFilters();
+        });
+    }
+    const tabRoles = document.getElementById('tab-roles');
+    if (tabRoles) {
+        tabRoles.addEventListener('click', (e) => {
+            const btn = e.target.closest('.tab-role-btn');
+            if (!btn)
+                return;
+            const selectedRole = btn.getAttribute('data-role') || 'All';
+            syncRoleTabsUI(selectedRole);
+            currentFilterRole = selectedRole;
+            if (currentQuickFilter === 'admin' && selectedRole !== 'Admin') {
+                currentQuickFilter = 'total';
+            }
+            else if (selectedRole === 'Admin' && currentQuickFilter === 'total') {
+                currentQuickFilter = 'admin';
+            }
+            updateCardStyles();
+            applyFilters();
+        });
+    }
+    const branchSelector = document.getElementById('branch-selector');
+    if (branchSelector) {
+        currentFilterBranch = branchSelector.value;
+        branchSelector.addEventListener('change', () => {
+            currentFilterBranch = branchSelector.value;
+            applyFilters();
+        });
+    }
+    const tableBody = document.getElementById('users-table-body');
+    if (tableBody) {
+        tableBody.addEventListener('click', async (e) => {
+            const target = e.target;
+            const toggleBtn = target.closest('.btn-toggle-status');
+            if (toggleBtn) {
+                const id = toggleBtn.getAttribute('data-id');
+                const currentStatus = toggleBtn.getAttribute('data-status');
+                if (id && currentStatus) {
+                    if (currentStatus === 'Active') {
+                        userToLockId = id;
+                        const modal = document.getElementById('lock-user-modal');
+                        const reasonSelect = document.getElementById('lock-reason-select');
+                        const reasonNote = document.getElementById('lock-reason-note');
+                        if (modal && reasonSelect && reasonNote) {
+                            reasonSelect.value = 'Nghỉ việc';
+                            reasonNote.value = '';
+                            modal.classList.remove('hidden');
+                            setTimeout(() => {
+                                modal.classList.remove('opacity-0');
+                                const content = modal.querySelector('div');
+                                if (content)
+                                    content.classList.remove('scale-95');
+                            }, 10);
+                        }
+                    }
+                    else {
+                        await toggleUserStatus(id, currentStatus, '');
+                    }
+                }
+            }
+        });
+    }
+    const lockModal = document.getElementById('lock-user-modal');
+    const btnCancelLock = document.getElementById('btn-cancel-lock');
+    const btnConfirmLock = document.getElementById('btn-confirm-lock');
+    const reasonSelect = document.getElementById('lock-reason-select');
+    const reasonNote = document.getElementById('lock-reason-note');
+    const closeLockModal = () => {
+        if (!lockModal)
+            return;
+        lockModal.classList.add('opacity-0');
+        const content = lockModal.querySelector('div');
+        if (content)
+            content.classList.add('scale-95');
+        setTimeout(() => lockModal.classList.add('hidden'), 200);
+        userToLockId = null;
+    };
+    if (btnCancelLock) {
+        btnCancelLock.addEventListener('click', closeLockModal);
+    }
+    if (btnConfirmLock) {
+        btnConfirmLock.addEventListener('click', async () => {
+            if (!userToLockId)
+                return;
+            const selectValue = reasonSelect.value;
+            const note = reasonNote.value.trim();
+            const reason = note ? `${selectValue} - ${note}` : selectValue;
+            await toggleUserStatus(userToLockId, 'Active', reason);
+            closeLockModal();
+        });
+    }
+};
+export const setUserQuickFilter = (filterType) => {
+    currentQuickFilter = filterType;
+    if (filterType === 'total') {
+        currentFilterStatus = 'All';
+        currentFilterRole = 'All';
+        syncRoleTabsUI('All');
+    }
+    else if (filterType === 'online') {
+        currentFilterStatus = 'Active';
+    }
+    else if (filterType === 'admin') {
+        currentFilterStatus = 'All';
+        currentFilterRole = 'Admin';
+        syncRoleTabsUI('Admin');
+    }
+    else if (filterType === 'locked') {
+        currentFilterStatus = 'Locked';
+    }
+    updateCardStyles();
+    applyFilters();
+};
+const handleQuickFilterClick = (filterType) => {
+    if (currentQuickFilter === filterType && filterType !== 'total') {
+        setUserQuickFilter('total');
+    }
+    else {
+        setUserQuickFilter(filterType);
+    }
+};
+const syncRoleTabsUI = (role) => {
+    const tabRoles = document.getElementById('tab-roles');
+    if (!tabRoles)
+        return;
+    tabRoles.querySelectorAll('.tab-role-btn').forEach(el => {
+        const r = el.getAttribute('data-role');
+        if (r === role) {
+            el.classList.remove('bg-transparent', 'text-slate-400');
+            el.classList.add('bg-orange-500', 'text-white', 'shadow-md');
+        }
+        else {
+            el.classList.remove('bg-orange-500', 'text-white', 'shadow-md');
+            el.classList.add('bg-transparent', 'text-slate-400');
+        }
+    });
+};
+const updateCardStyles = () => {
+    const cardDefs = [
+        { id: 'card-filter-total', type: 'total', activeBorder: 'border-orange-500 ring-2 ring-orange-500/20 bg-slate-800/90 shadow-lg' },
+        { id: 'card-filter-online', type: 'online', activeBorder: 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-950/20 shadow-lg' },
+        { id: 'card-filter-admin', type: 'admin', activeBorder: 'border-blue-500 ring-2 ring-blue-500/20 bg-blue-950/20 shadow-lg' },
+        { id: 'card-filter-locked', type: 'locked', activeBorder: 'border-rose-500 ring-2 ring-rose-500/20 bg-rose-950/20 shadow-lg' },
+    ];
+    cardDefs.forEach(c => {
+        const el = document.getElementById(c.id);
+        if (!el)
+            return;
+        const dot = el.querySelector('.card-active-dot');
+        const isActive = currentQuickFilter === c.type;
+        el.className = 'user-stat-card cursor-pointer rounded-2xl p-5 border shadow-md flex items-center justify-between gap-4 transition-all duration-200 hover:scale-105 active:scale-95 select-none group ' +
+            (isActive ? c.activeBorder : 'bg-[#1e293b] border-slate-700/50 hover:border-slate-600');
+        if (dot) {
+            if (isActive)
+                dot.classList.remove('hidden');
+            else
+                dot.classList.add('hidden');
+        }
+    });
+};
+const fetchAndRenderUsers = async () => {
+    try {
+        const response = await fetch(API_USERS_URL);
+        if (!response.ok)
+            throw new Error("Lỗi khi tải dữ liệu người dùng");
+        const resJson = await response.json();
+        allUsers = Array.isArray(resJson) ? resJson : (resJson.data || []);
+        updateCardStyles();
+        applyFilters();
+    }
+    catch (error) {
+        console.error("Lỗi fetch users:", error);
+    }
+};
+const updateDashboardCards = () => {
+    const branchUsers = currentFilterBranch === ''
+        ? allUsers
+        : allUsers.filter(u => u.branch_id === currentFilterBranch);
+    const totalUsers = branchUsers.length;
+    const onlineUsers = branchUsers.filter(u => u.status !== 'Locked').length;
+    const adminUsers = branchUsers.filter(u => u.role === 'Admin').length;
+    const lockedUsers = branchUsers.filter(u => u.status === 'Locked').length;
+    const elTotal = document.getElementById('stat-total-users');
+    const elOnline = document.getElementById('stat-online-users');
+    const elAdmin = document.getElementById('stat-admin-users');
+    const elLocked = document.getElementById('stat-locked-users');
+    if (elTotal)
+        elTotal.innerText = totalUsers.toString();
+    if (elOnline)
+        elOnline.innerText = onlineUsers.toString();
+    if (elAdmin)
+        elAdmin.innerText = adminUsers.toString();
+    if (elLocked)
+        elLocked.innerText = lockedUsers.toString();
+};
+const applyFilters = () => {
+    filteredUsers = allUsers.filter(user => {
+        const name = (user.name || user.fullname || '').toLowerCase();
+        const email = (user.email || user.username || '').toLowerCase();
+        const id = (user.id || '').toLowerCase();
+        const matchesSearch = name.includes(currentSearchTerm) || email.includes(currentSearchTerm) || id.includes(currentSearchTerm);
+        const matchesRole = currentFilterRole === 'All' || user.role === currentFilterRole;
+        const matchesBranch = currentFilterBranch === '' || user.branch_id === currentFilterBranch;
+        const isActive = user.status !== 'Locked';
+        let matchesStatus = true;
+        if (currentFilterStatus === 'Active') {
+            matchesStatus = isActive;
+        }
+        else if (currentFilterStatus === 'Locked') {
+            matchesStatus = !isActive;
+        }
+        return matchesSearch && matchesRole && matchesBranch && matchesStatus;
+    });
+    updateDashboardCards();
+    renderTable();
+};
+const createUserRowHtml = (user) => {
+    const fullName = user.fullname || user.name || 'Không tên';
+    const userName = user.username || user.email || 'Không có email';
+    const isActive = user.status !== 'Locked';
+    const roleBadge = getRoleBadge(user.role);
+    const roleInitial = getRoleInitialBadge(user.role, fullName);
+    const statusBadge = isActive
+        ? `<span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-black border border-emerald-500/30"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>Active</span>`
+        : `<span class="inline-flex items-center gap-1.5 bg-slate-700/50 text-slate-400 px-3 py-1 rounded-full text-xs font-black border border-slate-600"><span class="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>Locked</span>`;
+    const opacityClass = isActive ? '' : 'opacity-50 grayscale-[50%]';
+    return `
+        <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50 last:border-0 ${opacityClass}">
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                    ${roleInitial}
+                    <div>
+                        <p class="font-bold text-white whitespace-nowrap">${fullName}</p>
+                        <p class="text-xs text-slate-400 whitespace-nowrap">${userName}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 font-bold text-slate-300 whitespace-nowrap">${user.id}</td>
+            <td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td>
+            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Theo ca</td>
+            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Vừa xong</td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">${statusBadge}</td>
+            <td class="px-6 py-4 text-center whitespace-nowrap">
+                <button data-id="${user.id}" data-status="${user.status || 'Active'}" 
+                    class="btn-toggle-status w-8 h-8 rounded-xl ${isActive ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} inline-flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
+                    title="${isActive ? 'Khóa tài khoản ' + fullName : 'Mở khóa tài khoản ' + fullName}">
+                    <i class="fa-solid ${isActive ? 'fa-lock' : 'fa-lock-open'} text-xs"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+};
+const renderNextUsersBatch = () => {
+    const tbody = document.getElementById('users-table-body');
+    if (!tbody || currentRenderedUsersCount >= filteredUsers.length)
+        return;
+    const oldSentinel = document.getElementById('users-lazy-sentinel');
+    if (oldSentinel)
+        oldSentinel.remove();
+    const batch = filteredUsers.slice(currentRenderedUsersCount, currentRenderedUsersCount + USERS_PAGE_SIZE);
+    currentRenderedUsersCount += batch.length;
+    const rowsHtml = batch.map(u => createUserRowHtml(u)).join('');
+    tbody.insertAdjacentHTML('beforeend', rowsHtml);
+    updatePaginationInfo();
+    if (currentRenderedUsersCount < filteredUsers.length) {
+        const sentinel = document.createElement('tr');
+        sentinel.id = 'users-lazy-sentinel';
+        sentinel.className = 'cursor-pointer hover:bg-slate-800/40 transition-colors';
+        sentinel.innerHTML = `
+            <td colspan="7" class="px-6 py-4 text-center text-xs text-slate-400 font-bold bg-[#1e293b]/60">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 shadow-sm text-slate-300">
+                    <i class="fa-solid fa-spinner fa-spin text-orange-500 text-xs"></i>
+                    <span>Đang cuộn tải thêm (${currentRenderedUsersCount}/${filteredUsers.length} tài khoản)...</span>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(sentinel);
+        sentinel.addEventListener('click', () => {
+            renderNextUsersBatch();
+        });
+        if (!userSentinelObserver) {
+            userSentinelObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    renderNextUsersBatch();
+                }
+            }, {
+                root: null,
+                rootMargin: '160px',
+                threshold: 0.05
+            });
+        }
+        userSentinelObserver.disconnect();
+        userSentinelObserver.observe(sentinel);
+    }
+    else {
+        if (userSentinelObserver) {
+            userSentinelObserver.disconnect();
+        }
+    }
+};
+const renderTable = () => {
+    const tbody = document.getElementById('users-table-body');
+    if (!tbody)
+        return;
+    if (userSentinelObserver) {
+        userSentinelObserver.disconnect();
+    }
+    tbody.innerHTML = '';
+    currentRenderedUsersCount = 0;
+    if (filteredUsers.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="px-6 py-12 text-center text-slate-500 font-bold">
+                    <div class="flex flex-col items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-slash text-3xl text-slate-600"></i>
+                        <p class="text-slate-400">Không tìm thấy tài khoản nào phù hợp bộ lọc</p>
+                        <button type="button" id="btn-reset-user-filters" class="mt-2 text-xs text-orange-400 hover:text-orange-300 underline font-semibold cursor-pointer">
+                            Xóa bộ lọc để xem tất cả
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        const btnReset = document.getElementById('btn-reset-user-filters');
+        if (btnReset) {
+            btnReset.addEventListener('click', () => {
+                currentQuickFilter = 'total';
+                currentFilterRole = 'All';
+                currentFilterStatus = 'All';
+                currentSearchTerm = '';
+                const searchInput = document.getElementById('search-user');
+                if (searchInput)
+                    searchInput.value = '';
+                syncRoleTabsUI('All');
+                updateCardStyles();
+                applyFilters();
+            });
+        }
+        updatePaginationInfo();
+        return;
+    }
+    renderNextUsersBatch();
+};
+const updatePaginationInfo = () => {
+    const infoEl = document.getElementById('users-pagination-info');
+    if (!infoEl)
+        return;
+    const total = filteredUsers.length;
+    if (total === 0) {
+        infoEl.innerHTML = `Không có tài khoản nào`;
+    }
+    else {
+        let filterLabel = '';
+        if (currentQuickFilter === 'online')
+            filterLabel = ' • <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle text-[9px] mr-1"></i>Đang online</span>';
+        else if (currentQuickFilter === 'admin')
+            filterLabel = ' • <span class="text-blue-400 font-semibold"><i class="fa-solid fa-shield-halved text-xs mr-1"></i>Quản trị viên</span>';
+        else if (currentQuickFilter === 'locked')
+            filterLabel = ' • <span class="text-rose-400 font-semibold"><i class="fa-solid fa-ban text-xs mr-1"></i>Bị khóa</span>';
+        if (currentFilterRole !== 'All' && currentQuickFilter !== 'admin') {
+            filterLabel += ` • <span class="text-orange-400 font-semibold">Vai trò: ${currentFilterRole}</span>`;
+        }
+        const isComplete = currentRenderedUsersCount >= total;
+        infoEl.innerHTML = `Đã tải <span class="text-white font-bold">${currentRenderedUsersCount}</span> trên tổng số <span class="text-white font-bold">${total}</span> tài khoản${filterLabel} ${isComplete
+            ? '<span class="ml-2 text-xs font-semibold text-emerald-400"><i class="fa-solid fa-circle-check text-[11px] mr-1"></i>Đã tải toàn bộ</span>'
+            : '<span class="ml-2 text-xs font-medium text-slate-400 italic">(Cuộn chuột xuống để tự động tải tiếp)</span>'}`;
+    }
+    let controls = document.getElementById('users-pagination-controls');
+    if (!controls) {
+        const parent = infoEl.parentElement;
+        if (parent) {
+            controls = document.createElement('div');
+            controls.id = 'users-pagination-controls';
+            controls.className = 'flex items-center gap-2';
+            parent.appendChild(controls);
+        }
+    }
+    if (controls) {
+        if (currentRenderedUsersCount < total) {
+            controls.innerHTML = `
+                <button id="btn-manual-load-more" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95" title="Bấm để tải thêm tài khoản">
+                    <i class="fa-solid fa-arrow-down text-[10px]"></i> Tải thêm
+                </button>
+            `;
+            document.getElementById('btn-manual-load-more')?.addEventListener('click', () => {
+                renderNextUsersBatch();
+            });
+        }
+        else {
+            controls.innerHTML = `
+                <span class="text-xs font-bold text-slate-500 flex items-center gap-1">
+                    <i class="fa-solid fa-check text-emerald-400"></i> Hết danh sách
+                </span>
+            `;
+        }
+    }
+};
+const getRoleBadge = (role) => {
+    switch (role) {
+        case 'Admin': return `<span class="bg-orange-500/20 text-orange-500 px-3 py-1 rounded-full text-xs font-black border border-orange-500/30">Quản trị viên</span>`;
+        case 'Cashier': return `<span class="bg-blue-500/20 text-blue-500 px-3 py-1 rounded-full text-xs font-black border border-blue-500/30">Thu ngân</span>`;
+        case 'Waiter': return `<span class="bg-purple-500/20 text-purple-500 px-3 py-1 rounded-full text-xs font-black border border-purple-500/30">Phục vụ</span>`;
+        case 'Chef': return `<span class="bg-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full text-xs font-black border border-emerald-500/30">Đầu bếp</span>`;
+        default: return `<span class="bg-slate-700 text-slate-400 px-3 py-1 rounded-full text-xs font-black border border-slate-600">Khác</span>`;
+    }
+};
+const getRoleInitialBadge = (role, name) => {
+    const init = name.charAt(0).toUpperCase();
+    switch (role) {
+        case 'Admin': return `<div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg shadow-orange-500/30">AD</div>`;
+        case 'Cashier': return `<div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg shadow-blue-500/30">TN</div>`;
+        case 'Waiter': return `<div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg shadow-purple-500/30">PV</div>`;
+        case 'Chef': return `<div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg shadow-emerald-500/30">BP</div>`;
+        default: return `<div class="w-10 h-10 bg-slate-600 rounded-xl flex items-center justify-center text-white font-black text-sm shrink-0">${init}</div>`;
+    }
+};
+const toggleUserStatus = async (id, currentStatus, reason = '') => {
+    const isLocked = currentStatus === 'Locked';
+    const newStatus = isLocked ? 'Active' : 'Locked';
+    const actionName = isLocked ? "Mở khóa" : "Khóa";
+    try {
+        const response = await fetch(`${API_USERS_URL}/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                status: newStatus,
+                lock_reason: reason
+            })
+        });
+        if (!response.ok)
+            throw new Error(`Lỗi khi ${actionName}`);
+        showToast(`Đã ${actionName.toLowerCase()} tài khoản thành công!`);
+        await fetchAndRenderUsers();
+    }
+    catch (error) {
+        console.error(error);
+        showConfirmModal("Lỗi", `Có lỗi xảy ra khi ${actionName} tài khoản!`);
+    }
+};
+const showToast = (message) => {
+    if (!document.getElementById('toast-styles')) {
+        const style = document.createElement('style');
+        style.id = 'toast-styles';
+        style.innerHTML = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed bottom-6 right-6 z-[100] flex flex-col gap-3';
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = 'bg-[#1e293b] border-l-4 border-emerald-500 text-white px-5 py-4 rounded-lg font-bold text-sm flex items-center gap-3 shadow-2xl transition-all duration-300';
+    toast.style.animation = 'slideInRight 0.3s ease-out forwards';
+    toast.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <i class="fa-solid fa-circle-info text-sm"></i>
+        </div>
+        <span class="tracking-wide">${message}</span>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transform = 'translateX(100%)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};
+export const loadUsers = fetchAndRenderUsers;

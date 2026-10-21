@@ -1006,27 +1006,27 @@
       "tableNumber": "01",
       "max_capacity": 4,
       "zone": "Khu Trong Nhà (Tầng 1)",
-      "status": "Available",
+      "status": "Occupied",
       "currentOrderId": "6ad6828f44ce483ecadd7815",
       "createdAt": "2026-10-18T18:29:58.817Z",
       "updatedAt": "2026-10-19T20:50:23.405Z",
       "__v": 0,
       "reservation": null,
       "id": "6ad51026fee662a5d85df3e3",
-      "currentOrder_id": null
+      "currentOrder_id": "1a15ed7c5e148afc4"
     },
     {
       "_id": "6ad540a5f9b227157295deca",
       "tableNumber": "02",
       "max_capacity": 2,
       "zone": "Khu Trong Nhà (Tầng 1)",
-      "status": "Available",
+      "status": "Occupied",
       "__v": 0,
       "currentOrderId": null,
       "updatedAt": "2026-10-20T08:40:23.155Z",
       "reservation": null,
       "id": "6ad540a5f9b227157295deca",
-      "currentOrder_id": null
+      "currentOrder_id": "1a15f2da71d1d0a6b"
     },
     {
       "_id": "6ad540a5f9b227157295decb",
@@ -2169,8 +2169,384 @@
       "id": "6ad72e6d9746cc99d12a075a"
     }
   ],
-  "orders": [],
-  "order-details": [],
+  "orders": [
+    {
+      "_id": "1a15ed7c5e148afc4",
+      "id": "1a15ed7c5e148afc4",
+      "table_id": "6ad51026fee662a5d85df3e3",
+      "customerInfo": "Khách Bàn 01",
+      "customerPhone": null,
+      "status": "In_Progress",
+      "paymentStatus": "Unpaid",
+      "discountType": "none",
+      "discountPercent": 0,
+      "discountAmount": 0,
+      "discountReason": null,
+      "notes": "Ít cay, mang nước trước; Ít cay, mang nước trước; Ít cay, mang nước trước",
+      "items": [
+        {
+          "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+          "name": "Tiệc sum vầy",
+          "image": "/images/menu/combo_tiec_sum_vay.jpg",
+          "quantity": 1,
+          "price": 500000,
+          "priceAtOrder": 500000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:22:41.633Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+          "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+          "image": "/images/menu/combo_hai_san_hoang_gia.jpg",
+          "quantity": 1,
+          "price": 1790000,
+          "priceAtOrder": 1790000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:22:41.633Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+          "name": "Combo Gia Đình Châu Âu (3-4 người)",
+          "image": "/images/menu/combo_gia_dinh_chau_au.jpg",
+          "quantity": 1,
+          "price": 1290000,
+          "priceAtOrder": 1290000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:22:43.582Z"
+        },
+        {
+          "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+          "name": "Tiệc sum vầy",
+          "image": "/images/menu/combo_tiec_sum_vay.jpg",
+          "quantity": 1,
+          "price": 500000,
+          "priceAtOrder": 500000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:24:05.146Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+          "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+          "image": "/images/menu/combo_hai_san_hoang_gia.jpg",
+          "quantity": 1,
+          "price": 1790000,
+          "priceAtOrder": 1790000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:24:05.146Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+          "name": "Combo Gia Đình Châu Âu (3-4 người)",
+          "image": "/images/menu/combo_gia_dinh_chau_au.jpg",
+          "quantity": 1,
+          "price": 1290000,
+          "priceAtOrder": 1290000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:24:07.097Z"
+        },
+        {
+          "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+          "name": "Tiệc sum vầy",
+          "image": "/images/menu/combo_tiec_sum_vay.jpg",
+          "quantity": 1,
+          "price": 500000,
+          "priceAtOrder": 500000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:28:48.761Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+          "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+          "image": "/images/menu/combo_hai_san_hoang_gia.jpg",
+          "quantity": 1,
+          "price": 1790000,
+          "priceAtOrder": 1790000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:28:48.761Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+          "name": "Combo Gia Đình Châu Âu (3-4 người)",
+          "image": "/images/menu/combo_gia_dinh_chau_au.jpg",
+          "quantity": 1,
+          "price": 1290000,
+          "priceAtOrder": 1290000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T14:28:50.737Z"
+        }
+      ],
+      "total": 10740000,
+      "totalAmount": 10740000,
+      "createdAt": "2026-10-21T14:22:41.633Z",
+      "updatedAt": "2026-10-21T14:28:50.737Z"
+    },
+    {
+      "_id": "1a15f2da71d1d0a6b",
+      "id": "1a15f2da71d1d0a6b",
+      "table_id": "6ad540a5f9b227157295deca",
+      "customerInfo": "Lê Hoàng Long - 0988888888 (Diamond)",
+      "customerPhone": "0988888888",
+      "status": "In_Progress",
+      "paymentStatus": "Unpaid",
+      "discountType": "percent",
+      "discountPercent": 15,
+      "discountAmount": 462000,
+      "discountReason": "Ưu đãi Hội viên Kim Cương (Lê Hoàng Long)",
+      "notes": "",
+      "items": [
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+          "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+          "image": "/images/menu/combo_hai_san_hoang_gia.jpg",
+          "quantity": 1,
+          "price": 1790000,
+          "priceAtOrder": 1790000,
+          "variants_selected": [],
+          "variantNote": "",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T15:56:29.853Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+          "name": "Combo Gia Đình Châu Âu (3-4 người)",
+          "image": "/images/menu/combo_gia_dinh_chau_au.jpg",
+          "quantity": 1,
+          "price": 1290000,
+          "priceAtOrder": 1290000,
+          "variants_selected": [],
+          "variantNote": "ít ít thôi",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T15:56:29.853Z"
+        },
+        {
+          "menuItem_id": "6ad6529312edf05c3d3ae3c3",
+          "name": "Nước ép cam bưởi hồng nha đam tươi",
+          "image": "/images/menu/nuoc_ep_cam_buoi_hong.jpg",
+          "quantity": 1,
+          "price": 65000,
+          "priceAtOrder": 65000,
+          "variants_selected": [
+            {
+              "_id": "6ad6529312edf05c3d3ae3f4",
+              "name": "Đá riêng",
+              "extra_price": 0
+            },
+            {
+              "_id": "6ad6529312edf05c3d3ae3f7",
+              "name": "Ngọt thanh tự nhiên (100% không thêm đường)",
+              "extra_price": 0
+            }
+          ],
+          "variantNote": "Đá riêng, Ngọt thanh tự nhiên (100% không thêm đường)",
+          "status": "Unconfirmed",
+          "createdAt": "2026-10-21T16:04:41.422Z"
+        }
+      ],
+      "total": 2683000,
+      "totalAmount": 2683000,
+      "createdAt": "2026-10-21T15:56:29.853Z",
+      "updatedAt": "2026-10-21T16:04:41.423Z"
+    }
+  ],
+  "order-details": [
+    {
+      "_id": "1a15ed7c5e22ee9ed",
+      "id": "1a15ed7c5e22ee9ed",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+      "name": "Tiệc sum vầy",
+      "quantity": 1,
+      "price": 500000,
+      "priceAtOrder": 500000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:22:41.634Z"
+    },
+    {
+      "_id": "1a15ed7c5e21d479e",
+      "id": "1a15ed7c5e21d479e",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+      "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+      "quantity": 1,
+      "price": 1790000,
+      "priceAtOrder": 1790000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:22:41.634Z"
+    },
+    {
+      "_id": "1a15ed7cd7e799da0",
+      "id": "1a15ed7cd7e799da0",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+      "name": "Combo Gia Đình Châu Âu (3-4 người)",
+      "quantity": 1,
+      "price": 1290000,
+      "priceAtOrder": 1290000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:22:43.582Z"
+    },
+    {
+      "_id": "1a15ed90c1a2d9e1f",
+      "id": "1a15ed90c1a2d9e1f",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+      "name": "Tiệc sum vầy",
+      "quantity": 1,
+      "price": 500000,
+      "priceAtOrder": 500000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:24:05.146Z"
+    },
+    {
+      "_id": "1a15ed90c1ac86ac4",
+      "id": "1a15ed90c1ac86ac4",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+      "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+      "quantity": 1,
+      "price": 1790000,
+      "priceAtOrder": 1790000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:24:05.146Z"
+    },
+    {
+      "_id": "1a15ed913b98d58f2",
+      "id": "1a15ed913b98d58f2",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+      "name": "Combo Gia Đình Châu Âu (3-4 người)",
+      "quantity": 1,
+      "price": 1290000,
+      "priceAtOrder": 1290000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:24:07.097Z"
+    },
+    {
+      "_id": "1a15edd5ff9c64302",
+      "id": "1a15edd5ff9c64302",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad65641a42d9095ffe2b8cb",
+      "name": "Tiệc sum vầy",
+      "quantity": 1,
+      "price": 500000,
+      "priceAtOrder": 500000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:28:48.761Z"
+    },
+    {
+      "_id": "1a15edd5ff9dd5532",
+      "id": "1a15edd5ff9dd5532",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+      "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+      "quantity": 1,
+      "price": 1790000,
+      "priceAtOrder": 1790000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:28:48.761Z"
+    },
+    {
+      "_id": "1a15edd67b10fb6d4",
+      "id": "1a15edd67b10fb6d4",
+      "order_id": "1a15ed7c5e148afc4",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+      "name": "Combo Gia Đình Châu Âu (3-4 người)",
+      "quantity": 1,
+      "price": 1290000,
+      "priceAtOrder": 1290000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T14:28:50.737Z"
+    },
+    {
+      "_id": "1a15f2da71e8c10bd",
+      "id": "1a15f2da71e8c10bd",
+      "order_id": "1a15f2da71d1d0a6b",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fb",
+      "name": "Combo Hải Sản Hoàng Gia (4-5 người)",
+      "quantity": 1,
+      "price": 1790000,
+      "priceAtOrder": 1790000,
+      "status": "Unconfirmed",
+      "variantNote": "",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T15:56:29.854Z"
+    },
+    {
+      "_id": "1a15f2da71e91c42e",
+      "id": "1a15f2da71e91c42e",
+      "order_id": "1a15f2da71d1d0a6b",
+      "menuItem_id": "6ad6529312edf05c3d3ae3fa",
+      "name": "Combo Gia Đình Châu Âu (3-4 người)",
+      "quantity": 1,
+      "price": 1290000,
+      "priceAtOrder": 1290000,
+      "status": "Unconfirmed",
+      "variantNote": "ít ít thôi",
+      "variants_selected": [],
+      "createdAt": "2026-10-21T15:56:29.854Z"
+    },
+    {
+      "_id": "1a15f35274fb7e75d",
+      "id": "1a15f35274fb7e75d",
+      "order_id": "1a15f2da71d1d0a6b",
+      "menuItem_id": "6ad6529312edf05c3d3ae3c3",
+      "name": "Nước ép cam bưởi hồng nha đam tươi",
+      "quantity": 1,
+      "price": 65000,
+      "priceAtOrder": 65000,
+      "status": "Unconfirmed",
+      "variantNote": "Đá riêng, Ngọt thanh tự nhiên (100% không thêm đường)",
+      "variants_selected": [
+        {
+          "_id": "6ad6529312edf05c3d3ae3f4",
+          "name": "Đá riêng",
+          "extra_price": 0
+        },
+        {
+          "_id": "6ad6529312edf05c3d3ae3f7",
+          "name": "Ngọt thanh tự nhiên (100% không thêm đường)",
+          "extra_price": 0
+        }
+      ],
+      "createdAt": "2026-10-21T16:04:41.423Z"
+    }
+  ],
   "variants": [
     {
       "_id": "6ad6529312edf05c3d3ae3c8",

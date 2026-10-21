@@ -1343,7 +1343,11 @@ const MENU_ITEMS_PAGE_SIZE = 15;
 let menuSentinelObserver: IntersectionObserver | null = null;
 
 const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => {
-    const cat = allCategories.find(c => String(c.id) === String(item.category_id));
+    const catId = typeof item.category_id === 'object' && item.category_id !== null
+        ? String(item.category_id._id || item.category_id.id || '')
+        : String(item.category_id || '');
+    const cat = allCategories.find(c => String(c.id || (c as any)._id) === catId)
+        || (typeof item.category_id === 'object' && item.category_id !== null ? item.category_id : null);
     let statusHtml = '';
     
     if (item.status === 'Available') {
@@ -1391,20 +1395,38 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
             `</div>`;
     }
 
-    const catName = cat ? cat.name : (item.is_combo ? 'Set Combo' : 'Chưa phân loại');
+    const catName = cat ? (cat.name || 'Danh mục') : (item.is_combo ? 'Set Combo' : 'Chưa phân loại');
+    const rawIcon = (cat && cat.icon) ? cat.icon : (item.is_combo ? 'fa-boxes-stacked' : 'fa-utensils');
+    const cleanIcon = rawIcon.replace(/^fa-(solid|regular|brands)\s+/, '');
+
     let categoryCellHtml = '';
     if (item.is_combo) {
         categoryCellHtml = `
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold whitespace-nowrap" title="Set Combo">
-                <i class="fa-solid fa-boxes-stacked text-amber-400 text-xs"></i>
-                <span>${catName}</span>
+            <div class="relative group inline-flex items-center justify-center">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 group-hover:bg-amber-500 group-hover:text-white flex items-center justify-center text-sm shadow-sm transition-all duration-200 cursor-pointer group-hover:scale-110 active:scale-95" title="${catName}">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <!-- Tooltip hiện tên danh mục khi hover -->
+                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-amber-500/40 text-amber-300 text-xs font-bold whitespace-nowrap shadow-2xl z-30 pointer-events-none transition-all duration-200">
+                    <i class="fa-solid fa-boxes-stacked text-amber-400 text-xs"></i>
+                    <span>${catName}</span>
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900/95"></div>
+                </div>
             </div>
         `;
     } else {
         categoryCellHtml = `
-            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700/80 text-slate-300 text-xs font-bold whitespace-nowrap">
-                ${catName}
-            </span>
+            <div class="relative group inline-flex items-center justify-center">
+                <div class="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400 group-hover:bg-orange-500 group-hover:text-white flex items-center justify-center text-sm shadow-sm transition-all duration-200 cursor-pointer group-hover:scale-110 active:scale-95" title="${catName}">
+                    <i class="fa-solid ${cleanIcon}"></i>
+                </div>
+                <!-- Tooltip hiện tên danh mục khi hover -->
+                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/95 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-2xl z-30 pointer-events-none transition-all duration-200">
+                    <i class="fa-solid ${cleanIcon} text-orange-400 text-xs"></i>
+                    <span>${catName}</span>
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900/95"></div>
+                </div>
+            </div>
         `;
     }
 
@@ -1420,7 +1442,7 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
                 ${item.serving_size ? `<p class="text-[11px] text-slate-400 font-medium mt-0.5 whitespace-nowrap"><i class="fa-solid fa-users text-[10px] mr-1 text-slate-500"></i>${item.serving_size}</p>` : ''}
                 ${tagsHtml}
             </td>
-            <td class="px-4 py-4 whitespace-nowrap">
+            <td class="px-4 py-4 text-center whitespace-nowrap">
                 ${categoryCellHtml}
             </td>
             <td class="px-6 py-4 text-orange-400 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>

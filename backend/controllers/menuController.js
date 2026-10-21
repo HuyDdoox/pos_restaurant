@@ -157,7 +157,7 @@ exports.changeCategoryStatus = async (req, res) => {
     }
 };
 
-// Xóa danh mục (DELETE /api/categories/:id)
+// Xóa danh mục (Soft Delete theo yêu cầu: Chỉ ẩn danh mục sang Inactive, không xóa vĩnh viễn)
 exports.deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
@@ -165,12 +165,12 @@ exports.deleteCategory = async (req, res) => {
             return res.status(400).json({ status: 0, message: "Định dạng ID danh mục không hợp lệ!" });
         }
 
-        const deleted = await Category.findByIdAndDelete(id);
-        if (!deleted) return res.status(404).json({ status: 0, message: "Không tìm thấy danh mục!" });
+        const updated = await Category.findByIdAndUpdate(id, { status: 'Inactive' }, { new: true });
+        if (!updated) return res.status(404).json({ status: 0, message: "Không tìm thấy danh mục!" });
 
-        res.status(200).json({ status: 1, message: "Xóa danh mục thành công!" });
+        res.status(200).json({ status: 1, message: "Đã ẩn danh mục thành công (Soft Delete)!", data: updated });
     } catch (error) {
-        res.status(500).json({ status: 0, message: "Lỗi xóa danh mục", err: error.message });
+        res.status(500).json({ status: 0, message: "Lỗi ẩn danh mục", err: error.message });
     }
 };
 

@@ -200,7 +200,7 @@ export const capNhatTrangThaiMenu = async (id: string, status: string) => {
 };
 
 export const layDanhSachHoaDonChuaThanhToan = async () => {
-    const response = await fetch(API_ORDERS_URL + "?paymentStatus=Unpaid");
+    const response = await fetch(API_ORDERS_URL + "?paymentStatus=Unpaid&paymentStatus=unpaid");
     if (!response.ok) throw new Error("Lỗi khi tải hóa đơn");
     return unpackData(await response.json()) || [];
 };
@@ -367,8 +367,23 @@ export const suaDanhMuc = async (id: string, data: any) => {
 };
 
 export const xoaDanhMuc = async (id: string) => {
-    const response = await fetch(API_CATEGORY_URL + '/' + id, { method: 'DELETE' });
-    if (!response.ok) throw new Error('Lỗi xóa danh mục');
+    // Soft Delete: Chỉ đổi trạng thái sang Inactive, không xóa vĩnh viễn
+    const response = await fetch(API_CATEGORY_URL + '/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'Inactive' })
+    });
+    if (!response.ok) throw new Error('Lỗi ẩn danh mục');
+    return await response.json();
+};
+
+export const doiTrangThaiDanhMuc = async (id: string, status: string) => {
+    const response = await fetch(API_CATEGORY_URL + '/' + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+    });
+    if (!response.ok) throw new Error('Lỗi cập nhật trạng thái danh mục');
     return await response.json();
 };
 export const capNhatChiTietDonHang = async (id: string, updateData: any) => {
@@ -587,14 +602,20 @@ export const suaVoucher = async (id: string, updateData: any) => {
 };
 
 export const xoaVoucher = async (id: string) => {
+    // Soft Delete: Chuyển sang Inactive
     try {
-        await fetch(`${API_VOUCHERS_URL}/${id}`, { method: 'DELETE' });
+        await fetch(`${API_VOUCHERS_URL}/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'Inactive' })
+        });
     } catch (e) {
-        console.warn("Xóa voucher offline:", e);
+        console.warn("Lỗi cập nhật voucher:", e);
     }
     const list = await layDanhSachVouchers();
-    const filtered = list.filter(v => String(v.id) !== String(id));
-    localStorage.setItem('foodhub_vouchers_cache', JSON.stringify(filtered));
+    const v = list.find(item => String(item.id) === String(id));
+    if (v) v.status = 'Inactive';
+    localStorage.setItem('foodhub_vouchers_cache', JSON.stringify(list));
     return true;
 };
 
@@ -655,14 +676,20 @@ export const suaCustomer = async (id: string, updateData: any) => {
 };
 
 export const xoaCustomer = async (id: string) => {
+    // Soft Delete: Chuyển sang Inactive
     try {
-        await fetch(`${API_CUSTOMERS_URL}/${id}`, { method: 'DELETE' });
+        await fetch(`${API_CUSTOMERS_URL}/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'Inactive' })
+        });
     } catch (e) {
-        console.warn("Xóa customer offline:", e);
+        console.warn("Lỗi cập nhật customer:", e);
     }
     const list = await layDanhSachCustomers();
-    const filtered = list.filter(c => String(c.id) !== String(id));
-    localStorage.setItem('foodhub_customers_cache', JSON.stringify(filtered));
+    const c = list.find(item => String(item.id) === String(id));
+    if (c) c.status = 'Inactive';
+    localStorage.setItem('foodhub_customers_cache', JSON.stringify(list));
     return true;
 };
 

@@ -18,78 +18,58 @@ const PORT = 3000;
 const BACKEND_PORT = 4000; // Node.js Express backend
 
 // ========================================================
-// SMART PROXY: Forward tới backend port 4000 nếu đang chạy
-// Fallback về json-server (port 3000) nếu backend down
+// SMART PROXY: Forward trực tiếp tới backend port 4000 (MongoDB)
+// Stream dữ liệu liên tục, không timeout chập chờn
 // ========================================================
-let backendAlive = false;
-let lastCheck = 0;
-const CHECK_INTERVAL = 5000; // Kiểm tra backend mỗi 5 giây
-
-function checkBackend(callback) {
-    const now = Date.now();
-    if (now - lastCheck < CHECK_INTERVAL) {
-        return callback(backendAlive);
-    }
-    lastCheck = now;
-    const req = http.get({ hostname: '127.0.0.1', port: BACKEND_PORT, path: '/api/menu', timeout: 1500 }, (res) => {
-        backendAlive = res.statusCode < 500;
-        callback(backendAlive);
-    });
-    req.on('error', () => { backendAlive = false; callback(false); });
-    req.on('timeout', () => { req.destroy(); backendAlive = false; callback(false); });
-}
-
 function proxyToBackend(req, res, next) {
-    checkBackend((alive) => {
-        if (!alive) return next();
+    const rawBody = (req.body && Object.keys(req.body).length > 0) ? JSON.stringify(req.body) : '';
+    const headers = { ...req.headers };
+    delete headers['host'];
+    headers['host'] = `127.0.0.1:${BACKEND_PORT}`;
+    if (rawBody) {
+        headers['content-type'] = 'application/json';
+        headers['content-length'] = Buffer.byteLength(rawBody);
+    }
 
-        let body = '';
-        const chunks = [];
-        // Collect already-parsed body from bodyParser
-        const rawBody = req.body ? JSON.stringify(req.body) : '';
+    const options = {
+        hostname: '127.0.0.1',
+        port: BACKEND_PORT,
+        path: req.originalUrl || req.url,
+        method: req.method,
+        headers: headers,
+        timeout: 15000
+    };
 
-        const options = {
-            hostname: '127.0.0.1',
-            port: BACKEND_PORT,
-            path: req.url, // đã có /api/ prefix
-            method: req.method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(rawBody),
-                ...(req.headers['authorization'] ? { 'Authorization': req.headers['authorization'] } : {})
-            },
-            timeout: 3000
-        };
-
-        const proxyReq = http.request(options, (proxyRes) => {
-            let data = '';
-            proxyRes.on('data', chunk => data += chunk);
-            proxyRes.on('end', () => {
-                try {
-                    const parsed = JSON.parse(data);
-                    return res.status(proxyRes.statusCode).json(parsed);
-                } catch {
-                    return res.status(proxyRes.statusCode).send(data);
-                }
-            });
-        });
-
-        proxyReq.on('error', () => { backendAlive = false; next(); });
-        proxyReq.on('timeout', () => { proxyReq.destroy(); backendAlive = false; next(); });
-
-        if (rawBody) proxyReq.write(rawBody);
-        proxyReq.end();
+    const proxyReq = http.request(options, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        proxyRes.pipe(res);
     });
+
+    proxyReq.on('error', (err) => {
+        if (!res.headersSent) {
+            return next();
+        }
+    });
+
+    proxyReq.on('timeout', () => {
+        proxyReq.destroy();
+        if (!res.headersSent) {
+            return next();
+        }
+    });
+
+    if (rawBody) proxyReq.write(rawBody);
+    proxyReq.end();
 }
 
 const express = require('express');
 
+server.use(express.static(path.join(__dirname, 'public'), { extensions: ['js', 'html'] }));
 server.use(middlewares);
 server.use('/images', express.static(path.join(__dirname, 'public/images')));
 server.use(jsonServer.bodyParser);
 
 // Áp dụng smart proxy cho tất cả /api/* requests
-// (Custom routes bên dưới sẽ chỉ chạy nếu backend down)
 server.use('/api', proxyToBackend);
 
 // ========================================================

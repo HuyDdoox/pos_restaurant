@@ -7,7 +7,7 @@
  * - Môn 2: Express Backend NodeJS & MongoDB (Port 4000) -> Mapping qua `/api/...`
  */
 
-export const API_PORT = "3000"; // JSON-Server (Môn TSC: Port 3000 | Backend NodeJS: Port 4000)
+export const API_PORT = "4000"; // Kết nối trực tiếp Backend NodeJS Express & MongoDB (Port 4000)
 export const API_BACKEND_URL = `http://localhost:${API_PORT}/api`;
 
 // 1. MENU & MÓN ĂN

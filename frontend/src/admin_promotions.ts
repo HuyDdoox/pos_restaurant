@@ -149,8 +149,8 @@ const renderVouchersTable = () => {
                         <button data-id="${v.id}" class="btn-edit-voucher w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa voucher ${v.code}">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
-                        <button data-id="${v.id}" data-code="${v.code}" class="btn-delete-voucher w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xóa voucher ${v.code}">
-                            <i class="fa-solid fa-trash text-xs"></i>
+                        <button data-id="${v.id}" data-code="${v.code}" class="btn-delete-voucher w-8 h-8 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng voucher ${v.code}">
+                            <i class="fa-solid fa-eye-slash text-xs"></i>
                         </button>
                     </div>
                 </td>
@@ -206,22 +206,25 @@ const attachVoucherEvents = () => {
             if (!id) return;
 
             const ok = await showConfirmModal(
-                'Xác nhận xóa Voucher',
-                `Bạn có chắc chắn muốn xóa mã khuyến mãi "${code}"?\nHành động này không thể hoàn tác.`,
-                { okText: 'Xóa vĩnh viễn', cancelText: 'Hủy bỏ', type: 'danger' }
+                'Tạm ngưng Voucher',
+                `Bạn có chắc chắn muốn tạm ngưng áp dụng mã khuyến mãi "${code}"?\n(Mã sẽ tạm ngưng áp dụng nhưng lịch sử các đơn hàng trước đó vẫn được bảo toàn nguyên vẹn).`,
+                { okText: 'Tạm ngưng', cancelText: 'Hủy bỏ', type: 'warning' }
             );
             if (!ok) return;
 
             target.disabled = true;
             try {
                 await xoaVoucher(id);
-                allVouchers = allVouchers.filter(x => String(x.id) !== String(id));
-                ghiAuditLog('financial', 'Xóa Voucher', `Đã xóa mã khuyến mãi "${code}"`);
-                showSuccessToast(`Đã xóa mã "${code}" thành công!`);
+                const v = allVouchers.find(x => String(x.id) === String(id));
+                if (v) v.status = 'Inactive';
+                ghiAuditLog('financial', 'Tạm ngưng Voucher', `Tạm ngưng mã voucher "${code}" (ID: ${id})`);
+                showSuccessToast(`Đã tạm ngưng áp dụng mã "${code}"!`);
                 updateVoucherStats();
                 renderVouchersTable();
             } catch (err) {
-                showWarningToast('Lỗi khi xóa voucher');
+                showWarningToast('Lỗi khi tạm ngưng voucher');
+            } finally {
+                target.disabled = false;
             }
         });
     });
@@ -404,8 +407,8 @@ const renderCustomersTable = () => {
                         <button data-id="${c.id}" class="btn-edit-customer w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa hội viên ${c.name}">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
-                        <button data-id="${c.id}" data-name="${c.name}" class="btn-delete-customer w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xóa hội viên ${c.name}">
-                            <i class="fa-solid fa-trash text-xs"></i>
+                        <button data-id="${c.id}" data-name="${c.name}" class="btn-delete-customer w-8 h-8 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng hội viên ${c.name}">
+                            <i class="fa-solid fa-user-slash text-xs"></i>
                         </button>
                     </div>
                 </td>
@@ -447,22 +450,25 @@ const attachCustomerEvents = () => {
             if (!id) return;
 
             const ok = await showConfirmModal(
-                'Xác nhận xóa hội viên',
-                `Bạn có chắc chắn muốn xóa hội viên "${name}"?\nToàn bộ lịch sử điểm tích lũy của khách hàng này sẽ bị xóa.`,
-                { okText: 'Xóa hội viên', cancelText: 'Hủy bỏ', type: 'danger' }
+                'Tạm ngưng tài khoản hội viên',
+                `Bạn có chắc chắn muốn tạm ngưng hoạt động hội viên "${name}"?\n(Dữ liệu điểm tích lũy và lịch sử giao dịch vẫn được lưu giữ an toàn).`,
+                { okText: 'Tạm ngưng', cancelText: 'Hủy bỏ', type: 'warning' }
             );
             if (!ok) return;
 
             target.disabled = true;
             try {
                 await xoaCustomer(id);
-                allCustomers = allCustomers.filter(c => String(c.id) !== String(id));
-                ghiAuditLog('security', 'Xóa Hội Viên VIP', `Đã xóa hội viên "${name}" (ID: ${id})`);
-                showSuccessToast(`Đã xóa hội viên "${name}" thành công!`);
+                const c = allCustomers.find(item => String(item.id) === String(id));
+                if (c) c.status = 'Inactive';
+                ghiAuditLog('security', 'Tạm ngưng Hội Viên VIP', `Đã tạm ngưng hội viên "${name}" (ID: ${id})`);
+                showSuccessToast(`Đã tạm ngưng hội viên "${name}" thành công!`);
                 updateCustomerStats();
                 renderCustomersTable();
             } catch (err) {
-                showWarningToast('Lỗi khi xóa khách hàng');
+                showWarningToast('Lỗi khi cập nhật khách hàng');
+            } finally {
+                target.disabled = false;
             }
         });
     });

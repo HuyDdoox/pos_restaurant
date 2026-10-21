@@ -17,21 +17,67 @@ body {
     display: none !important;
 }
 
+.custom-scrollbar {
+    scrollbar-width: thin !important;
+    scrollbar-color: #475569 transparent !important;
+    -ms-overflow-style: auto !important;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    display: block !important;
+    width: 6px !important;
+    height: 6px !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #334155;
-    border-radius: 10px;
+    background-color: #475569 !important;
+    border-radius: 10px !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #475569;
+    background-color: #f97316 !important;
+}
+
+/* Sidebar scrollable navigation */
+#admin-sidebar {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+
+#admin-sidebar nav {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #64748b #1e293b !important;
+    -ms-overflow-style: auto !important;
+}
+
+#admin-sidebar nav::-webkit-scrollbar {
+    display: block !important;
+    width: 6px !important;
+}
+
+#admin-sidebar nav::-webkit-scrollbar-track {
+    background: #1e293b !important;
+}
+
+#admin-sidebar nav::-webkit-scrollbar-thumb {
+    background-color: #64748b !important;
+    border-radius: 9999px !important;
+}
+
+#admin-sidebar nav::-webkit-scrollbar-thumb:hover {
+    background-color: #f97316 !important;
 }
 
 /* Modern Radio & Checkbox Styles (Admin Dark Theme) */
@@ -108,27 +154,29 @@ input[type="checkbox"]:not(.sr-only):checked::before {
     transform: scale(1);
 }
 
-/* Sticky filter bars & table headers when scrolling main content */
+/* Sticky filter bars when scrolling main content */
 .admin-sticky-filter {
     position: sticky;
     top: -32px;
-    z-index: 30;
+    z-index: 25;
     background-color: #0f172a;
     padding-top: 14px;
-    padding-bottom: 12px;
+    padding-bottom: 14px;
     margin-left: -32px;
     margin-right: -32px;
     padding-left: 32px;
     padding-right: 32px;
-    border-bottom: 1px solid rgba(51, 65, 85, 0.8);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border-radius: 0 !important;
 }
 
 .admin-sticky-thead {
-    position: sticky;
-    top: 36px;
-    z-index: 20;
+    position: static;
     background-color: #1e293b;
-    border-bottom: 1px solid #334155;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-sticky-thead th {
+    position: static;
+    background-color: #1e293b;
 }

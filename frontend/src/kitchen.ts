@@ -286,6 +286,15 @@ const updateClock = () => {
 setInterval(updateClock, 1000);
 updateClock();
 
+// Helper lấy ID danh mục an toàn (hỗ trợ cả ObjectId dạng string hoặc Object được populate từ MongoDB)
+const getDishCategoryId = (mon: any): string => {
+    if (!mon) return '';
+    if (mon.category_id && typeof mon.category_id === 'object') {
+        return String(mon.category_id.id || mon.category_id._id || '');
+    }
+    return String(mon.category_id || '');
+};
+
 // --- PHÂN LOẠI TRẠM CHẾ BIẾN (STATION ROUTING) ---
 const getItemStation = (menuItemId: any): 'hot' | 'cold' | 'bar' => {
     if (menuItemId && typeof menuItemId === 'object' && menuItemId.station) {
@@ -295,9 +304,10 @@ const getItemStation = (menuItemId: any): 'hot' | 'cold' | 'bar' => {
     const item = mangMonAn.find(m => String(m.id || (m as any)._id) === rawId);
     if (item && (item as any).station) return (item as any).station as 'hot' | 'cold' | 'bar';
     if (!item) return 'hot';
-    const cat = mangDanhMuc.find(c => String(c.id || (c as any)._id) === String(item.category_id));
+    const itemCatId = getDishCategoryId(item);
+    const cat = mangDanhMuc.find(c => String(c.id || (c as any)._id) === itemCatId);
     const catName = (cat ? cat.name : '').toLowerCase();
-    const catId = item.category_id;
+    const catId = itemCatId;
 
     // Quầy Bar / Đồ uống
     if (catId === 'C004' || catName.includes('uống') || catName.includes('nước') || catName.includes('bar') || catName.includes('drink') || catName.includes('bia') || catName.includes('cà phê') || catName.includes('trà') || catName.includes('cocktail')) {
@@ -1393,7 +1403,8 @@ const openRecipePeekModal = (menuId: string) => {
     };
     if (stationBadge) stationBadge.innerText = stationLabels[station] || '🔥 Bếp Nóng';
 
-    const cat = mangDanhMuc.find(c => c.id === dish.category_id);
+    const dishCatId = getDishCategoryId(dish);
+    const cat = mangDanhMuc.find(c => String(c.id || (c as any)._id) === dishCatId);
     if (catEl) catEl.innerText = cat ? cat.name : 'Món ăn';
 
     // Công thức & nguyên liệu
@@ -1848,10 +1859,11 @@ const renderKitchenCategoryPills = () => {
     `;
 
     mangDanhMuc.forEach(cat => {
-        const count = mangMonAn.filter(m => m.category_id === cat.id).length;
-        const isActive = kitchenSelectedCategory === cat.id;
+        const catId = String(cat.id || (cat as any)._id);
+        const count = mangMonAn.filter(m => getDishCategoryId(m) === catId).length;
+        const isActive = kitchenSelectedCategory === catId;
         html += `
-            <button data-cat="${cat.id}" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${isActive ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'}">
+            <button data-cat="${catId}" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${isActive ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'}">
                 ${cat.name} (${count})
             </button>
         `;
@@ -1925,7 +1937,7 @@ const renderKitchenFilteredGrid = () => {
 
     const filtered = mangMonAn.filter(mon => {
         // Lọc danh mục
-        if (kitchenSelectedCategory !== 'all' && mon.category_id !== kitchenSelectedCategory) {
+        if (kitchenSelectedCategory !== 'all' && getDishCategoryId(mon) !== kitchenSelectedCategory) {
             return false;
         }
         // Lọc trạng thái

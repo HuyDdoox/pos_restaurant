@@ -164,16 +164,28 @@
         </nav>
 
         <!-- User bottom -->
-        <div class="p-4 border-t border-slate-700/50 shrink-0 bg-[#1e293b]">
-            <div
-                class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-700/30 transition-colors cursor-pointer">
-                <div
-                    class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0">
-                    AD</div>
-                <div>
-                    <p class="text-sm font-bold text-white">Quản trị viên</p>
-                    <p class="text-xs text-slate-400">admin@foodhub.com</p>
+        <div class="p-4 border-t border-slate-700/50 shrink-0 bg-[#1e293b] relative" id="admin-user-container">
+            <!-- Menu con xổ lên trên -->
+            <div id="admin-user-dropdown" class="absolute bottom-full left-4 right-4 mb-2 bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-2 hidden z-50">
+                <div class="px-3 py-2 border-b border-slate-700/60 mb-1">
+                    <p class="text-[11px] text-slate-400 font-semibold">Tài khoản Quản trị</p>
+                    <p class="text-xs font-bold text-white truncate" id="admin-dropdown-user-name">Quản trị viên</p>
                 </div>
+                <button type="button" onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 font-bold text-xs transition-colors cursor-pointer text-left">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                    <span>Đăng xuất hệ thống</span>
+                </button>
+            </div>
+            <div id="btn-admin-user-toggle"
+                class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-700/30 transition-colors cursor-pointer select-none">
+                <div
+                    class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0 shadow-md">
+                    AD</div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-white truncate" id="admin-sidebar-user-name">Quản trị viên</p>
+                    <p class="text-xs text-slate-400 truncate">admin@foodhub.com</p>
+                </div>
+                <i class="fa-solid fa-chevron-up text-slate-400 text-xs"></i>
             </div>
         </div>
     </aside>
@@ -2792,6 +2804,30 @@
     <script src="../../js/admin.js?v=20261021_06"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Toggle Dropdown Menu con cho Admin User
+            const btnAdminUser = document.getElementById('btn-admin-user-toggle');
+            const menuAdminUser = document.getElementById('admin-user-dropdown');
+            const adminNameEl = document.getElementById('admin-sidebar-user-name');
+            const adminDropNameEl = document.getElementById('admin-dropdown-user-name');
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                const displayName = storedUser.name || storedUser.username || 'Quản trị viên';
+                if (adminNameEl) adminNameEl.innerText = displayName;
+                if (adminDropNameEl) adminDropNameEl.innerText = displayName;
+            } catch(e) {}
+
+            if (btnAdminUser && menuAdminUser) {
+                btnAdminUser.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menuAdminUser.classList.toggle('hidden');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!btnAdminUser.contains(e.target) && !menuAdminUser.contains(e.target)) {
+                        menuAdminUser.classList.add('hidden');
+                    }
+                });
+            }
+
             // Toggle Sidebar
             const sidebar = document.getElementById('admin-sidebar');
             const toggleBtn = document.getElementById('btn-toggle-sidebar');
@@ -2836,7 +2872,7 @@
                         nav.scrollTop += e.deltaY;
                     }
                 }, { passive: true });
-            });
+            }
         });
     </script>
     <!-- MODAL THÊM/SỬA USER -->

@@ -158,7 +158,8 @@ function populateLossReasonOptions() {
 export async function loadLossData() {
     try {
         const res = await fetch(API_INGREDIENTS_URL);
-        allIngredientsCache = await res.json();
+        const json = await res.json();
+        allIngredientsCache = Array.isArray(json) ? json : (json.data || []);
     } catch (err) {
         console.error("Lỗi khi tải nguyên liệu:", err);
     }

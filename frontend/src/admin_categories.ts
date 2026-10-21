@@ -215,14 +215,26 @@ const setupCategoryEventListeners = () => {
                 return;
             }
 
-            // 3. NÚT XÓA DANH MỤC
+            // 3. NÚT ẨN / HIỆN DANH MỤC (SOFT DELETE / KHÔNG XÓA DỮ LIỆU)
+            const toggleBtn = target.closest('.btn-toggle-category-status') as HTMLElement;
+            if (toggleBtn) {
+                const catId = toggleBtn.getAttribute('data-id');
+                const catName = toggleBtn.getAttribute('data-name') || 'Danh mục';
+                const status = toggleBtn.getAttribute('data-status') || 'Active';
+                if (catId) {
+                    await handleToggleCategoryStatus(catId, catName, status);
+                }
+                return;
+            }
+
+            // Fallback tương thích ngược nếu còn element cũ
             const deleteBtn = target.closest('.btn-delete-category') as HTMLElement;
             if (deleteBtn) {
                 const catId = deleteBtn.getAttribute('data-id');
                 const catName = deleteBtn.getAttribute('data-name') || 'Danh mục';
-                const count = parseInt(deleteBtn.getAttribute('data-count') || '0', 10);
+                const status = deleteBtn.getAttribute('data-status') || 'Active';
                 if (catId) {
-                    await handleDeleteCategory(catId, catName, count);
+                    await handleToggleCategoryStatus(catId, catName, status);
                 }
                 return;
             }
@@ -408,47 +420,59 @@ const renderCategoriesTable = () => {
                     </span>
                 </td>
 
-                <!-- Trạng thái -->
+                <!-- Trạng thái (Bấm trực tiếp để Ẩn / Hiện) -->
                 <td class="px-6 py-4 text-center whitespace-nowrap">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${
+                    <button type="button" 
+                        class="btn-toggle-category-status inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-xs ${
                         isActive 
-                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' 
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
-                    }">
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25' 
+                            : 'bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-200'
+                    }" data-id="${cat.id}" data-name="${cat.name}" data-status="${cat.status || (isActive ? 'Active' : 'Inactive')}" title="Nhấn để ${isActive ? 'ẩn' : 'hiển thị lại'} danh mục">
                         <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}"></span>
                         ${isActive ? 'Đang hiển thị' : 'Tạm ẩn'}
-                    </span>
+                    </button>
                 </td>
 
-                <!-- Thao tác: Nút icon con mắt xem món, sửa, xóa (Hover hiển thị tooltip, không tốn diện tích bảng) -->
+                <!-- Thao tác: Xem món, sửa, ẩn/hiện (Không xóa dữ liệu, bảo toàn lịch sử F&B) -->
                 <td class="px-6 py-4 text-right whitespace-nowrap">
                     <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
-                        <!-- NÚT CON MẮT: XEM MÓN TRONG DANH MỤC (ICON ONLY) -->
+                        <!-- NÚT XEM MÓN TRONG DANH MỤC (ICON ONLY) -->
                         <button type="button" 
                             class="btn-view-category-dishes w-8 h-8 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 border border-blue-500/30 flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
                             data-id="${cat.id}" 
                             data-name="${cat.name}"
                             title="Xem ${dishCount} món trong danh mục ${cat.name}">
-                            <i class="fa-solid fa-eye text-xs"></i>
+                            <i class="fa-solid fa-layer-group text-xs"></i>
                         </button>
 
                         <!-- NÚT CHỈNH SỬA (ICON ONLY) -->
                         <button type="button" 
-                            class="btn-edit-category w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95" 
+                            class="btn-edit-category w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" 
                             data-id="${cat.id}"
                             title="Chỉnh sửa danh mục ${cat.name}">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
 
-                        <!-- NÚT XÓA (ICON ONLY) -->
+                        <!-- NÚT ẨN / HIỆN DANH MỤC (THAY THẾ NÚT XÓA: CHỈ ẨN ĐI, KHÔNG XÓA DỮ LIỆU) -->
+                        ${isActive ? `
                         <button type="button" 
-                            class="btn-delete-category w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95" 
+                            class="btn-toggle-category-status w-8 h-8 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" 
                             data-id="${cat.id}"
                             data-name="${cat.name}"
-                            data-count="${dishCount}"
-                            title="Xóa danh mục ${cat.name}">
-                            <i class="fa-solid fa-trash text-xs"></i>
+                            data-status="Active"
+                            title="Ẩn danh mục ${cat.name} (Tạm ẩn khỏi menu khách)">
+                            <i class="fa-solid fa-eye-slash text-xs"></i>
                         </button>
+                        ` : `
+                        <button type="button" 
+                            class="btn-toggle-category-status w-8 h-8 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" 
+                            data-id="${cat.id}"
+                            data-name="${cat.name}"
+                            data-status="Inactive"
+                            title="Hiển thị lại danh mục ${cat.name}">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                        `}
                     </div>
                 </td>
             </tr>
@@ -698,28 +722,45 @@ const handleCategoryFormSubmit = async () => {
 };
 
 // ========================================================
-// XÓA DANH MỤC (CÓ CẢNH BÁO NẾU CÒN MÓN)
+// ẨN / HIỆN DANH MỤC (SOFT DELETE - KHÔNG XÓA DỮ LIỆU)
 // ========================================================
-const handleDeleteCategory = async (catId: string, catName: string, dishCount: number) => {
-    let confirmMsg = `Bạn có chắc chắn muốn xóa danh mục "${catName}" không?`;
-    if (dishCount > 0) {
-        confirmMsg = `⚠️ CẢNH BÁO: Danh mục "${catName}" hiện đang có ${dishCount} món ăn!\n\nNếu xóa danh mục này, bạn sẽ cần gán lại danh mục mới cho các món ăn đó.\nBạn vẫn muốn tiếp tục xóa?`;
-    }
+const handleToggleCategoryStatus = async (catId: string, catName: string, currentStatus: string) => {
+    const isCurrentlyActive = currentStatus !== 'Inactive' && currentStatus !== 'Archived';
+    const newStatus = isCurrentlyActive ? 'Inactive' : 'Active';
 
     const confirmed = await showConfirmModal(
-        'Xác nhận xóa danh mục',
-        confirmMsg,
-        { okText: 'Xóa vĩnh viễn', cancelText: 'Hủy', type: 'danger' }
+        isCurrentlyActive ? 'Xác nhận ẩn danh mục' : 'Xác nhận hiển thị lại danh mục',
+        isCurrentlyActive
+            ? `Bạn có chắc chắn muốn ẩn danh mục "${catName}" không?\n\nDanh mục và các món thuộc nhóm này sẽ tạm thời không xuất hiện trên thực đơn khách gọi món, nhưng dữ liệu lịch sử và món ăn vẫn được bảo toàn nguyên vẹn.`
+            : `Bạn có chắc muốn kích hoạt hiển thị lại danh mục "${catName}" trên thực đơn nhà hàng không?`,
+        { 
+            okText: isCurrentlyActive ? 'Ẩn danh mục' : 'Hiển thị lại', 
+            cancelText: 'Hủy bỏ', 
+            type: isCurrentlyActive ? 'warning' : 'info' 
+        }
     );
 
     if (!confirmed) return;
 
     try {
-        await xoaDanhMuc(catId);
-        showSuccessToast(`Đã xóa danh mục "${catName}" thành công!`);
+        await suaDanhMuc(catId, { status: newStatus });
+        showSuccessToast(`Đã ${isCurrentlyActive ? 'ẩn' : 'kích hoạt hiển thị lại'} danh mục "${catName}" thành công!`);
         await loadCategoriesData();
+
+        // Cập nhật lại dropdown lọc ở trang Thực đơn nếu trang đó đang mở
+        const catSelect = document.getElementById('filter-menu-category');
+        if (catSelect) {
+            catSelect.innerHTML = `<option value="all">Tất cả danh mục</option>` + allCategories.map(c => `
+                <option value="${c.id}">${c.name}</option>
+            `).join('');
+        }
     } catch (error: any) {
-        console.error("Lỗi xóa danh mục:", error);
-        showWarningToast(error.message || 'Lỗi khi xóa danh mục!');
+        console.error("Lỗi khi đổi trạng thái danh mục:", error);
+        showWarningToast(error.message || 'Lỗi khi đổi trạng thái danh mục!');
     }
+};
+
+// Fallback giữ lại hàm cũ để tránh lỗi tham chiếu nếu có code gọi
+const handleDeleteCategory = async (catId: string, catName: string, dishCount: number) => {
+    await handleToggleCategoryStatus(catId, catName, 'Active');
 };
