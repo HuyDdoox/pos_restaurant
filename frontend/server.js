@@ -31,7 +31,7 @@ function checkBackend(callback) {
         return callback(backendAlive);
     }
     lastCheck = now;
-    const req = http.get({ hostname: 'localhost', port: BACKEND_PORT, path: '/api/menu', timeout: 1500 }, (res) => {
+    const req = http.get({ hostname: '127.0.0.1', port: BACKEND_PORT, path: '/api/menu', timeout: 1500 }, (res) => {
         backendAlive = res.statusCode < 500;
         callback(backendAlive);
     });
@@ -49,7 +49,7 @@ function proxyToBackend(req, res, next) {
         const rawBody = req.body ? JSON.stringify(req.body) : '';
 
         const options = {
-            hostname: 'localhost',
+            hostname: '127.0.0.1',
             port: BACKEND_PORT,
             path: req.url, // đã có /api/ prefix
             method: req.method,

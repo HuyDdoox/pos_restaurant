@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ../tests/e2e_exhaustive_ui_test.js --headless",
+    "test:e2e": "node ../tests/e2e_exhaustive_ui_test.js",
+    "test:e2e:headless": "node ../tests/e2e_exhaustive_ui_test.js --headless",
     "build": "node --max-old-space-size=4096 ./node_modules/webpack/bin/webpack.js",
     "webpack:watch": "webpack --watch",
     "server": "node server.js",
@@ -18,6 +20,7 @@
   "devDependencies": {
     "concurrently": "^10.0.6",
     "json-server": "^0.17.4",
+    "playwright": "^1.64.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "webpack": "^5.111.1",
