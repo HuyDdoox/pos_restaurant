@@ -1,4 +1,4 @@
-import { showConfirmModal, showSuccessToast, showWarningToast } from './utils/ui';
+import { showConfirmModal, showSuccessToast, showWarningToast, enableDragToScroll } from './utils/ui';
 import { 
     layDanhSachBan, capNhatTrangThaiBan, capNhatDonHang, taoCaLamViec, 
     ketThucCaLamViec, layThongTinCaLamViec, layCaHienTai, layChiTietCuaDon, layDanhSachMonAn, layDanhSachHoaDonChuaThanhToan, 
@@ -1722,14 +1722,14 @@ const renderSplitBillLists = () => {
         countA += item.quantity;
 
         htmlA += `
-            <div class="flex items-center justify-between p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/60">
+            <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
                 <div class="flex-1 min-w-0 pr-2">
-                    <p class="font-bold text-white text-xs truncate">${name}</p>
-                    <p class="text-[11px] text-slate-400">${formatMoney(price)} đ x <span class="text-orange-400 font-bold">${item.quantity}</span></p>
+                    <p class="font-bold text-slate-900 text-xs truncate">${name}</p>
+                    <p class="text-[11px] text-slate-500">${formatMoney(price)} đ x <span class="text-orange-600 font-bold">${item.quantity}</span></p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-black text-emerald-400">${formatMoney(lineTotal)} đ</span>
-                    <button type="button" class="btn-move-to-b w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 hover:bg-amber-500 hover:text-white flex items-center justify-center font-bold text-xs transition-colors" data-index="${index}" title="Chuyển sang Bill B">
+                    <span class="text-xs font-black text-emerald-600">${formatMoney(lineTotal)} đ</span>
+                    <button type="button" class="btn-move-to-b w-7 h-7 rounded-lg bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white border border-orange-200 flex items-center justify-center font-bold text-xs transition-colors shadow-2xs" data-index="${index}" title="Chuyển sang Bill B">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -1750,15 +1750,15 @@ const renderSplitBillLists = () => {
         countB += item.quantity;
 
         htmlB += `
-            <div class="flex items-center justify-between p-2.5 bg-slate-800/80 rounded-xl border border-amber-500/30">
-                <button type="button" class="btn-move-to-a w-7 h-7 rounded-lg bg-slate-700 text-slate-300 hover:bg-emerald-500 hover:text-white flex items-center justify-center font-bold text-xs transition-colors mr-2" data-index="${index}" title="Trả lại Bill A">
+            <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-amber-200 shadow-2xs">
+                <button type="button" class="btn-move-to-a w-7 h-7 rounded-lg bg-slate-100 text-slate-600 hover:bg-emerald-500 hover:text-white border border-slate-200 flex items-center justify-center font-bold text-xs transition-colors mr-2 shadow-2xs" data-index="${index}" title="Trả lại Bill A">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <div class="flex-1 min-w-0 pr-2">
-                    <p class="font-bold text-white text-xs truncate">${name}</p>
-                    <p class="text-[11px] text-slate-400">${formatMoney(price)} đ x <span class="text-amber-400 font-bold">${item.quantity}</span></p>
+                    <p class="font-bold text-slate-900 text-xs truncate">${name}</p>
+                    <p class="text-[11px] text-slate-500">${formatMoney(price)} đ x <span class="text-amber-600 font-bold">${item.quantity}</span></p>
                 </div>
-                <span class="text-xs font-black text-amber-400">${formatMoney(lineTotal)} đ</span>
+                <span class="text-xs font-black text-amber-600">${formatMoney(lineTotal)} đ</span>
             </div>
         `;
     });
@@ -1941,27 +1941,28 @@ const renderEqualSplitCards = () => {
     let html = '';
     for (let i = 1; i <= equalShareCount; i++) {
         const isPaid = equalPaidShares.includes(i);
-        const cardBg = isPaid ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-slate-800/80 border-slate-700/80';
+        const cardBg = isPaid ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200 shadow-sm';
         const statusBadge = isPaid 
-            ? '<span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 font-bold rounded-full text-[11px] border border-emerald-500/30">Đã thanh toán</span>'
-            : '<span class="px-2.5 py-1 bg-slate-700 text-slate-300 font-bold rounded-full text-[11px]">Chờ thanh toán</span>';
+            ? '<span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[11px] border border-emerald-300">Đã thanh toán</span>'
+            : '<span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-full text-[11px] border border-slate-200">Chờ thanh toán</span>';
 
         const actionBtn = isPaid
-            ? `<button disabled class="w-full py-2 bg-slate-700 text-slate-500 rounded-xl font-bold text-xs cursor-not-allowed">Đã thu tiền</button>`
-            : `<button class="btn-pay-share w-full py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-xs transition-colors shadow-md" data-share="${i}" data-amount="${shareAmount}">Thanh toán phần ${i}</button>`;
+            ? `<button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 rounded-xl font-bold text-xs cursor-not-allowed border border-slate-200">Đã thu tiền</button>`
+            : `<button class="btn-pay-share w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-xs transition-colors shadow-md shadow-orange-500/20 cursor-pointer" data-share="${i}" data-amount="${shareAmount}">Thanh toán phần ${i}</button>`;
 
         html += `
             <div class="${cardBg} rounded-2xl p-4 border flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="font-bold text-white text-sm">Phần ${i} / ${equalShareCount}</span>
+                    <span class="font-bold text-slate-900 text-sm">Phần ${i} / ${equalShareCount}</span>
                     ${statusBadge}
                 </div>
-                <p class="text-xl font-black text-amber-400 mb-4">${formatMoney(shareAmount)} đ</p>
+                <p class="text-xl font-black text-amber-600 mb-4">${formatMoney(shareAmount)} đ</p>
                 ${actionBtn}
             </div>
         `;
     }
     container.innerHTML = html;
+    enableDragToScroll(container);
 
     // Gắn sự kiện thanh toán từng phần
     document.querySelectorAll('.btn-pay-share').forEach(btn => {
@@ -2113,15 +2114,15 @@ const renderMergeCandidatesList = () => {
         const isChecked = selectedMergeOrderIds.includes(order.id) ? 'checked' : '';
 
         html += `
-            <label class="flex items-center justify-between p-3 bg-slate-800/80 hover:bg-slate-800 rounded-xl border border-slate-700/60 cursor-pointer transition-colors">
+            <label class="flex items-center justify-between p-3 bg-white hover:bg-slate-50 rounded-xl border border-slate-200 cursor-pointer transition-colors shadow-2xs">
                 <div class="flex items-center gap-3">
-                    <input type="checkbox" value="${order.id}" ${isChecked} class="chk-merge-order w-4 h-4 rounded text-indigo-500 bg-slate-900 border-slate-700 focus:ring-0 cursor-pointer">
+                    <input type="checkbox" value="${order.id}" ${isChecked} class="chk-merge-order w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-0 cursor-pointer">
                     <div>
-                        <span class="font-bold text-white text-sm">Bàn ${num}</span>
-                        <span class="text-xs text-slate-400 ml-2">#${order.id}</span>
+                        <span class="font-bold text-slate-900 text-sm">Bàn ${num}</span>
+                        <span class="text-xs text-slate-500 ml-2">#${order.id}</span>
                     </div>
                 </div>
-                <span class="font-black text-emerald-400 text-sm">${formatMoney(order.totalAmount)} đ</span>
+                <span class="font-black text-emerald-600 text-sm">${formatMoney(order.totalAmount)} đ</span>
             </label>
         `;
     });
@@ -2757,28 +2758,28 @@ export const renderOrdersList = async () => {
 
                 let itemStatusBadge = '';
                 if (d.status === 'Pending') {
-                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[10px] font-bold">Chờ nấu</span>';
+                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">Chờ nấu</span>';
                 } else if (d.status === 'Cooking') {
-                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 text-[10px] font-bold">Đang nấu</span>';
+                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-200 text-[10px] font-bold">Đang nấu</span>';
                 } else if (d.status === 'Ready' || d.status === 'Served') {
-                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">Đã phục vụ</span>';
+                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Đã phục vụ</span>';
                 } else if (d.status === 'Cancelled') {
-                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 text-[10px] font-bold">Đã hủy</span>';
+                    itemStatusBadge = '<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold">Đã hủy</span>';
                 } else {
-                    itemStatusBadge = `<span class="px-2 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px] font-bold">${d.status || 'N/A'}</span>`;
+                    itemStatusBadge = `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-bold">${d.status || 'N/A'}</span>`;
                 }
 
-                const notesHtml = d.notes ? `<div class="text-[10px] text-yellow-400 font-semibold italic mt-0.5">${d.notes}</div>` : '';
+                const notesHtml = d.notes ? `<div class="text-[10px] text-amber-600 font-semibold italic mt-0.5">${d.notes}</div>` : '';
 
                 itemsHtml += `
-                    <tr class="hover:bg-slate-800/40 transition-colors">
-                        <td class="p-3 font-bold text-white">
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3 font-bold text-slate-900">
                             <div>${name}</div>
                             ${notesHtml}
                         </td>
-                        <td class="text-center p-3 font-bold text-orange-400 text-sm">x${qty}</td>
-                        <td class="text-right p-3 text-slate-300">${formatMoney(price)} đ</td>
-                        <td class="text-right p-3 font-black text-white">${formatMoney(tt)} đ</td>
+                        <td class="text-center p-3 font-bold text-orange-600 text-sm">x${qty}</td>
+                        <td class="text-right p-3 text-slate-600">${formatMoney(price)} đ</td>
+                        <td class="text-right p-3 font-black text-slate-900">${formatMoney(tt)} đ</td>
                         <td class="text-center p-3">${itemStatusBadge}</td>
                     </tr>
                 `;
@@ -2950,14 +2951,20 @@ export const initCashierMenuEvents = () => {
 
             document.querySelectorAll('.cashier-menu-status-btn').forEach(b => {
                 b.classList.remove('bg-orange-500', 'text-white', 'shadow-sm');
-                b.classList.add('text-slate-400');
+                b.classList.add('text-slate-600');
             });
-            target.classList.remove('text-slate-400');
+            target.classList.remove('text-slate-600');
             target.classList.add('bg-orange-500', 'text-white', 'shadow-sm');
 
             renderMenuGrid();
         });
     });
+
+    // Kích hoạt nắm kéo cuộn ngang cho thanh danh mục món ăn
+    const categoryContainer = document.getElementById('cashier-category-pills');
+    if (categoryContainer) {
+        enableDragToScroll(categoryContainer);
+    }
 
     // Refresh button
     const btnRefresh = document.getElementById('btn-refresh-cashier-menu');
@@ -2974,7 +2981,7 @@ export const renderCashierCategoryPills = () => {
     if (!container) return;
 
     let html = `
-        <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${currentCashierMenuCategory === 'all' ? 'bg-orange-500 text-white shadow-sm' : 'bg-[#0f172a] text-slate-400 hover:text-white border border-slate-700/60'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="all">
+        <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${currentCashierMenuCategory === 'all' ? 'bg-orange-500 text-white shadow-sm border border-orange-500' : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 shadow-2xs'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="all">
             <i class="fa-solid fa-border-all text-xs"></i> Tất cả danh mục
         </button>
     `;
@@ -2984,8 +2991,8 @@ export const renderCashierCategoryPills = () => {
         const isActive = currentCashierMenuCategory === catId;
         const iconClass = cat.icon ? (cat.icon.startsWith('fa-') ? cat.icon : `fa-${cat.icon}`) : 'fa-utensils';
         html += `
-            <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${isActive ? 'bg-orange-500 text-white shadow-sm' : 'bg-[#0f172a] text-slate-400 hover:text-white border border-slate-700/60'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="${catId}">
-                <i class="fa-solid ${iconClass} text-xs ${isActive ? 'text-white' : 'text-orange-400'}"></i> ${cat.name}
+            <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${isActive ? 'bg-orange-500 text-white shadow-sm border border-orange-500' : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 shadow-2xs'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="${catId}">
+                <i class="fa-solid ${iconClass} text-xs ${isActive ? 'text-white' : 'text-orange-500'}"></i> ${cat.name}
             </button>
         `;
     });
@@ -2993,8 +3000,8 @@ export const renderCashierCategoryPills = () => {
     // Add extra pill for Combos
     const isComboActive = currentCashierMenuCategory === 'combo';
     html += `
-        <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${isComboActive ? 'bg-orange-500 text-white shadow-sm' : 'bg-[#0f172a] text-slate-400 hover:text-white border border-slate-700/60'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="combo">
-            <i class="fa-solid fa-boxes-stacked text-xs ${isComboActive ? 'text-white' : 'text-amber-400'}"></i> Combo Tiệc
+        <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl ${isComboActive ? 'bg-orange-500 text-white shadow-sm border border-orange-500' : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 shadow-2xs'} font-bold text-xs transition-all shrink-0 flex items-center gap-1.5 cursor-pointer" data-cat="combo">
+            <i class="fa-solid fa-boxes-stacked text-xs ${isComboActive ? 'text-white' : 'text-amber-500'}"></i> Combo Tiệc
         </button>
     `;
 
@@ -3079,32 +3086,32 @@ export const renderMenuGrid = () => {
         }
 
         html += `
-            <div class="bg-[#1e293b] rounded-2xl p-4 border border-slate-700/50 shadow-md hover:border-orange-500/40 transition-all flex flex-col justify-between group">
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-orange-400 hover:shadow-md transition-all flex flex-col justify-between group">
                 <div>
-                    <div class="relative overflow-hidden rounded-xl mb-3">
+                    <div class="relative overflow-hidden rounded-xl mb-3 border border-slate-100">
                         <img src="${item.image}" 
                             loading="lazy" decoding="async"
                             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300'" 
                             class="w-full h-36 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300 ${!isAvailable ? 'grayscale opacity-60' : ''}">
                         
                         <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
-                            <span class="bg-[#0f172a]/85 backdrop-blur-sm text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-700/80">
+                            <span class="bg-white/90 backdrop-blur-sm text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
                                 ${catName}
                             </span>
-                            ${isCombo ? '<span class="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md shadow-sm"><i class="fa-solid fa-crown text-[9px]"></i> COMBO</span>' : ''}
+                            ${isCombo ? '<span class="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md shadow-2xs"><i class="fa-solid fa-crown text-[9px]"></i> COMBO</span>' : ''}
                         </div>
 
-                        <span class="absolute top-2 right-2 ${isAvailable ? 'bg-emerald-500/90 text-white border border-emerald-400/50' : 'bg-red-500/90 text-white border border-red-400/50'} text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">
-                            ${isAvailable ? 'Còn hàng' : 'Hết hàng'}
+                        <span class="absolute top-2 right-2 ${isAvailable ? 'bg-emerald-50 text-emerald-700 border border-emerald-300' : 'bg-rose-50 text-rose-700 border border-rose-300'} text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs">
+                            ${isAvailable ? '● Còn hàng' : '● Hết hàng'}
                         </span>
                     </div>
 
-                    <h4 class="font-bold text-white text-sm mb-1.5 line-clamp-2 leading-snug" title="${item.name}">${item.name}</h4>
-                    ${item.description ? `<p class="text-[11px] text-slate-400 line-clamp-2 mb-2 leading-relaxed">${item.description}</p>` : ''}
+                    <h4 class="font-bold text-slate-800 text-sm mb-1.5 line-clamp-2 leading-snug group-hover:text-orange-600 transition-colors" title="${item.name}">${item.name}</h4>
+                    ${item.description ? `<p class="text-[11px] text-slate-500 line-clamp-2 mb-2 leading-relaxed">${item.description}</p>` : ''}
                 </div>
 
-                <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between mt-1">
-                    <span class="text-orange-400 font-black text-base">${formatMoney(item.base_price)} đ</span>
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between mt-1">
+                    <span class="text-orange-600 font-black text-base">${formatMoney(item.base_price)} đ</span>
                     <span class="text-[11px] text-slate-500 font-semibold uppercase tracking-wider">${item.station === 'bar' ? 'Quầy Bar' : (item.station === 'cold' ? 'Bếp Nguội' : 'Bếp Nóng')}</span>
                 </div>
             </div>
@@ -3259,12 +3266,12 @@ export const updateReportsTransactions = async () => {
         const d = new Date(o.createdAt);
         const dateStr = d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
         html += `
-            <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50">
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">#${o.id}</td>
-                <td class="px-6 py-4 text-slate-400 whitespace-nowrap">${dateStr}</td>
-                <td class="px-6 py-4 text-slate-300 whitespace-nowrap">Thanh toán</td>
-                <td class="px-6 py-4 text-right font-black text-emerald-400 whitespace-nowrap">+${formatMoney(o.totalAmount)} đ</td>
-                <td class="px-6 py-4 text-center whitespace-nowrap"><span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30 whitespace-nowrap">Thành công</span></td>
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">#${o.id}</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${dateStr}</td>
+                <td class="px-6 py-4 text-slate-700 whitespace-nowrap">Thanh toán</td>
+                <td class="px-6 py-4 text-right font-black text-emerald-600 whitespace-nowrap">+${formatMoney(o.totalAmount)} đ</td>
+                <td class="px-6 py-4 text-center whitespace-nowrap"><span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 whitespace-nowrap">Thành công</span></td>
             </tr>
         `;
     });
@@ -3299,11 +3306,11 @@ export const renderOverviewRecentOrders = async () => {
         const itemCount = orderDetails.reduce((sum: number, d: any) => sum + (Number(d.quantity) || 1), 0);
 
         html += `
-            <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50">
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">${numTable}</td>
-                <td class="px-6 py-4 text-slate-400 whitespace-nowrap">${timeStr}</td>
-                <td class="px-6 py-4 text-slate-300 whitespace-nowrap">${itemCount} món</td>
-                <td class="px-6 py-4 text-right font-black text-white whitespace-nowrap">${formatMoney(order.totalAmount || 0)} đ</td>
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${numTable}</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${timeStr}</td>
+                <td class="px-6 py-4 text-slate-700 whitespace-nowrap">${itemCount} món</td>
+                <td class="px-6 py-4 text-right font-black text-slate-900 whitespace-nowrap">${formatMoney(order.totalAmount || 0)} đ</td>
                 <td class="px-6 py-4 text-center whitespace-nowrap">${badge}</td>
             </tr>
         `;

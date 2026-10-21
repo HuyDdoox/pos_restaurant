@@ -384,11 +384,11 @@
                         <h3 class="font-black text-slate-900 mb-6">Tóm tắt ngày</h3>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Tổng
-                                    doanh thu</span><span id="reports-summary-revenue" class="font-black text-white">0 đ</span></div>
+                                    doanh thu</span><span id="reports-summary-revenue" class="font-black text-slate-900">0 đ</span></div>
                             <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">Số
-                                    đơn</span><span id="reports-summary-orders" class="font-black text-white">0</span></div>
+                                    đơn</span><span id="reports-summary-orders" class="font-black text-slate-900">0</span></div>
                             <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">TB /
-                                    đơn</span><span id="reports-summary-avg" class="font-black text-white">0 đ</span></div>
+                                    đơn</span><span id="reports-summary-avg" class="font-black text-slate-900">0 đ</span></div>
                             <div class="pt-4 border-t border-slate-200 flex justify-between items-center"><span
                                     class="text-slate-400 text-sm">Hủy đơn</span><span id="reports-summary-cancelled"
                                     class="font-black text-red-400">0</span></div>
@@ -423,31 +423,31 @@
                     <div class="p-6 grid grid-cols-2 md:grid-cols-5 gap-4 border-b border-slate-200">
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                             <p class="text-slate-400 text-xs font-bold mb-1">Tiền đầu ca (Vốn)</p>
-                            <p id="cashflow-starting" class="text-lg font-black text-white">0 đ</p>
+                            <p id="cashflow-starting" class="text-lg font-black text-slate-900">0 đ</p>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <p class="text-emerald-400 text-xs font-bold mb-1">+ Thu tiền mặt (Bán hàng)</p>
-                            <p id="cashflow-sales" class="text-lg font-black text-emerald-400">0 đ</p>
+                            <p class="text-emerald-600 text-xs font-bold mb-1">+ Thu tiền mặt (Bán hàng)</p>
+                            <p id="cashflow-sales" class="text-lg font-black text-emerald-600">0 đ</p>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <p class="text-blue-400 text-xs font-bold mb-1">+ Thu thêm (Nạp két)</p>
-                            <p id="cashflow-in" class="text-lg font-black text-blue-400">0 đ</p>
+                            <p class="text-blue-600 text-xs font-bold mb-1">+ Thu thêm (Nạp két)</p>
+                            <p id="cashflow-in" class="text-lg font-black text-blue-600">0 đ</p>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <p class="text-rose-400 text-xs font-bold mb-1">- Chi từ két (Mua đá, ship...)</p>
-                            <p id="cashflow-out" class="text-lg font-black text-rose-400">0 đ</p>
+                            <p class="text-rose-600 text-xs font-bold mb-1">- Chi từ két (Mua đá, ship...)</p>
+                            <p id="cashflow-out" class="text-lg font-black text-rose-600">0 đ</p>
                         </div>
-                        <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 p-4 rounded-xl border border-amber-500/30 col-span-2 md:col-span-1">
-                            <p class="text-amber-300 text-xs font-bold mb-1">= Tiền lý thuyết trong két</p>
-                            <p id="cashflow-expected" class="text-xl font-black text-amber-400">0 đ</p>
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border border-amber-300 col-span-2 md:col-span-1">
+                            <p class="text-amber-800 text-xs font-bold mb-1">= Tiền lý thuyết trong két</p>
+                            <p id="cashflow-expected" class="text-xl font-black text-amber-600">0 đ</p>
                         </div>
                     </div>
 
                     <!-- Cash Transactions List Table -->
                     <div class="p-6">
-                        <h4 class="text-sm font-bold text-slate-300 mb-3 flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
                             <span>Lịch sử phiếu Thu / Chi trong ca</span>
-                            <span id="cashflow-trans-count" class="text-xs bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-bold border border-slate-200">0 phiếu</span>
+                            <span id="cashflow-trans-count" class="text-xs bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full font-bold border border-slate-200">0 phiếu</span>
                         </h4>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs">
@@ -485,9 +485,9 @@
                     <div class="relative w-64 md:w-80">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         <input id="search-cashier-orders" type="text" placeholder="Tìm theo mã đơn (#...), số bàn..." 
-                            class="w-full bg-slate-50 border border-slate-200 text-slate-800/70 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition-colors">
+                            class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs font-medium placeholder-slate-400 focus:outline-none focus:border-orange-500 transition-colors">
                     </div>
-                    <button type="button" id="btn-refresh-cashier-orders" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-slate-300 hover:text-white rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-sm" title="Làm mới danh sách đơn">
+                    <button type="button" id="btn-refresh-cashier-orders" class="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-sm" title="Làm mới danh sách đơn">
                         <i class="fa-solid fa-arrows-rotate"></i>
                     </button>
                 </div>
@@ -574,10 +574,10 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div id="cashier-menu-stats-pill" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs">
-                        <i class="fa-solid fa-utensils text-orange-400"></i>
-                        <span class="text-slate-300 font-bold" id="cashier-menu-stats-count">0 món</span>
+                        <i class="fa-solid fa-utensils text-orange-500"></i>
+                        <span class="text-slate-700 font-bold" id="cashier-menu-stats-count">0 món</span>
                     </div>
-                    <button type="button" id="btn-refresh-cashier-menu" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-slate-300 hover:text-white rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-sm" title="Làm mới thực đơn">
+                    <button type="button" id="btn-refresh-cashier-menu" class="px-3.5 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-sm" title="Làm mới thực đơn">
                         <i class="fa-solid fa-arrows-rotate"></i> Làm mới
                     </button>
                 </div>
@@ -591,20 +591,20 @@
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                             <input type="text" id="search-cashier-menu" 
                                 placeholder="Tìm kiếm món ăn, combo theo tên hoặc giá tiền..." 
-                                class="w-full bg-slate-50 border border-slate-200 text-slate-800/80 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition-colors shadow-inner">
+                                class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs font-medium placeholder-slate-400 focus:outline-none focus:border-orange-500 transition-colors shadow-xs">
                         </div>
                         
                         <!-- Bộ lọc trạng thái (Tất cả / Còn hàng / Hết hàng) -->
                         <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 self-start sm:self-auto shrink-0 shadow-inner">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2">Trạng thái:</span>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2">Trạng thái:</span>
                             <button type="button" class="cashier-menu-status-btn px-2.5 py-1 rounded-lg bg-orange-500 text-white font-bold text-xs transition-all cursor-pointer shadow-sm" data-status="all">Tất cả</button>
-                            <button type="button" class="cashier-menu-status-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold text-xs transition-all cursor-pointer" data-status="available">Còn món</button>
-                            <button type="button" class="cashier-menu-status-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-bold text-xs transition-all cursor-pointer" data-status="out_of_stock">Hết món</button>
+                            <button type="button" class="cashier-menu-status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs transition-all cursor-pointer" data-status="available">Còn món</button>
+                            <button type="button" class="cashier-menu-status-btn px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 font-bold text-xs transition-all cursor-pointer" data-status="out_of_stock">Hết món</button>
                         </div>
                     </div>
 
                     <!-- Dòng 2: Danh mục món ăn (Category Pills) -->
-                    <div class="pt-3 border-t border-slate-200/80 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar" id="cashier-category-pills">
+                    <div class="pt-3 border-t border-slate-200/80 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar select-none cursor-grab active:cursor-grabbing scroll-smooth" id="cashier-category-pills">
                         <button type="button" class="cashier-cat-pill px-3 py-1.5 rounded-xl bg-orange-500 text-white font-bold text-xs transition-all shrink-0 shadow-sm flex items-center gap-1.5 cursor-pointer" data-cat="all">
                             <i class="fa-solid fa-border-all text-xs"></i> Tất cả danh mục
                         </button>
@@ -636,20 +636,20 @@
                             <h3 class="font-black text-slate-900">Thông tin nhà hàng</h3>
                         </div>
                         <div class="p-6 space-y-4">
-                            <div><label class="block text-sm font-bold text-slate-400 mb-2">Tên nhà hàng</label><input
+                            <div><label class="block text-sm font-bold text-slate-700 mb-2">Tên nhà hàng</label><input
                                     type="text" value="FoodHub Restaurant"
-                                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-orange-500">
+                                    class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-orange-500 shadow-xs">
                             </div>
-                            <div><label class="block text-sm font-bold text-slate-400 mb-2">Địa chỉ</label><input
+                            <div><label class="block text-sm font-bold text-slate-700 mb-2">Địa chỉ</label><input
                                     type="text" value="123 Đường Ẩm Thực, Q.1, TP.HCM"
-                                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-orange-500">
+                                    class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-orange-500 shadow-xs">
                             </div>
-                            <div><label class="block text-sm font-bold text-slate-400 mb-2">Số điện thoại</label><input
+                            <div><label class="block text-sm font-bold text-slate-700 mb-2">Số điện thoại</label><input
                                     type="text" value="0901 234 567"
-                                    class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-white font-bold focus:outline-none focus:border-orange-500">
+                                    class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-orange-500 shadow-xs">
                             </div>
                             <button
-                                class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-all active:scale-95">Lưu
+                                class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-all active:scale-95 shadow-md shadow-orange-500/20">Lưu
                                 thay đổi</button>
                         </div>
                     </div>
@@ -660,11 +660,11 @@
                         <div class="p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-white font-bold">Epson TM-T82</p>
-                                    <p class="text-slate-400 text-sm">USB - Đã kết nối</p>
+                                    <p class="text-slate-900 font-bold">Epson TM-T82</p>
+                                    <p class="text-slate-500 text-sm">USB - Đã kết nối</p>
                                 </div>
                                 <span
-                                    class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30">Sẵn
+                                    class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200">Sẵn
                                     sàng</span>
                             </div>
                         </div>
@@ -691,29 +691,29 @@
                                 class="w-20 h-20 bg-orange-500 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg">
                                 AD</div>
                             <div>
-                                <h3 class="text-xl font-black text-white">Quản trị viên</h3>
-                                <p class="text-slate-400 font-bold">Thu ngân • NV001</p>
+                                <h3 class="text-xl font-black text-slate-900">Quản trị viên</h3>
+                                <p class="text-slate-500 font-bold">Thu ngân • NV001</p>
                                 <span
-                                    class="mt-2 inline-flex items-center gap-1.5 text-xs font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20"><span
-                                        class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>Đang làm
+                                    class="mt-2 inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200"><span
+                                        class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>Đang làm
                                     việc</span>
                             </div>
                         </div>
                         <div class="p-6 space-y-4">
                             <div class="flex items-center border-b border-slate-200 pb-4"><span
-                                    class="w-40 text-slate-400 font-bold text-sm">Họ và tên</span><span
-                                    class="text-white font-bold">Nguyễn Văn An</span></div>
+                                    class="w-40 text-slate-500 font-bold text-sm">Họ và tên</span><span
+                                    class="text-slate-900 font-bold">Nguyễn Văn An</span></div>
                             <div class="flex items-center border-b border-slate-200 pb-4"><span
-                                    class="w-40 text-slate-400 font-bold text-sm">Mã nhân viên</span><span
-                                    class="text-white font-bold">NV001</span></div>
+                                    class="w-40 text-slate-500 font-bold text-sm">Mã nhân viên</span><span
+                                    class="text-slate-900 font-bold">NV001</span></div>
                             <div class="flex items-center border-b border-slate-200 pb-4"><span
-                                    class="w-40 text-slate-400 font-bold text-sm">Chức vụ</span><span
-                                    class="text-white font-bold">Thu ngân</span></div>
+                                    class="w-40 text-slate-500 font-bold text-sm">Chức vụ</span><span
+                                    class="text-slate-900 font-bold">Thu ngân</span></div>
                             <div class="flex items-center border-b border-slate-200 pb-4"><span
-                                    class="w-40 text-slate-400 font-bold text-sm">Email</span><span
-                                    class="text-white font-bold">nguyenvana@foodhub.com</span></div>
-                            <div class="flex items-center"><span class="w-40 text-slate-400 font-bold text-sm">Ca làm
-                                    việc</span><span class="text-white font-bold">08:00 - 16:00</span></div>
+                                    class="w-40 text-slate-500 font-bold text-sm">Email</span><span
+                                    class="text-slate-900 font-bold">nguyenvana@foodhub.com</span></div>
+                            <div class="flex items-center"><span class="w-40 text-slate-500 font-bold text-sm">Ca làm
+                                    việc</span><span class="text-slate-900 font-bold">08:00 - 16:00</span></div>
                         </div>
                     </div>
                     <button
@@ -1071,13 +1071,13 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 class="text-lg font-black text-white" id="ov-order-id">Đơn hàng #...</h3>
+                            <h3 class="text-lg font-black text-slate-900" id="ov-order-id">Đơn hàng #...</h3>
                             <span id="ov-status-badge"></span>
                         </div>
-                        <p class="text-xs text-slate-400 font-semibold" id="ov-order-meta">Bàn ... • Giờ vào: ...</p>
+                        <p class="text-xs text-slate-500 font-semibold" id="ov-order-meta">Bàn ... • Giờ vào: ...</p>
                     </div>
                 </div>
-                <button id="btn-close-order-detail" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <button id="btn-close-order-detail" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -1085,11 +1085,11 @@
             <!-- Body: Danh sách món -->
             <div class="p-6 flex-1 overflow-y-auto space-y-4">
                 <div>
-                    <p class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Danh sách món đã gọi</p>
-                    <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <p class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Danh sách món đã gọi</p>
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
                         <table class="w-full text-xs">
                             <thead>
-                                <tr class="border-b border-slate-200 bg-slate-800/60 text-slate-400 font-bold uppercase">
+                                <tr class="border-b border-slate-200 bg-slate-100 text-slate-700 font-bold uppercase">
                                     <th class="text-left p-3">Món ăn</th>
                                     <th class="text-center p-3 w-16">SL</th>
                                     <th class="text-right p-3 w-28">Đơn giá</th>
@@ -1097,7 +1097,7 @@
                                     <th class="text-center p-3 w-24">Trạng thái</th>
                                 </tr>
                             </thead>
-                            <tbody id="ov-items-tbody" class="divide-y divide-slate-800/80 text-slate-200">
+                            <tbody id="ov-items-tbody" class="divide-y divide-slate-100 text-slate-800">
                                 <!-- Items injected by TS -->
                             </tbody>
                         </table>
@@ -1106,39 +1106,39 @@
 
                 <!-- Tóm tắt chi phí -->
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2 text-xs text-slate-700">
-                    <div class="flex justify-between items-center text-slate-400">
+                    <div class="flex justify-between items-center text-slate-500">
                         <span>Tạm tính (Subtotal):</span>
-                        <span class="font-bold text-white text-sm" id="ov-subtotal">0 đ</span>
+                        <span class="font-bold text-slate-900 text-sm" id="ov-subtotal">0 đ</span>
                     </div>
-                    <div class="flex justify-between items-center text-rose-400 hidden" id="ov-row-discount">
+                    <div class="flex justify-between items-center text-rose-500 hidden" id="ov-row-discount">
                         <span>Giảm giá:</span>
                         <span class="font-bold" id="ov-discount">-0 đ</span>
                     </div>
-                    <div class="flex justify-between items-center text-slate-400 hidden" id="ov-row-service">
+                    <div class="flex justify-between items-center text-slate-500 hidden" id="ov-row-service">
                         <span>Phí dịch vụ:</span>
-                        <span class="font-bold text-slate-200" id="ov-service">+0 đ</span>
+                        <span class="font-bold text-slate-800" id="ov-service">+0 đ</span>
                     </div>
-                    <div class="flex justify-between items-center text-slate-400 hidden" id="ov-row-vat">
+                    <div class="flex justify-between items-center text-slate-500 hidden" id="ov-row-vat">
                         <span>VAT (8%):</span>
-                        <span class="font-bold text-slate-200" id="ov-vat">+0 đ</span>
+                        <span class="font-bold text-slate-800" id="ov-vat">+0 đ</span>
                     </div>
                     <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-sm">
-                        <span class="font-black text-white">TỔNG CỘNG:</span>
-                        <span class="text-xl font-black text-emerald-400" id="ov-total">0 đ</span>
+                        <span class="font-black text-slate-900">TỔNG CỘNG:</span>
+                        <span class="text-xl font-black text-emerald-600" id="ov-total">0 đ</span>
                     </div>
                 </div>
             </div>
 
             <!-- Footer Buttons -->
             <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center shrink-0">
-                <button id="btn-ov-goto-table" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs transition-colors flex items-center gap-2">
+                <button id="btn-ov-goto-table" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors flex items-center gap-2 shadow-2xs">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Mở sơ đồ bàn
                 </button>
                 <div class="flex items-center gap-3">
                     <button id="btn-ov-print" class="px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black text-xs transition-colors shadow-lg shadow-orange-500/20 flex items-center gap-2">
                         <i class="fa-solid fa-print"></i> Xem mẫu in (In bill)
                     </button>
-                    <button id="btn-ov-close" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors">
+                    <button id="btn-ov-close" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors shadow-2xs">
                         Đóng
                     </button>
                 </div>
@@ -1152,16 +1152,16 @@
             <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 text-blue-500 mx-auto">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-            <h2 id="shift-modal-title" class="text-xl font-black text-white text-center mb-2">Mở ca làm việc</h2>
-            <p id="shift-modal-desc" class="text-slate-400 text-center mb-8">Vui lòng nhập số tiền mặt có trong két.</p>
+            <h2 id="shift-modal-title" class="text-xl font-black text-slate-900 text-center mb-2">Mở ca làm việc</h2>
+            <p id="shift-modal-desc" class="text-slate-500 text-center mb-8">Vui lòng nhập số tiền mặt có trong két.</p>
             
             <div class="relative mb-6">
                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">VNĐ</span>
-                <input type="number" id="input-shift-cash" class="w-full bg-slate-50 border border-slate-600 rounded-xl py-4 pl-14 pr-4 text-white font-black text-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" placeholder="0">
+                <input type="number" id="input-shift-cash" class="w-full bg-slate-50 border border-slate-300 rounded-xl py-4 pl-14 pr-4 text-slate-900 font-black text-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors shadow-xs" placeholder="0">
             </div>
 
             <div class="flex gap-4">
-                <button id="btn-cancel-shift" class="flex-1 py-4 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold transition-colors hidden">Hủy bỏ</button>
+                <button id="btn-cancel-shift" class="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors hidden">Hủy bỏ</button>
                 <button id="btn-submit-shift" class="flex-1 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black transition-colors shadow-lg shadow-blue-500/30">Xác nhận</button>
             </div>
         </div>
@@ -1173,21 +1173,21 @@
             <!-- Header -->
             <div class="h-16 px-6 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold border border-amber-200">
                         <i class="fa-solid fa-scissors"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-black text-white">Tách hóa đơn - <span id="split-table-name">Bàn --</span></h3>
-                        <p class="text-xs text-slate-400">Chọn món cần tách sang hóa đơn mới hoặc chia đều số người</p>
+                        <h3 class="text-lg font-black text-slate-900">Tách hóa đơn - <span id="split-table-name">Bàn --</span></h3>
+                        <p class="text-xs text-slate-500">Chọn món cần tách sang hóa đơn mới hoặc chia đều số người</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <!-- Tab mode switch -->
-                    <div class="flex bg-slate-800 p-1 rounded-xl border border-slate-200">
-                        <button id="btn-split-mode-items" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-white transition-colors">Tách theo món</button>
-                        <button id="btn-split-mode-equal" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-colors">Chia đều (Equal)</button>
+                    <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button id="btn-split-mode-items" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-xs transition-colors">Tách theo món</button>
+                        <button id="btn-split-mode-equal" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-colors">Chia đều (Equal)</button>
                     </div>
-                    <button id="btn-close-split" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                    <button id="btn-close-split" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -1197,12 +1197,12 @@
             <div id="split-mode-items-view" class="flex-1 flex overflow-hidden p-5 gap-4">
                 <!-- Left: Bill A (Gốc) -->
                 <div class="flex-1 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col overflow-hidden">
-                    <div class="p-3.5 border-b border-slate-200 flex justify-between items-center bg-slate-900/60">
+                    <div class="p-3.5 border-b border-slate-200 flex justify-between items-center bg-slate-100">
                         <div>
-                            <h4 class="font-bold text-slate-900 text-xs">HÓA ĐƠN GỐC (BILL A)</h4>
-                            <p class="text-[11px] text-slate-400" id="split-bill-a-item-count">0 món</p>
+                            <h4 class="font-bold text-slate-800 text-xs">HÓA ĐƠN GỐC (BILL A)</h4>
+                            <p class="text-[11px] text-slate-500" id="split-bill-a-item-count">0 món</p>
                         </div>
-                        <span class="text-base font-black text-emerald-400" id="split-bill-a-total">0 đ</span>
+                        <span class="text-base font-black text-emerald-600" id="split-bill-a-total">0 đ</span>
                     </div>
                     <div class="flex-1 overflow-y-auto p-3 space-y-2" id="split-bill-a-list">
                         <!-- Bill A items -->
@@ -1211,20 +1211,20 @@
 
                 <!-- Middle Transfer Indicator -->
                 <div class="flex flex-col items-center justify-center shrink-0">
-                    <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-200 flex items-center justify-center text-slate-400">
+                    <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 shadow-2xs">
                         <i class="fa-solid fa-arrows-left-right text-xs"></i>
                     </div>
                     <span class="text-[9px] text-slate-500 font-bold mt-1 uppercase">Chuyển</span>
                 </div>
 
                 <!-- Right: Bill B (Mới tách) -->
-                <div class="flex-1 bg-amber-50/40 rounded-2xl border border-amber-300 flex flex-col overflow-hidden">
-                    <div class="p-3.5 border-b border-slate-200 flex justify-between items-center bg-amber-500/10">
+                <div class="flex-1 bg-amber-50/30 rounded-2xl border border-amber-200 flex flex-col overflow-hidden">
+                    <div class="p-3.5 border-b border-amber-200 flex justify-between items-center bg-amber-50">
                         <div>
-                            <h4 class="font-bold text-amber-400 text-xs">HÓA ĐƠN TÁCH (BILL B)</h4>
-                            <p class="text-[11px] text-slate-400" id="split-bill-b-item-count">0 món</p>
+                            <h4 class="font-bold text-amber-800 text-xs">HÓA ĐƠN TÁCH (BILL B)</h4>
+                            <p class="text-[11px] text-slate-500" id="split-bill-b-item-count">0 món</p>
                         </div>
-                        <span class="text-base font-black text-amber-400" id="split-bill-b-total">0 đ</span>
+                        <span class="text-base font-black text-amber-600" id="split-bill-b-total">0 đ</span>
                     </div>
                     <div class="flex-1 overflow-y-auto p-3 space-y-2" id="split-bill-b-list">
                         <!-- Bill B items -->
@@ -1236,20 +1236,20 @@
             <div id="split-mode-equal-view" class="flex-1 hidden flex-col overflow-hidden p-6 space-y-4">
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
-                        <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider">Tổng tiền hóa đơn</h4>
-                        <p class="text-2xl font-black text-emerald-400" id="split-equal-total-display">0 đ</p>
+                        <h4 class="font-bold text-slate-500 text-xs uppercase tracking-wider">Tổng tiền hóa đơn</h4>
+                        <p class="text-2xl font-black text-emerald-600" id="split-equal-total-display">0 đ</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="text-sm font-bold text-slate-300">Số phần chia:</span>
-                        <div class="flex items-center bg-slate-800 border border-slate-200 rounded-xl p-1">
-                            <button id="btn-split-count-dec" class="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-black transition-colors">-</button>
+                        <span class="text-sm font-bold text-slate-700">Số phần chia:</span>
+                        <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl p-1">
+                            <button id="btn-split-count-dec" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-200 text-slate-800 border border-slate-200 font-black transition-colors shadow-2xs">-</button>
                             <span id="split-equal-count" class="w-12 text-center font-black text-slate-900 text-base">2</span>
-                            <button id="btn-split-count-inc" class="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-black transition-colors">+</button>
+                            <button id="btn-split-count-inc" class="w-8 h-8 rounded-lg bg-white hover:bg-slate-200 text-slate-800 border border-slate-200 font-black transition-colors shadow-2xs">+</button>
                         </div>
                     </div>
                     <div class="text-right">
-                        <h4 class="font-bold text-slate-400 text-xs uppercase tracking-wider">Mỗi người trả:</h4>
-                        <p class="text-xl font-black text-amber-400" id="split-equal-per-person">0 đ</p>
+                        <h4 class="font-bold text-slate-500 text-xs uppercase tracking-wider">Mỗi người trả:</h4>
+                        <p class="text-xl font-black text-amber-600" id="split-equal-per-person">0 đ</p>
                     </div>
                 </div>
 
@@ -1260,12 +1260,12 @@
 
             <!-- Footer -->
             <div class="h-16 px-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
-                <button id="btn-cancel-split" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold text-xs transition-colors border border-slate-200">Hủy bỏ</button>
+                <button id="btn-cancel-split" class="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl font-bold text-xs transition-colors border border-slate-200 shadow-2xs">Hủy bỏ</button>
                 <div class="flex items-center gap-3" id="split-items-actions">
-                    <button id="btn-confirm-split-only" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-xs transition-colors border border-slate-600">
+                    <button id="btn-confirm-split-only" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold text-xs transition-colors shadow-sm">
                         <i class="fa-solid fa-save mr-1.5"></i> Tách thành đơn mới
                     </button>
-                    <button id="btn-confirm-split-pay" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-amber-500/30">
+                    <button id="btn-confirm-split-pay" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-orange-500/20">
                         <i class="fa-solid fa-credit-card mr-1.5"></i> Tách & Thanh toán Bill B
                     </button>
                 </div>
@@ -1279,15 +1279,15 @@
             <!-- Header -->
             <div class="h-16 px-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold border border-indigo-200">
                         <i class="fa-solid fa-layer-group"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-white">Gộp hóa đơn vào <span id="merge-target-table-name">Bàn --</span></h3>
-                        <p class="text-xs text-slate-400">Chọn các bàn khác để chuyển món và gộp tiền chung</p>
+                        <h3 class="text-base font-black text-slate-900">Gộp hóa đơn vào <span id="merge-target-table-name">Bàn --</span></h3>
+                        <p class="text-xs text-slate-500">Chọn các bàn khác để chuyển món và gộp tiền chung</p>
                     </div>
                 </div>
-                <button id="btn-close-merge" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <button id="btn-close-merge" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1296,36 +1296,36 @@
             <div class="p-6 overflow-y-auto space-y-4 flex-1">
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex justify-between items-center">
                     <div>
-                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Bàn tiếp nhận (Chính)</span>
-                        <h4 class="text-base font-black text-white" id="merge-target-info">Bàn --</h4>
+                        <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">Bàn tiếp nhận (Chính)</span>
+                        <h4 class="text-base font-black text-slate-900" id="merge-target-info">Bàn --</h4>
                     </div>
-                    <span class="text-xl font-black text-emerald-400" id="merge-target-current-total">0 đ</span>
+                    <span class="text-xl font-black text-emerald-600" id="merge-target-current-total">0 đ</span>
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Chọn bàn cần gộp vào:</h4>
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Chọn bàn cần gộp vào:</h4>
                     <div id="merge-candidates-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
                         <!-- Candidates loaded here -->
                     </div>
                 </div>
 
                 <!-- Preview total -->
-                <div class="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl flex justify-between items-center">
+                <div class="p-4 bg-indigo-50/60 border border-indigo-200 rounded-2xl flex justify-between items-center">
                     <div>
-                        <span class="text-xs text-indigo-400 font-bold uppercase">Sau khi gộp:</span>
-                        <p class="text-xs text-slate-400" id="merge-summary-desc">Chưa chọn bàn nào</p>
+                        <span class="text-xs text-indigo-700 font-bold uppercase">Sau khi gộp:</span>
+                        <p class="text-xs text-slate-600" id="merge-summary-desc">Chưa chọn bàn nào</p>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-slate-400 block font-medium">Tổng tiền mới</span>
-                        <span class="text-2xl font-black text-indigo-400" id="merge-preview-total">0 đ</span>
+                        <span class="text-xs text-slate-500 block font-medium">Tổng tiền mới</span>
+                        <span class="text-2xl font-black text-indigo-700" id="merge-preview-total">0 đ</span>
                     </div>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="h-16 px-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
-                <button id="btn-cancel-merge" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold text-xs transition-colors border border-slate-200">Hủy</button>
-                <button id="btn-confirm-merge" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-indigo-500/30 flex items-center gap-1.5">
+                <button id="btn-cancel-merge" class="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl font-bold text-xs transition-colors border border-slate-200 shadow-2xs">Hủy</button>
+                <button id="btn-confirm-merge" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-indigo-500/20 flex items-center gap-1.5">
                     <i class="fa-solid fa-check"></i> Xác nhận Gộp hóa đơn
                 </button>
             </div>
@@ -1338,30 +1338,30 @@
             <!-- Left: Bill Summary Breakdown -->
             <div class="w-1/3 bg-slate-50 p-6 border-r border-slate-200 flex flex-col justify-between">
                 <div>
-                    <h3 class="text-lg font-black text-white mb-4">Chi tiết thanh toán</h3>
+                    <h3 class="text-lg font-black text-slate-900 mb-4">Chi tiết thanh toán</h3>
                     
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 mb-4 text-center shadow-xs">
-                        <p class="text-xs text-slate-400 mb-1 font-bold uppercase tracking-wider">TỔNG CẦN THU</p>
-                        <p id="pay-total-amount" class="text-3xl font-black text-emerald-400">0 đ</p>
+                        <p class="text-xs text-slate-500 mb-1 font-bold uppercase tracking-wider">TỔNG CẦN THU</p>
+                        <p id="pay-total-amount" class="text-3xl font-black text-emerald-600">0 đ</p>
                     </div>
 
                     <!-- Breakdown table -->
-                    <div class="space-y-2 text-xs bg-white p-3.5 rounded-xl border border-slate-200 mb-4">
-                        <div class="flex justify-between text-slate-400">
+                    <div class="space-y-2 text-xs bg-white p-3.5 rounded-xl border border-slate-200 mb-4 shadow-2xs">
+                        <div class="flex justify-between text-slate-500">
                             <span>Tạm tính:</span>
-                            <span class="font-bold text-white" id="pay-subtotal">0 đ</span>
+                            <span class="font-bold text-slate-900" id="pay-subtotal">0 đ</span>
                         </div>
-                        <div class="flex justify-between text-slate-400">
+                        <div class="flex justify-between text-slate-500">
                             <span>Chiết khấu:</span>
-                            <span class="font-bold text-rose-400" id="pay-discount">-0 đ</span>
+                            <span class="font-bold text-rose-500" id="pay-discount">-0 đ</span>
                         </div>
-                        <div class="flex justify-between text-slate-400">
+                        <div class="flex justify-between text-slate-500">
                             <span>Phí dịch vụ:</span>
-                            <span class="font-bold text-slate-300" id="pay-service">+0 đ</span>
+                            <span class="font-bold text-slate-800" id="pay-service">+0 đ</span>
                         </div>
-                        <div class="flex justify-between text-slate-400">
+                        <div class="flex justify-between text-slate-500">
                             <span>Thuế VAT:</span>
-                            <span class="font-bold text-slate-300" id="pay-vat">+0 đ</span>
+                            <span class="font-bold text-slate-800" id="pay-vat">+0 đ</span>
                         </div>
                     </div>
                 </div>
@@ -1369,20 +1369,20 @@
                 <div class="space-y-2.5">
                     <label class="block">
                         <input type="radio" name="payment_method" value="cash" class="peer sr-only" checked>
-                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 cursor-pointer flex items-center gap-3 transition-colors">
-                            <div class="w-9 h-9 rounded-full bg-slate-800 peer-checked:bg-orange-500 flex items-center justify-center text-slate-400 peer-checked:text-white transition-colors shrink-0">
+                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50/50 cursor-pointer flex items-center gap-3 transition-colors bg-white shadow-2xs">
+                            <div class="w-9 h-9 rounded-full bg-slate-100 peer-checked:bg-orange-500 flex items-center justify-center text-slate-600 peer-checked:text-white transition-colors shrink-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </div>
-                            <span class="font-bold text-sm text-slate-300 peer-checked:text-orange-500">Tiền mặt</span>
+                            <span class="font-bold text-sm text-slate-700 peer-checked:text-orange-600">Tiền mặt</span>
                         </div>
                     </label>
                     <label class="block">
                         <input type="radio" name="payment_method" value="transfer" class="peer sr-only">
-                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-500/10 cursor-pointer flex items-center gap-3 transition-colors">
-                            <div class="w-9 h-9 rounded-full bg-slate-800 peer-checked:bg-orange-500 flex items-center justify-center text-slate-400 peer-checked:text-white transition-colors shrink-0">
+                        <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50/50 cursor-pointer flex items-center gap-3 transition-colors bg-white shadow-2xs">
+                            <div class="w-9 h-9 rounded-full bg-slate-100 peer-checked:bg-orange-500 flex items-center justify-center text-slate-600 peer-checked:text-white transition-colors shrink-0">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                             </div>
-                            <span class="font-bold text-sm text-slate-300 peer-checked:text-orange-500">Chuyển khoản (VietQR)</span>
+                            <span class="font-bold text-sm text-slate-700 peer-checked:text-orange-600">Chuyển khoản (VietQR)</span>
                         </div>
                     </label>
                 </div>
@@ -1390,72 +1390,72 @@
 
             <!-- Right: Dynamic Payment Input -->
             <div class="w-2/3 p-6 flex flex-col justify-between relative bg-white">
-                <button id="btn-close-payment" class="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button id="btn-close-payment" class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
                 
                 <!-- Tiền mặt view -->
                 <div id="pay-view-cash" class="w-full max-w-lg mx-auto flex-1 flex flex-col justify-center">
                     <div class="mb-2">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Số tiền khách đưa</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Số tiền khách đưa</label>
                         <div class="relative">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-sm">VNĐ</span>
-                            <input type="text" inputmode="numeric" id="input-customer-cash" class="w-full bg-slate-50 border-2 border-slate-600 focus:border-orange-500 rounded-xl py-3 pl-4 pr-16 text-white font-black text-2xl text-right transition-colors outline-none" placeholder="0">
+                            <input type="text" inputmode="numeric" id="input-customer-cash" class="w-full bg-slate-50 border-2 border-slate-300 focus:border-orange-500 rounded-xl py-3 pl-4 pr-16 text-slate-900 font-black text-2xl text-right transition-colors outline-none shadow-xs" placeholder="0">
                         </div>
                     </div>
 
                     <!-- Quick Cash Preset Buttons -->
                     <div class="grid grid-cols-4 gap-1.5 mb-2.5">
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="exact">Vừa đủ</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="100000">100k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="200000">200k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="500000">500k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="1000000">1.000k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="2000000">2.000k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="+50000">+50k</button>
-                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-800 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-300 transition-colors" data-amount="+100000">+100k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="exact">Vừa đủ</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="100000">100k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="200000">200k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="500000">500k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="1000000">1.000k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="2000000">2.000k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="+50000">+50k</button>
+                        <button type="button" class="btn-quick-cash py-1.5 px-2 bg-slate-100 hover:bg-orange-500 hover:text-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 transition-colors shadow-2xs" data-amount="+100000">+100k</button>
                     </div>
 
                     <!-- Touchscreen Numpad -->
                     <div class="grid grid-cols-4 gap-1.5 mb-2.5">
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="1">1</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="2">2</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="3">3</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-rose-600/30 hover:bg-rose-600 border border-rose-500/50 text-rose-300 hover:text-white font-bold rounded-lg text-sm" data-key="back">⌫</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="1">1</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="2">2</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="3">3</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold rounded-lg text-sm" data-key="back">⌫</button>
                         
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="4">4</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="5">5</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="6">6</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-300 font-bold rounded-lg text-sm" data-key="clear">C</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="4">4</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="5">5</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="6">6</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-200 hover:bg-slate-300 border border-slate-300 text-slate-700 font-bold rounded-lg text-sm" data-key="clear">C</button>
                         
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="7">7</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="8">8</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="9">9</button>
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm" data-key="000">000</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="7">7</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="8">8</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="9">9</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm shadow-2xs" data-key="000">000</button>
                         
-                        <button type="button" class="btn-numpad py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-200 text-white font-bold rounded-lg text-sm col-span-4" data-key="0">0</button>
+                        <button type="button" class="btn-numpad py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold rounded-lg text-sm col-span-4 shadow-2xs" data-key="0">0</button>
                     </div>
 
                     <!-- Change amount display -->
-                    <div id="pay-change-container" class="p-3 bg-orange-500/10 border border-orange-500/30 rounded-xl flex justify-between items-center">
-                        <span id="pay-change-label" class="text-orange-400 font-bold text-sm">Tiền thối lại:</span>
-                        <span id="pay-change-amount" class="text-2xl font-black text-orange-500">0 đ</span>
+                    <div id="pay-change-container" class="p-3 bg-orange-50 border border-orange-200 rounded-xl flex justify-between items-center">
+                        <span id="pay-change-label" class="text-orange-700 font-bold text-sm">Tiền thối lại:</span>
+                        <span id="pay-change-amount" class="text-2xl font-black text-orange-600">0 đ</span>
                     </div>
                 </div>
 
                 <!-- QR View -->
                 <div id="pay-view-transfer" class="w-full max-w-md mx-auto hidden text-center flex-1 flex flex-col justify-center items-center">
-                    <h4 class="text-lg font-black text-white mb-2">Quét mã VietQR để thanh toán</h4>
-                    <p class="text-slate-400 text-xs mb-3">Mã QR động chứa chính xác số tiền và số bàn</p>
-                    <div class="bg-white p-3 rounded-2xl inline-block mb-3 shadow-xl">
+                    <h4 class="text-lg font-black text-slate-900 mb-2">Quét mã VietQR để thanh toán</h4>
+                    <p class="text-slate-500 text-xs mb-3">Mã QR động chứa chính xác số tiền và số bàn</p>
+                    <div class="bg-white p-3 rounded-2xl inline-block mb-3 shadow-md border border-slate-200">
                         <img id="pay-qr-img" src="" class="w-48 h-48 rounded-lg object-contain bg-white" alt="QR Code">
                     </div>
-                    <p class="text-slate-300 text-xs font-semibold">Nội dung CK: <span class="text-orange-400 font-mono font-bold" id="pay-qr-desc">...</span></p>
+                    <p class="text-slate-700 text-xs font-semibold">Nội dung CK: <span class="text-orange-600 font-mono font-bold" id="pay-qr-desc">...</span></p>
                 </div>
 
                 <!-- Confirm Pay Button -->
                 <div class="w-full max-w-lg mx-auto pt-2">
-                    <button id="btn-confirm-pay" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 active:scale-[0.98] text-white rounded-xl font-black text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] flex justify-center items-center gap-2">
+                    <button id="btn-confirm-pay" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white rounded-xl font-black text-lg transition-all shadow-md shadow-emerald-600/30 flex justify-center items-center gap-2">
                         <i class="fa-solid fa-circle-check"></i> XÁC NHẬN HOÀN TẤT
                     </button>
                 </div>
@@ -1467,38 +1467,38 @@
             <!-- Header -->
             <div class="h-16 px-6 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold border border-orange-200">
                         <i class="fa-solid fa-ticket"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-white">Khuyến mãi & Giảm giá hóa đơn</h3>
-                        <p class="text-xs text-slate-400">Áp dụng mã Voucher hoặc chiết khấu trực tiếp</p>
+                        <h3 class="text-base font-black text-slate-900">Khuyến mãi & Giảm giá hóa đơn</h3>
+                        <p class="text-xs text-slate-500">Áp dụng mã Voucher hoặc chiết khấu trực tiếp</p>
                     </div>
                 </div>
-                <button type="button" id="btn-close-discount" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">✕</button>
+                <button type="button" id="btn-close-discount" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors cursor-pointer">✕</button>
             </div>
 
             <!-- Body Tabs -->
             <div class="p-6 space-y-5 overflow-y-auto">
                 <!-- Current Applied Summary -->
-                <div id="discount-current-applied-box" class="p-3.5 bg-orange-500/10 border border-orange-500/30 rounded-2xl flex items-center justify-between">
+                <div id="discount-current-applied-box" class="p-3.5 bg-orange-50 border border-orange-200 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 flex items-center justify-center font-bold text-sm">
                             <i class="fa-solid fa-tag"></i>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-400 font-medium">Giảm giá hiện tại</p>
-                            <p id="discount-current-desc" class="text-sm font-black text-white">Chưa áp dụng (0 đ)</p>
+                            <p class="text-xs text-slate-500 font-medium">Giảm giá hiện tại</p>
+                            <p id="discount-current-desc" class="text-sm font-black text-slate-900">Chưa áp dụng (0 đ)</p>
                         </div>
                     </div>
-                    <button type="button" id="btn-remove-discount" class="text-xs font-bold text-rose-400 hover:text-rose-300 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 transition-colors cursor-pointer">
+                    <button type="button" id="btn-remove-discount" class="text-xs font-bold text-rose-600 hover:text-rose-700 px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer shadow-2xs">
                         Xóa giảm giá
                     </button>
                 </div>
 
                 <!-- Voucher list header -->
                 <div>
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">Voucher khuyến mãi có sẵn</h4>
+                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2.5">Voucher khuyến mãi có sẵn</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="discount-voucher-list">
                         <!-- Voucher cards rendered dynamically by TS -->
                     </div>
@@ -1506,33 +1506,33 @@
 
                 <!-- Custom Discount Section -->
                 <div class="border-t border-slate-200 pt-4 space-y-3">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Hoặc nhập chiết khấu tùy chỉnh</h4>
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hoặc nhập chiết khấu tùy chỉnh</h4>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1 font-semibold">Giảm theo phần trăm (%)</label>
+                            <label class="block text-xs text-slate-500 mb-1 font-semibold">Giảm theo phần trăm (%)</label>
                             <div class="relative">
-                                <input type="number" id="input-custom-discount-pct" min="0" max="100" placeholder="0" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500 pr-8">
+                                <input type="number" id="input-custom-discount-pct" min="0" max="100" placeholder="0" class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-3 py-2 font-bold text-sm focus:outline-none focus:border-orange-500 pr-8 shadow-xs">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">%</span>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1 font-semibold">Giảm số tiền cố định (VNĐ)</label>
+                            <label class="block text-xs text-slate-500 mb-1 font-semibold">Giảm số tiền cố định (VNĐ)</label>
                             <div class="relative">
-                                <input type="number" id="input-custom-discount-amount" min="0" step="5000" placeholder="0" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2 text-white font-bold text-sm focus:outline-none focus:border-orange-500 pr-10">
+                                <input type="number" id="input-custom-discount-amount" min="0" step="5000" placeholder="0" class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-3 py-2 font-bold text-sm focus:outline-none focus:border-orange-500 pr-10 shadow-xs">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">đ</span>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1 font-semibold">Lý do giảm giá</label>
-                        <input type="text" id="input-custom-discount-reason" placeholder="VD: Khách quen, Sự cố món chậm, Thẻ thành viên..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-orange-500">
+                        <label class="block text-xs text-slate-500 mb-1 font-semibold">Lý do giảm giá</label>
+                        <input type="text" id="input-custom-discount-reason" placeholder="VD: Khách quen, Sự cố món chậm, Thẻ thành viên..." class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-3 py-2 font-medium text-xs focus:outline-none focus:border-orange-500 shadow-xs">
                     </div>
                 </div>
             </div>
 
             <!-- Footer Actions -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 shrink-0">
-                <button type="button" id="btn-cancel-discount" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors cursor-pointer">Đóng</button>
+                <button type="button" id="btn-cancel-discount" class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors cursor-pointer shadow-2xs">Đóng</button>
                 <button type="button" id="btn-apply-custom-discount" class="px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs transition-colors shadow-lg shadow-orange-500/20 cursor-pointer">Áp dụng giảm giá</button>
             </div>
         </div>
@@ -1544,55 +1544,55 @@
             <!-- Header -->
             <div class="h-16 px-6 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center font-bold border border-cyan-200">
                         <i class="fa-solid fa-arrow-right-arrow-left"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-white">Chuyển bàn / Đổi bàn ăn</h3>
-                        <p class="text-xs text-slate-400">Chuyển toàn bộ món và đơn hàng sang bàn mới</p>
+                        <h3 class="text-base font-black text-slate-900">Chuyển bàn / Đổi bàn ăn</h3>
+                        <p class="text-xs text-slate-500">Chuyển toàn bộ món và đơn hàng sang bàn mới</p>
                     </div>
                 </div>
-                <button type="button" id="btn-close-transfer" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">✕</button>
+                <button type="button" id="btn-close-transfer" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors cursor-pointer">✕</button>
             </div>
 
             <div class="p-6 space-y-4">
                 <!-- Source Table Card -->
                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Bàn nguồn hiện tại</p>
-                        <p id="transfer-source-name" class="text-xl font-black text-white mt-0.5">Bàn ---</p>
-                        <p id="transfer-source-details" class="text-xs text-slate-400 mt-1">Đang có 0 món (0 đ)</p>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Bàn nguồn hiện tại</p>
+                        <p id="transfer-source-name" class="text-xl font-black text-slate-900 mt-0.5">Bàn ---</p>
+                        <p id="transfer-source-details" class="text-xs text-slate-500 mt-1">Đang có 0 món (0 đ)</p>
                     </div>
-                    <div class="text-2xl text-cyan-400">
+                    <div class="text-2xl text-cyan-500">
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
                 </div>
 
                 <!-- Destination Table Selector -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Chọn bàn đích (Bàn trống)</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Chọn bàn đích (Bàn trống)</label>
                     <div id="transfer-target-grid" class="grid grid-cols-4 sm:grid-cols-5 gap-2.5 max-h-48 overflow-y-auto pr-1">
                         <!-- Dynamic Available Table buttons -->
                     </div>
-                    <p id="transfer-no-tables-msg" class="hidden text-xs text-amber-400 font-semibold py-3 text-center">Hiện tại không có bàn nào đang trống để chuyển!</p>
+                    <p id="transfer-no-tables-msg" class="hidden text-xs text-amber-600 font-semibold py-3 text-center">Hiện tại không có bàn nào đang trống để chuyển!</p>
                 </div>
 
                 <!-- Reason input -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Lý do chuyển bàn</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Lý do chuyển bàn</label>
                     <div class="flex flex-wrap gap-1.5 mb-2">
-                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer" data-reason="Khách đổi sang bàn rộng hơn">Bàn rộng hơn</button>
-                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer" data-reason="Khách muốn ngồi ngoài trời">Ngồi ngoài trời</button>
-                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer" data-reason="Bàn cũ gặp sự cố kỹ thuật">Bàn gặp sự cố</button>
+                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer shadow-2xs" data-reason="Khách đổi sang bàn rộng hơn">Bàn rộng hơn</button>
+                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer shadow-2xs" data-reason="Khách muốn ngồi ngoài trời">Ngồi ngoài trời</button>
+                        <button type="button" class="btn-transfer-quick-reason px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold border border-slate-200 transition-colors cursor-pointer shadow-2xs" data-reason="Bàn cũ gặp sự cố kỹ thuật">Bàn gặp sự cố</button>
                     </div>
-                    <input type="text" id="input-transfer-reason" placeholder="Nhập lý do cụ thể..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-cyan-500">
+                    <input type="text" id="input-transfer-reason" placeholder="Nhập lý do cụ thể..." class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-cyan-500 shadow-xs">
                 </div>
             </div>
 
             <!-- Footer Actions -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 shrink-0">
-                <button type="button" id="btn-cancel-transfer" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors cursor-pointer">Hủy bỏ</button>
-                <button type="button" id="btn-confirm-transfer" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors shadow-lg shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Xác nhận chuyển bàn</button>
+                <button type="button" id="btn-cancel-transfer" class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors cursor-pointer shadow-2xs">Hủy bỏ</button>
+                <button type="button" id="btn-confirm-transfer" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs transition-colors shadow-lg shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Xác nhận chuyển bàn</button>
             </div>
         </div>
     </div>
@@ -1603,15 +1603,15 @@
             <!-- Header -->
             <div class="h-16 px-6 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div id="cash-trans-header-icon" class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                    <div id="cash-trans-header-icon" class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold border border-amber-200">
                         <i class="fa-solid fa-money-bill-transfer"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-white">Lập phiếu Thu / Chi két</h3>
-                        <p class="text-xs text-slate-400">Ghi nhận dòng tiền phát sinh trong ca</p>
+                        <h3 class="text-base font-black text-slate-900">Lập phiếu Thu / Chi két</h3>
+                        <p class="text-xs text-slate-500">Ghi nhận dòng tiền phát sinh trong ca</p>
                     </div>
                 </div>
-                <button type="button" id="btn-close-cash-trans" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">✕</button>
+                <button type="button" id="btn-close-cash-trans" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 flex items-center justify-center transition-colors cursor-pointer">✕</button>
             </div>
 
             <div class="p-6 space-y-4">
@@ -1620,40 +1620,40 @@
                     <button type="button" id="btn-type-cash-in" class="py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all bg-emerald-500 text-white shadow-md cursor-pointer">
                         <i class="fa-solid fa-arrow-down"></i> Phiếu THU (+ Két)
                     </button>
-                    <button type="button" id="btn-type-cash-out" class="py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all text-slate-400 hover:text-white cursor-pointer">
+                    <button type="button" id="btn-type-cash-out" class="py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900 cursor-pointer">
                         <i class="fa-solid fa-arrow-up"></i> Phiếu CHI (- Két)
                     </button>
                 </div>
 
                 <!-- Amount Input -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Số tiền (VNĐ)</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Số tiền (VNĐ)</label>
                     <div class="relative">
-                        <input type="number" id="input-cash-trans-amount" min="1000" step="10000" placeholder="0" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-3 text-white font-black text-xl focus:outline-none focus:border-amber-500 pr-14">
+                        <input type="number" id="input-cash-trans-amount" min="1000" step="10000" placeholder="0" class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl px-4 py-3 font-black text-xl focus:outline-none focus:border-amber-500 pr-14 shadow-xs">
                         <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">VNĐ</span>
                     </div>
                     <!-- Quick amount buttons -->
                     <div class="flex gap-2 mt-2">
-                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-slate-200 hover:border-amber-500 cursor-pointer" data-amt="50000">+50k</button>
-                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-slate-200 hover:border-amber-500 cursor-pointer" data-amt="100000">+100k</button>
-                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-slate-200 hover:border-amber-500 cursor-pointer" data-amt="200000">+200k</button>
-                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-slate-200 hover:border-amber-500 cursor-pointer" data-amt="500000">+500k</button>
+                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 hover:border-amber-500 hover:bg-slate-200 cursor-pointer shadow-2xs" data-amt="50000">+50k</button>
+                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 hover:border-amber-500 hover:bg-slate-200 cursor-pointer shadow-2xs" data-amt="100000">+100k</button>
+                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 hover:border-amber-500 hover:bg-slate-200 cursor-pointer shadow-2xs" data-amt="200000">+200k</button>
+                        <button type="button" class="btn-cash-quick-add px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 hover:border-amber-500 hover:bg-slate-200 cursor-pointer shadow-2xs" data-amt="500000">+500k</button>
                     </div>
                 </div>
 
                 <!-- Reason chips & custom reason input -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Lý do / Mục đích</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Lý do / Mục đích</label>
                     <div id="cash-preset-reasons" class="flex flex-wrap gap-1.5 mb-2">
                         <!-- Dynamic preset chips depending on IN / OUT -->
                     </div>
-                    <textarea id="input-cash-trans-reason" rows="2" placeholder="Ghi chú chi tiết mục đích thu/chi..." class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl p-3 text-white text-xs focus:outline-none focus:border-amber-500 resize-none"></textarea>
+                    <textarea id="input-cash-trans-reason" rows="2" placeholder="Ghi chú chi tiết mục đích thu/chi..." class="w-full bg-slate-50 border border-slate-300 text-slate-900 rounded-xl p-3 font-medium text-xs focus:outline-none focus:border-amber-500 resize-none shadow-xs"></textarea>
                 </div>
             </div>
 
             <!-- Footer Actions -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 shrink-0">
-                <button type="button" id="btn-cancel-cash-trans" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors cursor-pointer">Hủy bỏ</button>
+                <button type="button" id="btn-cancel-cash-trans" class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors cursor-pointer shadow-2xs">Hủy bỏ</button>
                 <button type="button" id="btn-submit-cash-trans" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition-colors shadow-lg shadow-amber-500/20 cursor-pointer">Lưu phiếu</button>
             </div>
         </div>
@@ -1662,11 +1662,11 @@
     <!-- MODAL Z-REPORT (BIÊN BẢN CHỐT CA K80) -->
     <div id="overlay-zreport" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 hidden items-center justify-center overflow-y-auto py-10">
         <div class="relative w-full max-w-sm mx-auto">
-            <div id="zreport-print-area" class="bg-white p-6 rounded-2xl text-black font-mono shadow-2xl relative text-xs">
+            <div id="zreport-print-area" class="bg-white p-6 rounded-2xl text-black font-mono shadow-2xl relative text-xs border border-slate-200">
                 <!-- Z-Report content generated by TS -->
             </div>
             <div class="mt-4 flex gap-3">
-                <button type="button" id="btn-close-zreport" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer">Đóng</button>
+                <button type="button" id="btn-close-zreport" class="flex-1 py-3 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-2xs">Đóng</button>
                 <button type="button" id="btn-do-print-zreport" class="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs transition-colors shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-print"></i> In Z-Report
                 </button>

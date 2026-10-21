@@ -145,23 +145,23 @@ export const showPromptModal = (title: string, placeholder: string): Promise<{is
         overlay.className = 'fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 opacity-0 transition-opacity duration-200';
         
         const modal = document.createElement('div');
-        modal.className = 'bg-[#1e293b] border border-slate-700 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200 p-6';
+        modal.className = 'bg-white border border-slate-200 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200 p-6';
         modal.innerHTML = `
-            <h3 class="text-xl font-black text-white mb-2">${title}</h3>
-            <p class="text-slate-400 text-sm mb-3">Vui lòng nhập lý do cụ thể để Bếp nắm thông tin.</p>
+            <h3 class="text-xl font-black text-slate-900 mb-2">${title}</h3>
+            <p class="text-slate-500 text-sm mb-3">Vui lòng nhập lý do cụ thể để Bếp nắm thông tin.</p>
             
-            <div class="flex gap-2 mb-3 overflow-x-auto pb-2 hide-scrollbar">
-                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Khách làm đổ</button>
-                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Món nguội</button>
-                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Dị ứng</button>
-                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Có dị vật</button>
-                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">Lỗi chế biến</button>
+            <div class="flex gap-2 mb-3 overflow-x-auto pb-2 no-scrollbar">
+                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-2xs">Khách làm đổ</button>
+                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-2xs">Món nguội</button>
+                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-2xs">Dị ứng</button>
+                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-2xs">Có dị vật</button>
+                <button class="quick-reason shrink-0 px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-2xs">Lỗi chế biến</button>
             </div>
 
-            <textarea id="prompt-input" rows="3" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-4 text-slate-300 font-medium resize-none focus:outline-none focus:border-red-500 placeholder-slate-600 mb-6" placeholder="${placeholder}"></textarea>
+            <textarea id="prompt-input" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-slate-800 font-medium resize-none focus:outline-none focus:border-red-500 placeholder-slate-400 mb-6 shadow-xs" placeholder="${placeholder}"></textarea>
             <div class="flex gap-3">
-                <button id="btn-prompt-cancel" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold transition-colors border border-slate-700">Hủy bỏ</button>
-                <button id="btn-prompt-ok" class="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-500/30">Xác nhận</button>
+                <button id="btn-prompt-cancel" class="flex-1 py-3 bg-white hover:bg-slate-100 text-slate-700 rounded-xl font-bold transition-colors border border-slate-200 shadow-2xs">Hủy bỏ</button>
+                <button id="btn-prompt-ok" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors shadow-lg shadow-red-500/20">Xác nhận</button>
             </div>
         `;
         
@@ -212,14 +212,14 @@ export const showNumberPromptModal = (title: string, placeholder: string = "Nh�
         overlay.className = 'fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex justify-center items-center p-4 opacity-0 transition-opacity duration-200';
         
         const modal = document.createElement('div');
-        modal.className = 'bg-[#1e293b] border border-slate-700 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200 p-6';
+        modal.className = 'bg-white border border-slate-200 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl transform scale-95 transition-transform duration-200 p-6';
         modal.innerHTML = `
-            <h3 class="text-xl font-black text-white mb-2">${title}</h3>
-            <p class="text-slate-400 text-sm mb-4">Vui lòng nhập số lượng (đơn vị cơ sở).</p>
-            <input type="number" id="prompt-number-input" class="w-full bg-[#0f172a] border border-slate-700 rounded-xl p-4 text-white font-bold focus:outline-none focus:border-orange-500 placeholder-slate-600 mb-6" placeholder="${placeholder}" value="${initialValue}" min="0" step="any" />
+            <h3 class="text-xl font-black text-slate-900 mb-2">${title}</h3>
+            <p class="text-slate-500 text-sm mb-4">Vui lòng nhập số lượng (đơn vị cơ sở).</p>
+            <input type="number" id="prompt-number-input" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-4 text-slate-900 font-bold focus:outline-none focus:border-orange-500 placeholder-slate-400 mb-6 shadow-xs" placeholder="${placeholder}" value="${initialValue}" min="0" step="any" />
             <div class="flex gap-3">
-                <button id="btn-num-prompt-cancel" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold transition-colors border border-slate-700">Hủy bỏ</button>
-                <button id="btn-num-prompt-ok" class="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-orange-500/30">Xác nhận</button>
+                <button id="btn-num-prompt-cancel" class="flex-1 py-3 bg-white hover:bg-slate-100 text-slate-700 rounded-xl font-bold transition-colors border border-slate-200 shadow-2xs">Hủy bỏ</button>
+                <button id="btn-num-prompt-ok" class="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-colors shadow-lg shadow-orange-500/20">Xác nhận</button>
             </div>
         `;
         
@@ -279,22 +279,22 @@ export const showMoveMergeModal = (sourceName: string, targetName: string): Prom
         overlay.className = 'absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity opacity-0';
         
         const modal = document.createElement('div');
-        modal.className = 'bg-[#0f172a] border border-slate-700/50 rounded-2xl p-6 shadow-2xl w-[450px] relative z-10 transform transition-all scale-95 opacity-0';
+        modal.className = 'bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl w-[450px] relative z-10 transform transition-all scale-95 opacity-0';
         
         modal.innerHTML = `
-            <h3 class="text-xl font-black text-white mb-2">Thao tác bàn</h3>
-            <p class="text-slate-400 text-sm mb-6">Bạn muốn thực hiện hành động gì với <span class="text-orange-400 font-bold">${sourceName}</span> và <span class="text-emerald-400 font-bold">${targetName}</span>?</p>
+            <h3 class="text-xl font-black text-slate-900 mb-2">Thao tác bàn</h3>
+            <p class="text-slate-500 text-sm mb-6">Bạn muốn thực hiện hành động gì với <span class="text-orange-600 font-bold">${sourceName}</span> và <span class="text-emerald-600 font-bold">${targetName}</span>?</p>
             
             <div class="flex flex-col gap-3">
-                <button id="btn-modal-move" class="bg-[#1e293b] hover:bg-slate-700 border border-slate-600 text-white rounded-xl p-4 text-left transition-colors flex flex-col gap-1 group">
-                    <span class="font-bold text-orange-500 text-base group-hover:text-white transition-colors">Đổi bàn</span>
-                    <span class="text-xs text-slate-400">Chuyển toàn bộ khách từ ${sourceName} sang ${targetName}</span>
+                <button id="btn-modal-move" class="bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-2xl p-4 text-left transition-colors flex flex-col gap-1 group shadow-2xs cursor-pointer">
+                    <span class="font-bold text-orange-600 text-base">Đổi bàn</span>
+                    <span class="text-xs text-slate-600">Chuyển toàn bộ khách từ ${sourceName} sang ${targetName}</span>
                 </button>
-                <button id="btn-modal-merge" class="bg-[#1e293b] hover:bg-slate-700 border border-slate-600 text-white rounded-xl p-4 text-left transition-colors flex flex-col gap-1 group">
-                    <span class="font-bold text-emerald-500 text-base group-hover:text-white transition-colors">Ghép bàn</span>
-                    <span class="text-xs text-slate-400">Gộp chung hóa đơn của ${sourceName} và ${targetName} lại với nhau</span>
+                <button id="btn-modal-merge" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-2xl p-4 text-left transition-colors flex flex-col gap-1 group shadow-2xs cursor-pointer">
+                    <span class="font-bold text-emerald-700 text-base">Ghép bàn</span>
+                    <span class="text-xs text-slate-600">Gộp chung hóa đơn của ${sourceName} và ${targetName} lại với nhau</span>
                 </button>
-                <button id="btn-modal-cancel" class="mt-2 bg-transparent text-slate-500 hover:text-white font-bold py-2 rounded-xl transition-colors text-sm">Hủy bỏ thao tác</button>
+                <button id="btn-modal-cancel" class="mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition-colors text-sm shadow-2xs cursor-pointer">Hủy bỏ thao tác</button>
             </div>
         `;
 
@@ -322,4 +322,65 @@ export const showMoveMergeModal = (sourceName: string, targetName: string): Prom
         modal.querySelector('#btn-modal-cancel')?.addEventListener('click', () => close(null));
         overlay.addEventListener('click', () => close(null));
     });
+};
+
+/**
+ * Hỗ trợ kéo thả chuột (drag-to-scroll) và cuộn bánh xe chuột mượt mà cho thanh cuộn ngang
+ */
+export const enableDragToScroll = (container: HTMLElement | null) => {
+    if (!container) return;
+    if ((container as any).__dragScrollEnabled) return;
+    (container as any).__dragScrollEnabled = true;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasDragged = false;
+
+    container.classList.add('cursor-grab', 'select-none');
+
+    container.addEventListener('mousedown', (e: MouseEvent) => {
+        isDown = true;
+        hasDragged = false;
+        container.classList.add('cursor-grabbing');
+        container.classList.remove('cursor-grab');
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+    });
+
+    const stopDrag = () => {
+        if (!isDown) return;
+        isDown = false;
+        container.classList.remove('cursor-grabbing');
+        container.classList.add('cursor-grab');
+    };
+
+    container.addEventListener('mouseleave', stopDrag);
+    container.addEventListener('mouseup', stopDrag);
+
+    container.addEventListener('mousemove', (e: MouseEvent) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 6) {
+            hasDragged = true;
+        }
+        container.scrollLeft = scrollLeft - walk;
+    });
+
+    container.addEventListener('click', (e: MouseEvent) => {
+        if (hasDragged) {
+            e.preventDefault();
+            e.stopPropagation();
+            hasDragged = false;
+        }
+    }, true);
+
+    container.addEventListener('wheel', (e: WheelEvent) => {
+        if (e.deltaY !== 0) {
+            e.preventDefault();
+            container.scrollLeft += e.deltaY;
+        }
+    }, { passive: false });
 };
