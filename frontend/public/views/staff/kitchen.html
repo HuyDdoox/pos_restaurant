@@ -56,15 +56,15 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#0f172a] text-slate-200 h-screen overflow-hidden flex select-none">
+<body class="bg-slate-100 text-slate-800 h-screen overflow-hidden flex select-none">
 
     <!-- SIDEBAR NHỎ GỌN CHO TABLET -->
-    <aside class="w-20 bg-[#1e293b] border-r border-slate-700/50 flex flex-col items-center py-4 shrink-0">
+    <aside class="w-20 bg-white border-r border-slate-200 shadow-sm flex flex-col items-center py-4 shrink-0">
         <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-2xl mb-8 shadow-lg shadow-orange-500/20">
             FH
         </div>
         <nav class="flex-1 space-y-4 w-full px-3">
-            <a href="#" id="nav-kds" title="Màn hình Bếp (KDS)" class="group w-full aspect-square rounded-2xl bg-orange-500/20 text-orange-500 flex items-center justify-center relative border border-orange-500/30 transition-all">
+            <a href="#" id="nav-kds" title="Màn hình Bếp (KDS)" class="group w-full aspect-square rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center relative border border-orange-200 transition-all">
                 <div class="active-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-orange-500 rounded-r-full"></div>
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path></svg>
                 <!-- Tooltip nổi khi Hover -->
@@ -72,7 +72,7 @@
                     Màn hình Bếp (KDS)
                 </span>
             </a>
-            <a href="#" id="nav-menu" title="Quản lý Thực đơn" class="group w-full aspect-square rounded-2xl text-slate-500 hover:bg-slate-700/50 hover:text-slate-300 flex items-center justify-center transition-all relative">
+            <a href="#" id="nav-menu" title="Quản lý Thực đơn" class="group w-full aspect-square rounded-2xl text-slate-400 hover:bg-slate-50 hover:text-slate-700 flex items-center justify-center transition-all relative border border-transparent">
                 <div class="active-indicator absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-orange-500 rounded-r-full hidden"></div>
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                 <!-- Tooltip nổi khi Hover -->
@@ -83,36 +83,36 @@
         </nav>
         <div class="mt-auto flex flex-col items-center pb-3 relative" id="chef-user-container">
             <!-- Dropdown Menu con hiển thị khi click vào Avatar -->
-            <div id="chef-dropdown-menu" class="absolute bottom-2 left-full ml-3 w-52 bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-2 hidden z-50 animate-in fade-in slide-in-from-left-2">
-                <div class="px-3 py-2 border-b border-slate-700/60 mb-1">
-                    <p class="text-xs text-slate-400 font-semibold">Tài khoản Bếp</p>
-                    <p class="text-sm font-black text-white truncate" id="chef-user-display-name">Đầu bếp chính</p>
+            <div id="chef-dropdown-menu" class="absolute bottom-2 left-full ml-3 w-52 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 hidden z-50 animate-in fade-in slide-in-from-left-2">
+                <div class="px-3 py-2 border-b border-slate-100 mb-1">
+                    <p class="text-xs text-slate-500 font-semibold">Tài khoản Bếp</p>
+                    <p class="text-sm font-black text-slate-900 truncate" id="chef-user-display-name">Đầu bếp chính</p>
                 </div>
-                <button type="button" onclick="logout()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 font-bold text-xs transition-colors cursor-pointer text-left">
+                <button type="button" onclick="logout()" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-bold text-xs transition-colors cursor-pointer text-left">
                     <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
                     <span>Đăng xuất hệ thống</span>
                 </button>
             </div>
             <!-- Avatar Button -->
-            <button type="button" id="btn-chef-avatar" title="Tài khoản Bếp - Bấm để mở menu" class="w-11 h-11 rounded-full border-2 border-emerald-500/70 hover:border-emerald-400 p-0.5 transition-all cursor-pointer shadow-lg active:scale-95 focus:outline-none">
+            <button type="button" id="btn-chef-avatar" title="Tài khoản Bếp - Bấm để mở menu" class="w-11 h-11 rounded-full border-2 border-emerald-500 hover:border-emerald-600 p-0.5 transition-all cursor-pointer shadow-md active:scale-95 focus:outline-none">
                 <img src="https://ui-avatars.com/api/?name=Chef&background=10b981&color=fff" class="w-full h-full rounded-full object-cover">
             </button>
         </div>
     </aside>
 
     <!-- MAIN KDS BOARD -->
-    <main class="flex-1 flex flex-col min-w-0 bg-[#0f172a]">
+    <main class="flex-1 flex flex-col min-w-0 bg-slate-100">
         <!-- HEADER (2 HÀNG RÕ RÀNG, CHUYÊN NGHIỆP, KHÔNG BỊ TRÀN CHỮ) -->
-        <header class="bg-[#1e293b] border-b border-slate-700/60 shrink-0 select-none">
+        <header class="bg-white border-b border-slate-200 shrink-0 select-none shadow-sm">
             <!-- HÀNG 1: Tiêu đề KDS, Trạng thái hệ thống, Đồng hồ và Công cụ nhanh -->
-            <div class="h-14 px-6 flex justify-between items-center border-b border-slate-700/40 gap-3 overflow-x-auto hide-scrollbar">
+            <div class="h-14 px-6 flex justify-between items-center border-b border-slate-100 gap-3 overflow-x-auto hide-scrollbar">
                 <!-- Bên trái: Logo Bếp + Trực tuyến -->
                 <div class="flex items-center gap-3 shrink-0">
-                    <h2 class="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
+                    <h2 class="text-xl font-black text-slate-900 uppercase tracking-wider flex items-center gap-2 whitespace-nowrap">
                         <i class="fa-solid fa-fire-burner text-orange-500 text-2xl"></i>
                         <span>Bếp (KDS)</span>
                     </h2>
-                    <div class="px-2.5 py-1 bg-emerald-500/10 rounded-full text-xs font-bold text-emerald-400 border border-emerald-500/25 flex items-center gap-1.5 whitespace-nowrap">
+                    <div class="px-2.5 py-1 bg-emerald-50 rounded-full text-xs font-bold text-emerald-700 border border-emerald-200 flex items-center gap-1.5 whitespace-nowrap">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>Trực tuyến</span>
                     </div>
@@ -124,42 +124,42 @@
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         <input id="kds-quick-search" type="text" placeholder="Tìm món / bàn..." 
-                            class="w-36 sm:w-48 transition-all pl-8 pr-7 py-1.5 bg-slate-800/90 border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
-                        <button id="kds-clear-search-btn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-[10px] w-4 h-4 rounded-full bg-slate-700 flex items-center justify-center cursor-pointer">✕</button>
+                            class="w-36 sm:w-48 transition-all pl-8 pr-7 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-orange-500 focus:bg-white">
+                        <button id="kds-clear-search-btn" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-[10px] w-4 h-4 rounded-full bg-slate-200 flex items-center justify-center cursor-pointer">✕</button>
                     </div>
 
                     <!-- Nút Lịch sử / Khôi phục món đã xong (Recall - Gói 1) -->
-                    <button id="btn-open-recall-modal" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 active:scale-95 transition-all shadow-sm whitespace-nowrap cursor-pointer" title="Xem danh sách món vừa nấu xong và hoàn tác nếu cần">
-                        <i class="fa-solid fa-clock-rotate-left text-orange-400"></i>
+                    <button id="btn-open-recall-modal" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:text-slate-900 flex items-center gap-2 active:scale-95 transition-all shadow-sm whitespace-nowrap cursor-pointer" title="Xem danh sách món vừa nấu xong và hoàn tác nếu cần">
+                        <i class="fa-solid fa-clock-rotate-left text-orange-500"></i>
                         <span>Đã xong gần đây</span>
-                        <span id="badge-recent-ready-count" class="bg-emerald-500/20 text-emerald-400 font-black text-[10px] px-1.5 py-0.5 rounded-full border border-emerald-500/30">0</span>
+                        <span id="badge-recent-ready-count" class="bg-emerald-100 text-emerald-700 font-black text-[10px] px-1.5 py-0.5 rounded-full border border-emerald-200">0</span>
                     </button>
 
                     <!-- Sound alert toggle -->
-                    <button id="btn-sound-toggle" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-300 hover:text-white flex items-center gap-2 active:scale-95 transition-all whitespace-nowrap cursor-pointer" title="Bật/Tắt chuông báo món mới">
-                        <i class="fa-solid fa-volume-high text-emerald-400" id="sound-icon"></i>
+                    <button id="btn-sound-toggle" class="px-3 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 hover:text-slate-900 flex items-center gap-2 active:scale-95 transition-all whitespace-nowrap cursor-pointer shadow-sm" title="Bật/Tắt chuông báo món mới">
+                        <i class="fa-solid fa-volume-high text-emerald-600" id="sound-icon"></i>
                         <span id="sound-label">Chuông: Bật</span>
                     </button>
 
                     <!-- Đồng hồ thời gian thực -->
-                    <div id="clock" class="text-base font-black text-orange-500 font-mono bg-slate-800/90 px-3 py-1 rounded-lg border border-slate-700 shadow-inner whitespace-nowrap">
+                    <div id="clock" class="text-base font-black text-orange-600 font-mono bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 shadow-inner whitespace-nowrap">
                         12:00:00
                     </div>
                 </div>
             </div>
 
             <!-- HÀNG 2: Thanh điều khiển KDS (Chế độ xem & Bộ lọc Trạm) -->
-            <div class="h-12 px-6 flex justify-between items-center bg-[#151e2e] gap-4 overflow-x-auto hide-scrollbar">
+            <div class="h-12 px-6 flex justify-between items-center bg-slate-50 border-b border-slate-200 gap-4 overflow-x-auto hide-scrollbar">
                 <!-- Nhóm 1: Chế độ hiển thị (Theo món / Theo bàn) -->
                 <div class="flex items-center gap-2.5 shrink-0">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="fa-solid fa-sliders text-orange-400"></i> Chế độ xem:
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-sliders text-orange-500"></i> Chế độ xem:
                     </span>
-                    <div class="flex bg-slate-800/90 rounded-lg p-1 border border-slate-700 gap-1" id="view-mode-bar">
+                    <div class="flex bg-slate-200/80 rounded-lg p-1 border border-slate-300 gap-1" id="view-mode-bar">
                         <button id="btn-view-by-dish" class="px-3 py-1 bg-orange-500 text-white rounded-md text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
                             <i class="fa-solid fa-layer-group"></i> Tổng hợp món
                         </button>
-                        <button id="btn-view-by-table" class="px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                        <button id="btn-view-by-table" class="px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
                             <i class="fa-solid fa-receipt"></i> Theo bàn
                         </button>
                     </div>
@@ -167,23 +167,23 @@
 
                 <!-- Nhóm 2: Bộ lọc Trạm chế biến -->
                 <div class="flex items-center gap-2.5 shrink-0">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="fa-solid fa-filter text-orange-400"></i> Trạm chế biến:
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-filter text-orange-500"></i> Trạm chế biến:
                     </span>
-                    <div class="flex bg-slate-800/90 rounded-lg p-1 border border-slate-700 gap-1" id="station-filter-bar">
+                    <div class="flex bg-slate-200/80 rounded-lg p-1 border border-slate-300 gap-1" id="station-filter-bar">
                         <button data-station="all" class="btn-station px-3 py-1 bg-orange-500 text-white rounded-md text-xs font-bold transition-all shadow-sm whitespace-nowrap cursor-pointer">
                             Tất cả trạm
                         </button>
-                        <button data-station="hot" class="btn-station px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-                            <i class="fa-solid fa-fire text-orange-400"></i>
+                        <button data-station="hot" class="btn-station px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-fire text-orange-500"></i>
                             <span>Bếp Nóng</span>
                         </button>
-                        <button data-station="cold" class="btn-station px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-                            <i class="fa-solid fa-leaf text-emerald-400"></i>
+                        <button data-station="cold" class="btn-station px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-leaf text-emerald-600"></i>
                             <span>Bếp Lạnh</span>
                         </button>
-                        <button data-station="bar" class="btn-station px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
-                            <i class="fa-solid fa-martini-glass-citrus text-blue-400"></i>
+                        <button data-station="bar" class="btn-station px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-martini-glass-citrus text-blue-600"></i>
                             <span>Quầy Bar</span>
                         </button>
                     </div>
@@ -195,135 +195,61 @@
         <div id="view-kds" class="flex-1 flex gap-4 p-4 overflow-hidden">
             
             <!-- CỘT 1: ĐANG CHỜ (PENDING) -->
-            <div class="flex-1 flex flex-col bg-[#1e293b] rounded-2xl border-t-4 border-blue-500 overflow-hidden shadow-2xl">
-                <div class="px-5 py-3 bg-[#1e293b] border-b border-slate-700 flex justify-between items-center shadow-sm">
-                    <h3 class="font-black text-white text-lg flex items-center gap-3">
+            <div class="flex-1 flex flex-col bg-white rounded-2xl border-t-4 border-blue-500 border-x border-b border-slate-200 overflow-hidden shadow-sm">
+                <div class="px-5 py-3.5 bg-white border-b border-slate-100 flex justify-between items-center shadow-sm">
+                    <h3 class="font-black text-slate-900 text-lg flex items-center gap-3">
                         ĐANG CHỜ 
-                        <span class="bg-blue-500 text-white text-sm px-3 py-0.5 rounded-full" id="pending-count">4</span>
+                        <span class="bg-blue-600 text-white text-sm px-3 py-0.5 rounded-full font-bold shadow-sm" id="pending-count">0</span>
                     </h3>
                 </div>
-                <!-- Card Container -->
+                <!-- Card Container - 100% Dynamic MongoDB rendering -->
                 <div class="flex-1 p-4 space-y-4 overflow-y-auto hide-scrollbar" id="pending-container">
-                    
-                    <!-- Dữ liệu mẫu Card 1 (Bình thường) -->
-                    <div class="bg-slate-800 rounded-2xl p-5 shadow-lg border border-slate-700 relative overflow-hidden group">
-                        <!-- Nút báo hết hàng (Out of stock) -->
-                        <button class="absolute top-4 right-4 p-2 bg-slate-700/50 text-slate-400 rounded-lg hover:bg-red-500/20 hover:text-red-500 transition-colors tooltip" title="Báo hết hàng">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                        </button>
-                        
-                        <div class="pr-12">
-                            <h4 class="font-black text-2xl text-white mb-1">Cơm chiên hải sản</h4>
-                            <div class="text-3xl font-black text-orange-500 mb-3">x 3</div>
-                        </div>
-                        
-                        <div class="flex gap-2 flex-wrap mb-3">
-                            <span class="px-2 py-1 bg-slate-700 rounded text-xs font-bold text-slate-300">Bàn 02</span>
-                            <span class="px-2 py-1 bg-slate-700 rounded text-xs font-bold text-slate-300">Bàn 05 (x2)</span>
-                        </div>
-                        
-                        <div class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm font-bold p-3 rounded-xl mb-4">
-                            Ghi chú: 1 phần không cay, nhiều hải sản
-                        </div>
-                        
-                        <div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-700">
-                            <div class="flex items-center gap-2 text-slate-400 font-bold font-mono">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                02:15
-                            </div>
-                            <button class="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-black text-lg py-3 px-8 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-95">
-                                Nhận nấu
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Dữ liệu mẫu Card 2 (Quá hạn SLA) -->
-                    <div class="bg-slate-800 rounded-2xl p-5 shadow-lg border-slate-700 relative overflow-hidden group sla-alert">
-                        <button class="absolute top-4 right-4 p-2 bg-slate-700/50 text-slate-400 rounded-lg hover:bg-red-500/20 hover:text-red-500 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
-                        </button>
-                        
-                        <div class="pr-12">
-                            <h4 class="font-black text-2xl text-white mb-1">Mì Ý sốt bò băm</h4>
-                            <div class="text-3xl font-black text-orange-500 mb-3">x 1</div>
-                        </div>
-                        
-                        <div class="flex gap-2 flex-wrap mb-3">
-                            <span class="px-2 py-1 bg-slate-700 rounded text-xs font-bold text-slate-300">Bàn 12</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-700">
-                            <div class="flex items-center gap-2 text-red-500 font-black font-mono text-lg">
-                                <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                06:30
-                            </div>
-                            <button class="bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-black text-lg py-3 px-8 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-95">
-                                Nhận nấu
-                            </button>
-                        </div>
+                    <div class="text-center text-slate-400 py-10 font-bold">
+                        <i class="fa-solid fa-circle-notch animate-spin text-3xl mb-2 block opacity-40"></i>
+                        Đang đồng bộ món từ hệ thống...
                     </div>
                 </div>
             </div>
 
             <!-- CỘT 2: ĐANG NẤU (COOKING) -->
-            <div class="flex-1 flex flex-col bg-[#1e293b] rounded-2xl border-t-4 border-orange-500 overflow-hidden shadow-2xl">
-                <div class="px-5 py-3 bg-[#1e293b] border-b border-slate-700 flex justify-between items-center shadow-sm">
-                    <h3 class="font-black text-white text-lg flex items-center gap-3">
+            <div class="flex-1 flex flex-col bg-white rounded-2xl border-t-4 border-orange-500 border-x border-b border-slate-200 overflow-hidden shadow-sm">
+                <div class="px-5 py-3.5 bg-white border-b border-slate-100 flex justify-between items-center shadow-sm">
+                    <h3 class="font-black text-slate-900 text-lg flex items-center gap-3">
                         ĐANG NẤU 
-                        <span class="bg-orange-500 text-white text-sm px-3 py-0.5 rounded-full" id="cooking-count">2</span>
+                        <span class="bg-orange-500 text-white text-sm px-3 py-0.5 rounded-full font-bold shadow-sm" id="cooking-count">0</span>
                     </h3>
                 </div>
-                <!-- Card Container -->
+                <!-- Card Container - 100% Dynamic MongoDB rendering -->
                 <div class="flex-1 p-4 space-y-4 overflow-y-auto hide-scrollbar" id="cooking-container">
-                    
-                    <!-- Dữ liệu mẫu Card Đang nấu -->
-                    <div class="bg-slate-800/80 rounded-2xl p-5 shadow-lg border border-orange-500/30 relative overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+PC9zdmc+')]">
-                        <div class="pr-12">
-                            <h4 class="font-black text-2xl text-white mb-1">Lẩu Thái chua cay</h4>
-                            <div class="text-3xl font-black text-emerald-400 mb-3">x 1</div>
-                        </div>
-                        
-                        <div class="flex gap-2 flex-wrap mb-4">
-                            <span class="px-2 py-1 bg-slate-700 rounded text-xs font-bold text-slate-300">Bàn 08</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-700">
-                            <div class="flex items-center gap-2 text-orange-400 font-bold text-sm">
-                                <svg class="w-5 h-5 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                Đang chế biến
-                            </div>
-                            <button class="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-black text-lg py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform active:scale-95 flex items-center gap-2">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                Xong
-                            </button>
-                        </div>
+                    <div class="text-center text-slate-400 py-10 font-bold">
+                        <i class="fa-solid fa-circle-notch animate-spin text-3xl mb-2 block opacity-40"></i>
+                        Đang đồng bộ món từ hệ thống...
                     </div>
-                    
                 </div>
             </div>
             
         </div>
 
         <!-- THỰC ĐƠN / KHO (VIEW MENU) -->
-        <div id="view-menu" class="flex-1 hidden flex flex-col p-6 overflow-hidden bg-[#0f172a]">
+        <div id="view-menu" class="flex-1 hidden flex flex-col p-6 overflow-hidden bg-slate-100">
             <!-- Header bar with Title & Quick KPI summary -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5 shrink-0">
                 <div>
-                    <h3 class="text-2xl font-black text-white flex items-center gap-3">
+                    <h3 class="text-2xl font-black text-slate-900 flex items-center gap-3">
                         <span>Quản lý Bật/Tắt món</span>
-                        <span id="kitchen-menu-total-badge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full font-bold border border-slate-700">0 món</span>
+                        <span id="kitchen-menu-total-badge" class="text-xs bg-white text-slate-700 px-3 py-1 rounded-full font-bold border border-slate-200 shadow-sm">0 món</span>
                     </h3>
-                    <p class="text-slate-400 text-xs mt-1">Bếp có thể chủ động ngưng món nếu hết nguyên liệu thực tế hoặc mở bán lại khi đã sẵn sàng</p>
+                    <p class="text-slate-500 text-xs mt-1">Bếp có thể chủ động ngưng món nếu hết nguyên liệu thực tế hoặc mở bán lại khi đã sẵn sàng</p>
                 </div>
                 <!-- Quick Status Counters -->
                 <div class="flex items-center gap-2">
                     <button id="filter-status-all" data-status="all" class="btn-kitchen-status-filter active px-3.5 py-1.5 rounded-xl font-bold text-xs transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20">
                         Tất cả (<span id="count-status-all">0</span>)
                     </button>
-                    <button id="filter-status-available" data-status="Available" class="btn-kitchen-status-filter px-3.5 py-1.5 rounded-xl font-bold text-xs transition-all bg-slate-800 text-slate-400 hover:text-white border border-slate-700">
+                    <button id="filter-status-available" data-status="Available" class="btn-kitchen-status-filter px-3.5 py-1.5 rounded-xl font-bold text-xs transition-all bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm">
                         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1"></span> Đang bán (<span id="count-status-available">0</span>)
                     </button>
-                    <button id="filter-status-outofstock" data-status="Out_of_stock" class="btn-kitchen-status-filter px-3.5 py-1.5 rounded-xl font-bold text-xs transition-all bg-slate-800 text-slate-400 hover:text-white border border-slate-700">
+                    <button id="filter-status-outofstock" data-status="Out_of_stock" class="btn-kitchen-status-filter px-3.5 py-1.5 rounded-xl font-bold text-xs transition-all bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm">
                         <span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span> Đã khóa (<span id="count-status-outofstock">0</span>)
                     </button>
                 </div>
@@ -338,10 +264,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                         <input id="kitchen-menu-search" type="text" placeholder="Tìm kiếm món ăn theo tên hoặc mã món (vd: Cá hồi, Bò, M001)..." 
-                            class="w-full pl-11 pr-10 py-2.5 bg-slate-800/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all">
-                        <button id="kitchen-menu-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs bg-slate-700 hover:bg-slate-600 rounded-full w-5 h-5 flex items-center justify-center">✕</button>
+                            class="w-full pl-11 pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all shadow-sm">
+                        <button id="kitchen-menu-clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs bg-slate-100 hover:bg-slate-200 rounded-full w-5 h-5 flex items-center justify-center">✕</button>
                     </div>
-                    <button id="kitchen-menu-refresh-btn" class="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white rounded-xl text-sm font-bold flex items-center gap-2 transition-all cursor-pointer" title="Làm mới dữ liệu từ máy chủ">
+                    <button id="kitchen-menu-refresh-btn" class="px-3.5 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 rounded-xl text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm" title="Làm mới dữ liệu từ máy chủ">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
@@ -361,10 +287,10 @@
                     <!-- Cards will be generated here by TS -->
                 </div>
                 <div id="kitchen-menu-empty" class="hidden flex-col items-center justify-center py-16 text-center text-slate-400">
-                    <div class="w-16 h-16 rounded-full bg-slate-800/80 flex items-center justify-center text-2xl text-slate-500 mb-3">
+                    <div class="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-2xl text-slate-500 mb-3">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <h4 class="text-white font-bold text-lg mb-1">Không tìm thấy món ăn nào</h4>
+                    <h4 class="text-slate-800 font-bold text-lg mb-1">Không tìm thấy món ăn nào</h4>
                     <p class="text-slate-500 text-sm">Vui lòng thử từ khóa tìm kiếm khác hoặc chuyển sang danh mục khác</p>
                 </div>
             </div>
@@ -372,55 +298,55 @@
     </main>
 
     <!-- MODAL 1: KHÔI PHỤC MÓN ĐÃ NẤU XONG (RECALL - GÓI 1) -->
-    <div id="modal-kds-recall" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#1e293b] border border-slate-700 rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div id="modal-kds-recall" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header -->
-            <div class="p-5 border-b border-slate-700 flex items-center justify-between bg-slate-800/90 shrink-0">
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center font-black text-xl border border-orange-500/30">
+                    <div class="w-11 h-11 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center font-black text-xl border border-orange-200">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-black text-white flex items-center gap-2">
+                        <h3 class="text-xl font-black text-slate-900 flex items-center gap-2">
                             Lịch sử Món Đã Nấu Xong
-                            <span id="recall-modal-total-count" class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold px-2.5 py-0.5 rounded-full">0 món</span>
+                            <span id="recall-modal-total-count" class="text-xs bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold px-2.5 py-0.5 rounded-full">0 món</span>
                         </h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Bấm "Hoàn tác / Nấu lại" để kéo món trở lại cột "ĐANG NẤU" nếu bấm nhầm hoặc khách yêu cầu làm lại</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Bấm "Nấu lại" để kéo món trở lại cột "ĐANG NẤU" nếu bấm nhầm hoặc khách yêu cầu làm lại</p>
                     </div>
                 </div>
-                <button id="btn-close-recall-modal" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-700/60 transition-all text-xl">
+                <button id="btn-close-recall-modal" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition-all text-xl">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <!-- Filter & Search Controls -->
-            <div class="px-5 py-3 border-b border-slate-700/70 bg-slate-900/50 flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div class="px-5 py-3 border-b border-slate-200 bg-slate-50/60 flex flex-wrap items-center justify-between gap-3 shrink-0">
                 <div class="relative flex-1 min-w-[200px]">
                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
                     <input id="input-recall-search" type="text" placeholder="Tìm tên món, số bàn..." 
-                        class="w-full pl-8 pr-3 py-1.5 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-orange-500">
+                        class="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-orange-500 shadow-sm">
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="btn-recall-filter-all" data-filter="all" class="btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white">Tất cả</button>
-                    <button id="btn-recall-filter-15m" data-filter="15m" class="btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white border border-slate-700">15 phút gần nhất</button>
-                    <button id="btn-refresh-recall" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold border border-slate-700 flex items-center gap-1.5" title="Tải lại danh sách">
+                    <button id="btn-recall-filter-all" data-filter="all" class="btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-sm">Tất cả</button>
+                    <button id="btn-recall-filter-15m" data-filter="15m" class="btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm">15 phút gần nhất</button>
+                    <button id="btn-refresh-recall" class="px-2.5 py-1 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 rounded-lg text-xs font-bold border border-slate-200 flex items-center gap-1.5 shadow-sm" title="Tải lại danh sách">
                         <i class="fa-solid fa-rotate"></i>
                     </button>
                 </div>
             </div>
 
             <!-- List Container -->
-            <div id="recall-list-container" class="flex-1 p-5 overflow-y-auto space-y-3 hide-scrollbar min-h-[300px]">
+            <div id="recall-list-container" class="flex-1 p-5 overflow-y-auto space-y-3 hide-scrollbar min-h-[300px] bg-slate-50/40">
                 <!-- Dữ liệu món đã hoàn thành render động -->
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-4 border-t border-slate-700 bg-slate-800/60 flex items-center justify-between text-xs text-slate-400 shrink-0">
+            <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500 shrink-0">
                 <span class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-info text-blue-400"></i>
+                    <i class="fa-solid fa-circle-info text-blue-500"></i>
                     Hệ thống lưu vết món sẵn sàng (Ready) trong ca làm việc hiện tại
                 </span>
-                <button id="btn-close-recall-modal-footer" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold transition-all">
+                <button id="btn-close-recall-modal-footer" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-bold transition-all">
                     Đóng
                 </button>
             </div>
@@ -428,20 +354,20 @@
     </div>
 
     <!-- MODAL 2: XEM CÔNG THỨC & ĐỊNH LƯỢNG MÓN (RECIPE PEEK - GÓI 3) -->
-    <div id="modal-recipe-peek" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#1e293b] border border-slate-700 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div id="modal-recipe-peek" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Modal Header -->
-            <div class="p-5 border-b border-slate-700 flex items-center justify-between bg-slate-800/90 shrink-0">
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-black text-xl border border-blue-500/30">
+                    <div class="w-11 h-11 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center font-black text-xl border border-blue-200">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
                     <div>
-                        <h3 id="recipe-modal-dish-name" class="text-xl font-black text-white">Công thức món</h3>
-                        <p id="recipe-modal-dish-subtitle" class="text-xs text-slate-400 mt-0.5">Định lượng nguyên liệu tiêu chuẩn & Tình trạng tồn kho bếp</p>
+                        <h3 id="recipe-modal-dish-name" class="text-xl font-black text-slate-900">Công thức món</h3>
+                        <p id="recipe-modal-dish-subtitle" class="text-xs text-slate-500 mt-0.5">Định lượng nguyên liệu tiêu chuẩn & Tình trạng tồn kho bếp</p>
                     </div>
                 </div>
-                <button id="btn-close-recipe-modal" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-700/60 transition-all text-xl">
+                <button id="btn-close-recipe-modal" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-100 transition-all text-xl">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -449,28 +375,28 @@
             <!-- Modal Body -->
             <div class="flex-1 p-6 overflow-y-auto space-y-5 hide-scrollbar">
                 <!-- Info Banner -->
-                <div class="flex items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-700/80">
+                <div class="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div class="flex items-center gap-3">
-                        <img id="recipe-modal-dish-img" src="" class="w-14 h-14 object-cover rounded-xl border border-slate-700 shadow" onerror="this.src='https://via.placeholder.com/150'">
+                        <img id="recipe-modal-dish-img" src="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 shadow-sm" onerror="this.src='https://via.placeholder.com/150'">
                         <div>
-                            <span id="recipe-modal-station-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-orange-500/20 text-orange-400 border border-orange-500/30 inline-block mb-1">🔥 Bếp Nóng</span>
-                            <div id="recipe-modal-category-text" class="text-xs text-slate-400 font-bold">Món chính</div>
+                            <span id="recipe-modal-station-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-orange-100 text-orange-700 border border-orange-200 inline-block mb-1">🔥 Bếp Nóng</span>
+                            <div id="recipe-modal-category-text" class="text-xs text-slate-500 font-bold">Món chính</div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-xs text-slate-400 font-bold mb-0.5">Khả năng đáp ứng</div>
-                        <div id="recipe-modal-portions-badge" class="text-base font-black text-emerald-400 font-mono">Đủ nấu: 10 suất</div>
+                        <div class="text-xs text-slate-500 font-bold mb-0.5">Khả năng đáp ứng</div>
+                        <div id="recipe-modal-portions-badge" class="text-base font-black text-emerald-600 font-mono">Đủ nấu: 10 suất</div>
                     </div>
                 </div>
 
                 <!-- Bảng Định Lượng Nguyên Liệu -->
                 <div>
-                    <h4 class="text-sm font-black text-slate-300 uppercase tracking-wider mb-2.5 flex items-center gap-2">
-                        <i class="fa-solid fa-cubes-stacked text-orange-400"></i> Định lượng nguyên liệu (Cho 1 phần)
+                    <h4 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-2.5 flex items-center gap-2">
+                        <i class="fa-solid fa-cubes-stacked text-orange-500"></i> Định lượng nguyên liệu (Cho 1 phần)
                     </h4>
-                    <div class="border border-slate-700 rounded-2xl overflow-hidden bg-slate-800/40">
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-800 text-slate-300 font-bold uppercase tracking-wider border-b border-slate-700 text-[11px]">
+                            <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200 text-[11px]">
                                 <tr>
                                     <th class="p-3">Nguyên liệu</th>
                                     <th class="p-3 text-center">Định lượng / Suất</th>
@@ -478,7 +404,7 @@
                                     <th class="p-3 text-right">Trạng thái</th>
                                 </tr>
                             </thead>
-                            <tbody id="recipe-modal-ingredients-tbody" class="divide-y divide-slate-700/60 text-slate-200">
+                            <tbody id="recipe-modal-ingredients-tbody" class="divide-y divide-slate-100 text-slate-800">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>
@@ -486,19 +412,19 @@
                 </div>
 
                 <!-- Hướng dẫn chế biến / Ghi chú bếp -->
-                <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4">
-                    <h5 class="text-xs font-bold text-amber-400 mb-1 flex items-center gap-1.5">
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <h5 class="text-xs font-bold text-amber-700 mb-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-lightbulb"></i> Quy chuẩn chế biến FoodHub
                     </h5>
-                    <p id="recipe-modal-guide-text" class="text-xs text-slate-300 leading-relaxed">
+                    <p id="recipe-modal-guide-text" class="text-xs text-slate-700 leading-relaxed">
                         Luôn đảm bảo độ tươi ngon của nguyên liệu. Chế biến ngay khi nhận đơn để đảm bảo thời gian SLA chuẩn 5 phút.
                     </p>
                 </div>
             </div>
 
             <!-- Modal Footer -->
-            <div class="p-4 border-t border-slate-700 bg-slate-800/60 flex items-center justify-end shrink-0">
-                <button id="btn-close-recipe-modal-footer" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl font-bold text-xs transition-all shadow-md shadow-orange-600/20">
+            <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end shrink-0">
+                <button id="btn-close-recipe-modal-footer" class="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold text-xs transition-all shadow-md shadow-orange-600/20">
                     Đã hiểu
                 </button>
             </div>

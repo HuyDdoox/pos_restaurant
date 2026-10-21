@@ -239,16 +239,16 @@ const updateLiveTimers = () => {
             textEl.textContent = timeStr;
         }
         if (isSlaAlert) {
-            el.classList.add('text-red-500', 'font-black');
-            el.classList.remove('text-slate-400', 'font-bold');
+            el.classList.add('text-red-600', 'font-black');
+            el.classList.remove('text-slate-500', 'text-slate-400', 'font-bold');
             const icon = el.querySelector('i');
-            if (icon && !icon.classList.contains('text-red-500')) {
-                icon.className = 'fa-solid fa-clock text-red-500 animate-pulse text-lg';
+            if (icon && !icon.classList.contains('text-red-600')) {
+                icon.className = 'fa-solid fa-clock text-red-600 animate-pulse text-lg';
             }
             const card = el.closest('.kds-card');
             if (card && !card.classList.contains('sla-alert')) {
                 card.classList.add('sla-alert', 'border-red-500');
-                card.classList.remove('border-slate-700');
+                card.classList.remove('border-slate-700', 'border-slate-200');
             }
         }
     });
@@ -264,11 +264,11 @@ const updateLiveTimers = () => {
             textEl.textContent = timeStr;
         }
         if (isSlaAlert) {
-            el.className = 'kds-ticket-timer text-xs font-black px-2 py-0.5 rounded-full bg-red-500/20 text-red-400';
+            el.className = 'kds-ticket-timer text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-red-600 border border-red-200';
             const card = el.closest('.kds-ticket-card');
             if (card && !card.classList.contains('sla-alert')) {
                 card.classList.add('sla-alert', 'border-red-500');
-                card.classList.remove('border-slate-700');
+                card.classList.remove('border-slate-700', 'border-slate-200');
             }
         }
     });
@@ -579,7 +579,7 @@ const renderPendingCol = (groups: any[]) => {
     if (!container) return;
 
     if (groups.length === 0) {
-        container.innerHTML = `<div class="text-center text-slate-500 py-10 font-bold"><i class="fa-solid fa-check-circle text-3xl mb-2 block opacity-40"></i>Không có món chờ nấu</div>`;
+        container.innerHTML = `<div class="text-center text-slate-400 py-10 font-bold"><i class="fa-solid fa-check-circle text-3xl mb-2 block opacity-40"></i>Không có món chờ nấu</div>`;
         return;
     }
 
@@ -593,12 +593,12 @@ const renderPendingCol = (groups: any[]) => {
         
         // Format danh sách bàn
         const tableTags = Object.entries(group.tablesMap as Record<string, number>).map(([tb, qty]) => 
-            `<span class="px-2 py-1 bg-slate-700/80 rounded text-xs font-bold text-slate-300 border border-slate-600/50">${tb}${qty > 1 ? ` (x${qty})` : ''}</span>`
+            `<span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold text-slate-700 border border-slate-200 shadow-sm">${tb}${qty > 1 ? ` (x${qty})` : ''}</span>`
         ).join('');
 
         // Ghi chú
         const noteStr = Array.from(group.notes).join(', ');
-        const noteHtml = noteStr ? `<div class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm font-bold p-3 rounded-xl mb-4">Ghi chú: ${noteStr}</div>` : '';
+        const noteHtml = noteStr ? `<div class="bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold p-3 rounded-xl mb-4">Ghi chú: ${noteStr}</div>` : '';
 
         // Tính SLA (Đếm ngược 5 phút chuẩn bị)
         const { isSlaAlert, timeStr } = formatKdsTime(group.oldestTime, group.isUrgent);
@@ -606,9 +606,9 @@ const renderPendingCol = (groups: any[]) => {
         // Card styling: Ưu tiên chớp đỏ viền hồng cam cho GIỤC GẤP (Gói 2)
         const isRush = group.isUrgent;
         const alertClass = isRush 
-            ? 'rush-alert border-rose-500 bg-rose-950/20' 
-            : (isSlaAlert ? 'sla-alert border-red-500' : 'border-slate-700');
-        const timeClass = (isRush || isSlaAlert) ? 'text-red-500 font-black' : 'text-slate-400 font-bold';
+            ? 'rush-alert border-rose-500 bg-rose-50/60' 
+            : (isSlaAlert ? 'sla-alert border-red-500 bg-red-50/40' : 'border-slate-200 bg-white');
+        const timeClass = (isRush || isSlaAlert) ? 'text-red-600 font-black' : 'text-slate-500 font-bold';
 
         const detailIds = group.details.map((d: any) => d.id).join(',');
 
@@ -617,15 +617,15 @@ const renderPendingCol = (groups: any[]) => {
             ? monAn.combo_items
             : (group.details?.find((d: any) => d.combo_items && d.combo_items.length)?.combo_items || []);
         const comboBreakdownHtml = (isComboMon && comboItemList.length > 0)
-            ? `<div class="text-xs text-slate-300 bg-slate-900/70 p-2.5 rounded-xl mb-3 border border-amber-500/30">
-                 <div class="text-amber-400 font-bold flex items-center gap-1.5 mb-1.5 text-xs">
+            ? `<div class="text-xs text-slate-700 bg-amber-50/60 p-2.5 rounded-xl mb-3 border border-amber-200">
+                 <div class="text-amber-800 font-bold flex items-center gap-1.5 mb-1.5 text-xs">
                      <i class="fa-solid fa-layer-group"></i> Combo gồm các món (x${group.totalQty}):
                  </div>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-200">
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-800">
                      ${comboItemList.map((ci: any) => `
-                         <div class="flex items-center gap-1.5 bg-slate-800/80 px-2 py-1 rounded border border-slate-700">
-                             <span class="font-black text-amber-400 font-mono">${(ci.quantity || 1) * group.totalQty}x</span>
-                             <span class="truncate">${ci.name}${ci.variant_name ? ` <span class="text-slate-400 text-[10px]">(${ci.variant_name})</span>` : ''}</span>
+                         <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-slate-200 shadow-sm">
+                             <span class="font-black text-amber-600 font-mono">${(ci.quantity || 1) * group.totalQty}x</span>
+                             <span class="truncate">${ci.name}${ci.variant_name ? ` <span class="text-slate-500 text-[10px]">(${ci.variant_name})</span>` : ''}</span>
                          </div>
                      `).join('')}
                  </div>
@@ -648,25 +648,25 @@ const renderPendingCol = (groups: any[]) => {
         let stockHtml = '';
         let canCook = true;
         let cookBtnText = 'Nhận nấu';
-        let cookBtnClass = 'btn-start-cooking bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-black text-lg py-3 px-8 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform active:scale-95 cursor-pointer';
+        let cookBtnClass = 'btn-start-cooking min-h-[48px] bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-black text-lg py-3 px-8 rounded-xl shadow-md transition-all transform active:scale-95 cursor-pointer';
         let cookBtnDisabled = '';
 
         if (maxPortions >= 0) {
             if (maxPortions <= 0) {
                 canCook = false;
-                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-red-500/20 text-red-500 rounded border border-red-500/30 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> HẾT NGUYÊN LIỆU (0 phần)</div>`;
+                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-red-50 text-red-600 rounded-lg border border-red-200 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> HẾT NGUYÊN LIỆU (0 phần)</div>`;
                 cookBtnText = '<i class="fa-solid fa-ban mr-1.5"></i> Không thể nấu';
-                cookBtnClass = 'btn-start-cooking bg-slate-700/60 text-slate-500 font-bold text-base py-3 px-6 rounded-xl cursor-not-allowed border border-slate-600/50 flex items-center justify-center';
+                cookBtnClass = 'btn-start-cooking min-h-[48px] bg-slate-100 text-slate-400 font-bold text-base py-3 px-6 rounded-xl cursor-not-allowed border border-slate-200 flex items-center justify-center';
                 cookBtnDisabled = 'disabled';
             } else if (maxPortions < group.totalQty) {
-                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-amber-500/20 text-amber-400 rounded border border-amber-500/30 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Kho thiếu: còn ${maxPortions}/${group.totalQty} phần</div>`;
+                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-amber-50 text-amber-700 rounded-lg border border-amber-200 flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Kho thiếu: còn ${maxPortions}/${group.totalQty} phần</div>`;
             } else {
-                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded border border-emerald-500/30">Kho còn: ${maxPortions} phần</div>`;
+                stockHtml = `<div class="text-xs font-bold px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-200">Kho còn: ${maxPortions} phần</div>`;
             }
         }
 
         const outOfStockActionBtn = !canCook
-            ? `<button data-menu-id="${group.menuItemId}" data-detail-ids="${detailIds}" data-menu-name="${tenMon}" class="btn-cancel-out-of-stock bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer" title="Khóa món trên Menu & Hủy các phần đang chờ">
+            ? `<button data-menu-id="${group.menuItemId}" data-detail-ids="${detailIds}" data-menu-name="${tenMon}" class="btn-cancel-out-of-stock bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer" title="Khóa món trên Menu & Hủy các phần đang chờ">
                 <i class="fa-solid fa-ban"></i> Hủy & Báo hết
                </button>`
             : '';
@@ -676,28 +676,28 @@ const renderPendingCol = (groups: any[]) => {
             : '';
 
         html += `
-            <div class="kds-card bg-slate-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group border ${alertClass}">
+            <div class="kds-card rounded-2xl p-5 shadow-sm relative overflow-hidden group border transition-shadow hover:shadow-md ${alertClass}">
                 <!-- Toolbar góc phải: Công thức, Ưu tiên, Khóa món -->
                 <div class="absolute top-4 right-4 flex items-center gap-1.5">
-                    <button data-menu-id="${group.menuItemId}" class="btn-recipe-peek p-1.5 px-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-1" title="Xem định lượng công thức món">
+                    <button data-menu-id="${group.menuItemId}" class="btn-recipe-peek p-1.5 px-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-sm" title="Xem định lượng công thức món">
                         <i class="fa-solid fa-book-open"></i> <span class="hidden sm:inline">Công thức</span>
                     </button>
-                    <button data-menu-id="${group.menuItemId}" class="btn-toggle-priority p-1.5 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-700/60 text-slate-400 hover:text-amber-400 border border-slate-600/40'}" title="${isRush ? 'Hạ ưu tiên' : 'Đánh dấu ưu tiên cao lên đầu'}">
+                    <button data-menu-id="${group.menuItemId}" class="btn-toggle-priority p-1.5 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-100 text-slate-600 hover:text-amber-600 hover:bg-slate-200 border border-slate-200 shadow-sm'}" title="${isRush ? 'Hạ ưu tiên' : 'Đánh dấu ưu tiên cao lên đầu'}">
                         <i class="fa-solid fa-bolt"></i>
                     </button>
-                    <button data-menu-id="${group.menuItemId}" class="btn-out-of-stock p-1.5 px-2 bg-slate-700/50 text-slate-400 rounded-lg hover:bg-red-500/20 hover:text-red-500 transition-colors tooltip" title="Báo hết hàng">
+                    <button data-menu-id="${group.menuItemId}" class="btn-out-of-stock p-1.5 px-2 bg-slate-100 text-slate-500 rounded-lg hover:bg-red-50 hover:text-red-600 border border-slate-200 transition-colors shadow-sm tooltip" title="Báo hết hàng">
                         <i class="fa-solid fa-ban text-xs"></i>
                     </button>
                 </div>
                 
                 <div class="pr-28">
                     ${rushBadge}
-                    <h4 class="font-black text-2xl text-white mb-1 flex items-center gap-2">
+                    <h4 class="font-black text-2xl text-slate-900 mb-1 flex items-center gap-2">
                         <span>${tenMon}</span>
-                        ${isComboMon ? '<span class="text-[10px] font-black bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full">COMBO</span>' : ''}
+                        ${isComboMon ? '<span class="text-[10px] font-black bg-amber-100 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full">COMBO</span>' : ''}
                     </h4>
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl font-black text-orange-500">x ${group.totalQty}</div>
+                        <div class="text-3xl font-black text-orange-600">x ${group.totalQty}</div>
                         ${stockHtml}
                     </div>
                 </div>
@@ -706,9 +706,9 @@ const renderPendingCol = (groups: any[]) => {
                 <div class="flex gap-2 flex-wrap mb-3">${tableTags}</div>
                 ${noteHtml}
                 
-                <div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-700">
+                <div class="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
                     <div class="kds-timer-wrapper flex items-center gap-2 font-mono text-base ${timeClass}" data-oldest-time="${group.oldestTime}" data-urgent="${isRush ? '1' : '0'}">
-                        <i class="fa-solid fa-clock ${(isRush || isSlaAlert) ? 'text-red-500 animate-pulse' : 'text-slate-400'} text-lg"></i>
+                        <i class="fa-solid fa-clock ${(isRush || isSlaAlert) ? 'text-red-600 animate-pulse' : 'text-slate-400'} text-lg"></i>
                         <span class="kds-timer-text font-black">${timeStr}</span>
                     </div>
                     <div class="flex items-center gap-2">
@@ -732,7 +732,7 @@ const renderCookingCol = (groups: any[]) => {
     if (!container) return;
 
     if (groups.length === 0) {
-        container.innerHTML = `<div class="text-center text-slate-500 py-10 font-bold"><i class="fa-solid fa-fire text-3xl mb-2 block opacity-40"></i>Không có món đang nấu</div>`;
+        container.innerHTML = `<div class="text-center text-slate-400 py-10 font-bold"><i class="fa-solid fa-fire text-3xl mb-2 block opacity-40"></i>Không có món đang nấu</div>`;
         return;
     }
 
@@ -753,10 +753,10 @@ const renderCookingCol = (groups: any[]) => {
             });
             const tableDetailIds = tableDetails.map((d: any) => d.id).join(',');
             return `
-                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-700/80 rounded-xl text-xs font-bold text-slate-200 border border-slate-600/70 shadow-sm">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-bold text-slate-700 border border-slate-200 shadow-sm">
                     <span>${tb}${qty > 1 ? ` (x${qty})` : ''}</span>
                     <button data-ids="${tableDetailIds}" data-table="${tb}" data-qty="${qty}" data-dish="${tenMon}" 
-                        class="btn-partial-finish-table ml-1 px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg text-[11px] font-black transition-all flex items-center gap-1 active:scale-95 shadow cursor-pointer" 
+                        class="btn-partial-finish-table ml-1 px-2 py-0.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-lg text-[11px] font-black transition-all flex items-center gap-1 active:scale-95 shadow cursor-pointer" 
                         title="Đã nấu xong phần cho ${tb}">
                         <i class="fa-solid fa-check"></i> Xong
                     </button>
@@ -770,23 +770,23 @@ const renderCookingCol = (groups: any[]) => {
             : '';
 
         const cardBorderClass = isRush 
-            ? 'rush-alert border-rose-500 bg-rose-950/20' 
-            : 'border-orange-500/30';
+            ? 'rush-alert border-rose-500 bg-rose-50/60' 
+            : 'border-orange-300 bg-white';
 
         const isComboMon = monAn?.is_combo || group.details?.some((d: any) => d.is_combo);
         const comboItemList = (monAn?.combo_items && monAn.combo_items.length > 0)
             ? monAn.combo_items
             : (group.details?.find((d: any) => d.combo_items && d.combo_items.length)?.combo_items || []);
         const comboBreakdownHtml = (isComboMon && comboItemList.length > 0)
-            ? `<div class="text-xs text-slate-300 bg-slate-900/70 p-2.5 rounded-xl mb-3 border border-amber-500/30">
-                 <div class="text-amber-400 font-bold flex items-center gap-1.5 mb-1.5 text-xs">
+            ? `<div class="text-xs text-slate-700 bg-amber-50/60 p-2.5 rounded-xl mb-3 border border-amber-200">
+                 <div class="text-amber-800 font-bold flex items-center gap-1.5 mb-1.5 text-xs">
                      <i class="fa-solid fa-layer-group"></i> Combo gồm các món (x${group.totalQty}):
                  </div>
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-200">
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-slate-800">
                      ${comboItemList.map((ci: any) => `
-                         <div class="flex items-center gap-1.5 bg-slate-800/80 px-2 py-1 rounded border border-slate-700">
-                             <span class="font-black text-amber-400 font-mono">${(ci.quantity || 1) * group.totalQty}x</span>
-                             <span class="truncate">${ci.name}${ci.variant_name ? ` <span class="text-slate-400 text-[10px]">(${ci.variant_name})</span>` : ''}</span>
+                         <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-slate-200 shadow-sm">
+                             <span class="font-black text-amber-600 font-mono">${(ci.quantity || 1) * group.totalQty}x</span>
+                             <span class="truncate">${ci.name}${ci.variant_name ? ` <span class="text-slate-500 text-[10px]">(${ci.variant_name})</span>` : ''}</span>
                          </div>
                      `).join('')}
                  </div>
@@ -794,27 +794,27 @@ const renderCookingCol = (groups: any[]) => {
             : '';
 
         html += `
-            <div class="bg-slate-800/80 rounded-2xl p-5 shadow-lg border ${cardBorderClass} relative overflow-hidden">
+            <div class="rounded-2xl p-5 shadow-sm border ${cardBorderClass} relative overflow-hidden transition-shadow hover:shadow-md">
                 <!-- Toolbar góc phải: Công thức, Ưu tiên -->
                 <div class="absolute top-4 right-4 flex items-center gap-1.5">
-                    <button data-menu-id="${group.menuItemId}" class="btn-recipe-peek p-1.5 px-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-bold transition-all flex items-center gap-1" title="Xem định lượng công thức món">
+                    <button data-menu-id="${group.menuItemId}" class="btn-recipe-peek p-1.5 px-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-sm" title="Xem định lượng công thức món">
                         <i class="fa-solid fa-book-open"></i> <span class="hidden sm:inline">Công thức</span>
                     </button>
-                    <button data-menu-id="${group.menuItemId}" class="btn-toggle-priority p-1.5 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-700/60 text-slate-400 hover:text-amber-400 border border-slate-600/40'}" title="${isRush ? 'Hạ ưu tiên' : 'Đánh dấu ưu tiên cao lên đầu'}">
+                    <button data-menu-id="${group.menuItemId}" class="btn-toggle-priority p-1.5 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-100 text-slate-600 hover:text-amber-600 hover:bg-slate-200 border border-slate-200 shadow-sm'}" title="${isRush ? 'Hạ ưu tiên' : 'Đánh dấu ưu tiên cao lên đầu'}">
                         <i class="fa-solid fa-bolt"></i>
                     </button>
                 </div>
 
                 <div class="pr-24">
                     ${rushBadge}
-                    <h4 class="font-black text-2xl text-white mb-1 flex items-center gap-2">
+                    <h4 class="font-black text-2xl text-slate-900 mb-1 flex items-center gap-2">
                         <span>${tenMon}</span>
-                        ${isComboMon ? '<span class="text-[10px] font-black bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full">COMBO</span>' : ''}
+                        ${isComboMon ? '<span class="text-[10px] font-black bg-amber-100 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full">COMBO</span>' : ''}
                     </h4>
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl font-black text-emerald-400">x ${group.totalQty}</div>
-                        <span class="px-2 py-0.5 bg-orange-500/20 text-orange-400 rounded text-xs font-bold border border-orange-500/30 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span> Đang nấu
+                        <div class="text-3xl font-black text-emerald-600">x ${group.totalQty}</div>
+                        <span class="px-2.5 py-0.5 bg-orange-50 text-orange-600 rounded-full text-xs font-bold border border-orange-200 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span> Đang nấu
                         </span>
                     </div>
                 </div>
@@ -822,12 +822,12 @@ const renderCookingCol = (groups: any[]) => {
                 ${comboBreakdownHtml}
                 <div class="flex gap-2 flex-wrap mb-4">${tableTags}</div>
                 
-                <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-700">
-                    <div class="flex items-center gap-2 text-orange-400 font-bold text-sm">
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                    <div class="flex items-center gap-2 text-orange-600 font-bold text-sm">
                         <i class="fa-solid fa-fire text-sm animate-pulse"></i>
                         Đang chế biến
                     </div>
-                    <button data-ids="${detailIds}" data-dish="${tenMon}" class="btn-finish-cooking bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-black text-lg py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform active:scale-95 flex items-center gap-2 cursor-pointer">
+                    <button data-ids="${detailIds}" data-dish="${tenMon}" class="btn-finish-cooking min-h-[48px] bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black text-lg py-3 px-8 rounded-xl shadow-md transition-all active:scale-95 flex items-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-bell-concierge text-xl"></i>
                         Xong toàn bộ
                     </button>
@@ -846,7 +846,7 @@ const renderPendingTickets = (tickets: any[]) => {
     if (!container) return;
 
     if (tickets.length === 0) {
-        container.innerHTML = `<div class="text-center text-slate-500 py-10 font-bold"><i class="fa-solid fa-check-circle text-3xl mb-2 block opacity-40"></i>Không có phiếu bàn chờ nấu</div>`;
+        container.innerHTML = `<div class="text-center text-slate-400 py-10 font-bold"><i class="fa-solid fa-check-circle text-3xl mb-2 block opacity-40"></i>Không có phiếu bàn chờ nấu</div>`;
         return;
     }
 
@@ -862,26 +862,26 @@ const renderPendingTickets = (tickets: any[]) => {
             const mId = (d.menuItem_id && typeof d.menuItem_id === 'object') ? String(d.menuItem_id.id || d.menuItem_id._id) : String(d.menuItem_id || '');
             const mon = mangMonAn.find(m => String(m.id || (m as any)._id) === mId);
             const name = (d.menuItem_id && typeof d.menuItem_id === 'object' && d.menuItem_id.name) ? d.menuItem_id.name : (mon ? mon.name : (d.name || 'Món ?'));
-            const noteStr = d.notes ? `<span class="block text-xs text-yellow-400 italic">${cleanKdsNote(d.notes)}</span>` : '';
+            const noteStr = d.notes ? `<span class="block text-xs text-amber-700 italic">${cleanKdsNote(d.notes)}</span>` : '';
             const isCombo = d.is_combo || mon?.is_combo;
             const comboItems = (d.combo_items && d.combo_items.length > 0) ? d.combo_items : (mon?.combo_items || []);
             const comboBreakdown = (isCombo && comboItems.length > 0)
-                ? `<div class="text-[11px] text-slate-300 bg-slate-900/60 p-1.5 rounded-lg mt-1 border border-amber-500/30">
-                     <span class="text-amber-400 font-bold">Gồm:</span> ${comboItems.map((ci: any) => `${(ci.quantity || 1) * d.quantity}x ${ci.name}${ci.variant_name ? ` (${ci.variant_name})` : ''}`).join(', ')}
+                ? `<div class="text-[11px] text-slate-700 bg-amber-50/60 p-2 rounded-lg mt-1 border border-amber-200">
+                     <span class="text-amber-800 font-bold">Gồm:</span> ${comboItems.map((ci: any) => `${(ci.quantity || 1) * d.quantity}x ${ci.name}${ci.variant_name ? ` (${ci.variant_name})` : ''}`).join(', ')}
                    </div>`
                 : '';
 
             itemsHtml += `
-                <div class="flex items-start justify-between py-2 border-b border-slate-700/60 last:border-0">
+                <div class="flex items-start justify-between py-2 border-b border-slate-100 last:border-0">
                     <div class="flex-1 pr-2">
-                        <div class="font-bold text-white text-base flex items-center gap-1.5">
+                        <div class="font-bold text-slate-900 text-base flex items-center gap-1.5">
                             <span>${name}</span>
-                            ${isCombo ? '<span class="text-[9px] font-black bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.2 rounded">COMBO</span>' : ''}
+                            ${isCombo ? '<span class="text-[9px] font-black bg-amber-100 text-amber-700 border border-amber-200 px-1.5 py-0.2 rounded">COMBO</span>' : ''}
                         </div>
                         ${noteStr}
                         ${comboBreakdown}
                     </div>
-                    <div class="font-black text-orange-400 text-lg">x${d.quantity}</div>
+                    <div class="font-black text-orange-600 text-lg">x${d.quantity}</div>
                 </div>
             `;
         });
@@ -891,29 +891,29 @@ const renderPendingTickets = (tickets: any[]) => {
             : '';
 
         const alertClass = isRush 
-            ? 'rush-alert border-rose-500 bg-rose-950/20' 
-            : (isSlaAlert ? 'sla-alert border-red-500' : 'border-slate-700');
+            ? 'rush-alert border-rose-500 bg-rose-50/60' 
+            : (isSlaAlert ? 'sla-alert border-red-500 bg-red-50/40' : 'border-slate-200 bg-white');
 
         html += `
-            <div class="kds-ticket-card bg-slate-800 rounded-2xl p-5 shadow-lg border ${alertClass}">
-                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-700">
+            <div class="kds-ticket-card rounded-2xl p-5 shadow-sm border ${alertClass} transition-shadow hover:shadow-md">
+                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Phiếu Order #${ticket.orderId}</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Phiếu Order #${ticket.orderId}</span>
                             ${rushBadge}
                         </div>
-                        <h4 class="text-2xl font-black text-white">${ticket.tableName}</h4>
+                        <h4 class="text-2xl font-black text-slate-900">${ticket.tableName}</h4>
                     </div>
                     <div class="text-right flex flex-col items-end gap-1.5">
                         <div class="flex items-center gap-2">
-                            <button data-order-id="${ticket.orderId}" class="btn-toggle-priority-ticket p-1 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-700 text-slate-400 hover:text-amber-400'}" title="${isRush ? 'Hạ ưu tiên bàn' : 'Ghim ưu tiên bàn lên đầu'}">
+                            <button data-order-id="${ticket.orderId}" class="btn-toggle-priority-ticket p-1 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-100 text-slate-600 hover:text-amber-600 border border-slate-200 shadow-sm'}" title="${isRush ? 'Hạ ưu tiên bàn' : 'Ghim ưu tiên bàn lên đầu'}">
                                 <i class="fa-solid fa-bolt"></i>
                             </button>
-                            <span class="kds-ticket-timer text-xs font-black px-2 py-0.5 rounded-full ${(isRush || isSlaAlert) ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'}" data-oldest-time="${ticket.oldestTime}" data-urgent="${isRush ? '1' : '0'}">
+                            <span class="kds-ticket-timer text-xs font-black px-2 py-0.5 rounded-full ${(isRush || isSlaAlert) ? 'bg-red-100 text-red-600 border border-red-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}" data-oldest-time="${ticket.oldestTime}" data-urgent="${isRush ? '1' : '0'}">
                                 <i class="fa-solid fa-clock mr-1"></i><span class="kds-timer-text">${timeStr}</span>
                             </span>
                         </div>
-                        <div class="text-xs text-slate-400 font-bold">${ticket.details.length} món</div>
+                        <div class="text-xs text-slate-500 font-bold">${ticket.details.length} món</div>
                     </div>
                 </div>
 
@@ -921,7 +921,7 @@ const renderPendingTickets = (tickets: any[]) => {
                     ${itemsHtml}
                 </div>
 
-                <button data-ids="${allDetailIds}" class="btn-start-cooking w-full py-3 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white rounded-xl font-black text-base shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-2 cursor-pointer">
+                <button data-ids="${allDetailIds}" class="btn-start-cooking w-full py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl font-black text-base shadow-md transition-transform active:scale-95 flex justify-center items-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-fire"></i> Nhận nấu toàn bộ bàn
                 </button>
             </div>
@@ -938,7 +938,7 @@ const renderCookingTickets = (tickets: any[]) => {
     if (!container) return;
 
     if (tickets.length === 0) {
-        container.innerHTML = `<div class="text-center text-slate-500 py-10 font-bold"><i class="fa-solid fa-fire text-3xl mb-2 block opacity-40"></i>Không có phiếu bàn đang nấu</div>`;
+        container.innerHTML = `<div class="text-center text-slate-400 py-10 font-bold"><i class="fa-solid fa-fire text-3xl mb-2 block opacity-40"></i>Không có phiếu bàn đang nấu</div>`;
         return;
     }
 
@@ -954,29 +954,29 @@ const renderCookingTickets = (tickets: any[]) => {
             const mId = (d.menuItem_id && typeof d.menuItem_id === 'object') ? String(d.menuItem_id.id || d.menuItem_id._id) : String(d.menuItem_id || '');
             const mon = mangMonAn.find(m => String(m.id || (m as any)._id) === mId);
             const name = (d.menuItem_id && typeof d.menuItem_id === 'object' && d.menuItem_id.name) ? d.menuItem_id.name : (mon ? mon.name : (d.name || 'Món ?'));
-            const noteStr = d.notes ? `<span class="block text-xs text-yellow-400 italic">${cleanKdsNote(d.notes)}</span>` : '';
+            const noteStr = d.notes ? `<span class="block text-xs text-amber-700 italic">${cleanKdsNote(d.notes)}</span>` : '';
             const isCombo = d.is_combo || mon?.is_combo;
             const comboItems = (d.combo_items && d.combo_items.length > 0) ? d.combo_items : (mon?.combo_items || []);
             const comboBreakdown = (isCombo && comboItems.length > 0)
-                ? `<div class="text-[11px] text-slate-300 bg-slate-900/60 p-1.5 rounded-lg mt-1 border border-amber-500/30">
-                     <span class="text-amber-400 font-bold">Gồm:</span> ${comboItems.map((ci: any) => `${(ci.quantity || 1) * d.quantity}x ${ci.name}${ci.variant_name ? ` (${ci.variant_name})` : ''}`).join(', ')}
+                ? `<div class="text-[11px] text-slate-700 bg-amber-50/60 p-2 rounded-lg mt-1 border border-amber-200">
+                     <span class="text-amber-800 font-bold">Gồm:</span> ${comboItems.map((ci: any) => `${(ci.quantity || 1) * d.quantity}x ${ci.name}${ci.variant_name ? ` (${ci.variant_name})` : ''}`).join(', ')}
                    </div>`
                 : '';
 
             itemsHtml += `
-                <div class="flex items-center justify-between py-2.5 border-b border-slate-700/60 last:border-0">
+                <div class="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
                     <div class="flex-1 pr-3">
-                        <div class="font-bold text-white text-base flex items-center gap-1.5">
+                        <div class="font-bold text-slate-900 text-base flex items-center gap-1.5">
                             <span>${name}</span>
-                            ${isCombo ? '<span class="text-[9px] font-black bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.2 rounded">COMBO</span>' : ''}
+                            ${isCombo ? '<span class="text-[9px] font-black bg-amber-100 text-amber-700 border border-amber-200 px-1.5 py-0.2 rounded">COMBO</span>' : ''}
                         </div>
                         ${noteStr}
                         ${comboBreakdown}
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="font-black text-emerald-400 text-lg">x${d.quantity}</span>
+                        <span class="font-black text-emerald-600 text-lg">x${d.quantity}</span>
                         <button data-id="${d.id}" data-name="${name}" data-table="${ticket.tableName}" 
-                            class="btn-single-item-finish px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-lg text-xs font-black transition-all flex items-center gap-1 active:scale-95 shadow cursor-pointer" 
+                            class="btn-single-item-finish px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-lg text-xs font-black transition-all flex items-center gap-1 active:scale-95 shadow cursor-pointer" 
                             title="Hoàn thành riêng món này">
                             <i class="fa-solid fa-check"></i> Xong
                         </button>
@@ -990,25 +990,25 @@ const renderCookingTickets = (tickets: any[]) => {
             : '';
 
         const cardBorderClass = isRush 
-            ? 'rush-alert border-rose-500 bg-rose-950/20' 
-            : 'border-orange-500/30';
+            ? 'rush-alert border-rose-500 bg-rose-50/60' 
+            : 'border-orange-300 bg-white';
 
         html += `
-            <div class="bg-slate-800 rounded-2xl p-5 shadow-lg border ${cardBorderClass}">
-                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-700">
+            <div class="rounded-2xl p-5 shadow-sm border ${cardBorderClass} transition-shadow hover:shadow-md">
+                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Phiếu Đang Nấu #${ticket.orderId}</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Phiếu Đang Nấu #${ticket.orderId}</span>
                             ${rushBadge}
                         </div>
-                        <h4 class="text-2xl font-black text-white">${ticket.tableName}</h4>
+                        <h4 class="text-2xl font-black text-slate-900">${ticket.tableName}</h4>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button data-order-id="${ticket.orderId}" class="btn-toggle-priority-ticket p-1 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-700 text-slate-400 hover:text-amber-400'}" title="${isRush ? 'Hạ ưu tiên bàn' : 'Ghim ưu tiên bàn lên đầu'}">
+                        <button data-order-id="${ticket.orderId}" class="btn-toggle-priority-ticket p-1 px-2 rounded-lg text-xs font-bold transition-all ${isRush ? 'bg-rose-500 text-white shadow' : 'bg-slate-100 text-slate-600 hover:text-amber-600 border border-slate-200 shadow-sm'}" title="${isRush ? 'Hạ ưu tiên bàn' : 'Ghim ưu tiên bàn lên đầu'}">
                             <i class="fa-solid fa-bolt"></i>
                         </button>
-                        <span class="px-2 py-0.5 bg-orange-500/20 text-orange-400 rounded-full text-xs font-bold border border-orange-500/30 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span> Đang nấu
+                        <span class="px-2.5 py-0.5 bg-orange-50 text-orange-600 rounded-full text-xs font-bold border border-orange-200 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span> Đang nấu
                         </span>
                     </div>
                 </div>
@@ -1017,7 +1017,7 @@ const renderCookingTickets = (tickets: any[]) => {
                     ${itemsHtml}
                 </div>
 
-                <button data-ids="${allDetailIds}" data-table="${ticket.tableName}" class="btn-finish-cooking w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl font-black text-base shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-2 cursor-pointer">
+                <button data-ids="${allDetailIds}" data-table="${ticket.tableName}" class="btn-finish-cooking w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl font-black text-base shadow-md transition-transform active:scale-95 flex justify-center items-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-bell-concierge text-lg"></i> Hoàn thành toàn bộ bàn
                 </button>
             </div>
@@ -1434,15 +1434,15 @@ const openRecipePeekModal = (menuId: string) => {
             }
 
             const isStockOk = stock >= req;
-            const statusClass = isStockOk ? 'text-emerald-400' : 'text-red-400 font-bold';
+            const statusClass = isStockOk ? 'text-emerald-600' : 'text-red-600 font-bold';
             const statusText = isStockOk 
-                ? `<span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">Đủ nấu (${portionsPossible} suất)</span>` 
-                : `<span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold">Hết hàng</span>`;
+                ? `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">Đủ nấu (${portionsPossible} suất)</span>` 
+                : `<span class="px-2 py-0.5 rounded-full bg-red-50 text-red-600 border border-red-200 text-[10px] font-bold">Hết hàng</span>`;
 
             rowsHtml += `
-                <tr class="hover:bg-slate-700/30 transition-colors">
-                    <td class="p-3 font-bold text-white">${ingName}</td>
-                    <td class="p-3 text-center font-mono text-slate-300 font-bold">${req} ${unit}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-3 font-bold text-slate-900">${ingName}</td>
+                    <td class="p-3 text-center font-mono text-slate-600 font-bold">${req} ${unit}</td>
                     <td class="p-3 text-center font-mono font-bold ${statusClass}">${stock} ${unit}</td>
                     <td class="p-3 text-right">${statusText}</td>
                 </tr>
@@ -1452,13 +1452,13 @@ const openRecipePeekModal = (menuId: string) => {
         if (tbody) tbody.innerHTML = rowsHtml;
         if (portionsBadge) {
             if (minPortions <= 0) {
-                portionsBadge.className = 'text-base font-black text-red-400 font-mono';
+                portionsBadge.className = 'text-base font-black text-red-600 font-mono';
                 portionsBadge.innerText = 'Hết nguyên liệu (0 suất)';
             } else if (minPortions <= 5) {
-                portionsBadge.className = 'text-base font-black text-amber-400 font-mono';
+                portionsBadge.className = 'text-base font-black text-amber-600 font-mono';
                 portionsBadge.innerText = `Sắp hết: ${minPortions} suất`;
             } else {
-                portionsBadge.className = 'text-base font-black text-emerald-400 font-mono';
+                portionsBadge.className = 'text-base font-black text-emerald-600 font-mono';
                 portionsBadge.innerText = `Đủ nấu: ${minPortions} suất`;
             }
         }
@@ -1497,8 +1497,8 @@ const renderRecallModalList = () => {
     if (mangMonSanSang.length === 0) {
         container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-16 text-center text-slate-400">
-                <i class="fa-solid fa-clock-rotate-left text-4xl mb-3 text-slate-600"></i>
-                <h4 class="text-white font-bold text-base mb-1">Chưa có món nào nấu xong</h4>
+                <i class="fa-solid fa-clock-rotate-left text-4xl mb-3 text-slate-300"></i>
+                <h4 class="text-slate-800 font-bold text-base mb-1">Chưa có món nào nấu xong</h4>
                 <p class="text-xs text-slate-500">Các món được bấm "Xong" sẽ hiển thị ở đây để bếp kiểm soát và khôi phục khi cần</p>
             </div>
         `;
@@ -1540,8 +1540,8 @@ const renderRecallModalList = () => {
     if (filtered.length === 0) {
         container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-12 text-center text-slate-400">
-                <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-600"></i>
-                <p class="text-sm font-bold text-slate-300">Không tìm thấy món phù hợp</p>
+                <i class="fa-solid fa-magnifying-glass text-3xl mb-2 text-slate-300"></i>
+                <p class="text-sm font-bold text-slate-600">Không tìm thấy món phù hợp</p>
             </div>
         `;
         return;
@@ -1563,24 +1563,24 @@ const renderRecallModalList = () => {
         const stationBadge = station === 'bar' ? '🍸 Quầy Bar' : (station === 'cold' ? '🥗 Bếp Lạnh' : '🔥 Bếp Nóng');
 
         html += `
-            <div class="bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all shadow-sm">
+            <div class="bg-white border border-slate-200 hover:border-slate-300 rounded-2xl p-4 flex items-center justify-between gap-4 transition-all shadow-sm">
                 <div class="flex items-center gap-3.5 flex-1 min-w-0">
-                    <img src="${mon?.image || 'https://via.placeholder.com/150'}" loading="lazy" decoding="async" class="w-12 h-12 object-cover rounded-xl border border-slate-700 shrink-0" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${mon?.image || 'https://via.placeholder.com/150'}" loading="lazy" decoding="async" class="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-2 mb-0.5">
-                            <span class="text-xs font-bold text-slate-400">${tableName}</span>
-                            <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.2 rounded-full font-bold">${stationBadge}</span>
-                            <span class="text-[11px] text-slate-500 font-mono">${timeClockStr} (${timeAgoStr})</span>
+                            <span class="text-xs font-bold text-slate-500">${tableName}</span>
+                            <span class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.2 rounded-full font-bold border border-slate-200">${stationBadge}</span>
+                            <span class="text-[11px] text-slate-400 font-mono">${timeClockStr} (${timeAgoStr})</span>
                         </div>
-                        <h4 class="font-bold text-white text-base truncate">${dishName}</h4>
-                        ${d.notes ? `<div class="text-xs text-yellow-400 italic truncate">Ghi chú: ${d.notes}</div>` : ''}
+                        <h4 class="font-bold text-slate-900 text-base truncate">${dishName}</h4>
+                        ${d.notes ? `<div class="text-xs text-amber-700 italic truncate">Ghi chú: ${d.notes}</div>` : ''}
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-xl font-black text-emerald-400 font-mono">x${d.quantity}</span>
+                    <span class="text-xl font-black text-emerald-600 font-mono">x${d.quantity}</span>
                     <button data-id="${d.id}" data-name="${dishName}" data-table="${tableName}" 
-                        class="btn-recall-item px-3.5 py-2 bg-orange-600/90 hover:bg-orange-500 active:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer">
+                        class="btn-recall-item px-3.5 py-2 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer">
                         <i class="fa-solid fa-rotate-left"></i> Nấu lại
                     </button>
                 </div>
@@ -1683,15 +1683,15 @@ const initRecallModal = () => {
 
     filterAllBtn?.addEventListener('click', () => {
         recallFilterMode = 'all';
-        filterAllBtn.className = 'btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white';
-        filter15mBtn!.className = 'btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white border border-slate-700';
+        filterAllBtn.className = 'btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-sm';
+        filter15mBtn!.className = 'btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm';
         renderRecallModalList();
     });
 
     filter15mBtn?.addEventListener('click', () => {
         recallFilterMode = '15m';
-        filter15mBtn.className = 'btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white';
-        filterAllBtn!.className = 'btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white border border-slate-700';
+        filter15mBtn.className = 'btn-recall-filter active px-2.5 py-1 rounded-lg text-xs font-bold bg-orange-500 text-white shadow-sm';
+        filterAllBtn!.className = 'btn-recall-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm';
         renderRecallModalList();
     });
 };
@@ -1730,9 +1730,9 @@ const initStationAndFilters = () => {
             const target = e.currentTarget as HTMLButtonElement;
             stationBtns.forEach(b => {
                 b.classList.remove('bg-orange-500', 'text-white', 'shadow-sm');
-                b.classList.add('text-slate-400');
+                b.classList.add('text-slate-600');
             });
-            target.classList.remove('text-slate-400');
+            target.classList.remove('text-slate-600');
             target.classList.add('bg-orange-500', 'text-white', 'shadow-sm');
             currentStation = (target.getAttribute('data-station') || 'all') as any;
             currentKitchenDataHash = ""; // Buộc render lại
@@ -1747,7 +1747,7 @@ const initStationAndFilters = () => {
     btnViewDish?.addEventListener('click', () => {
         currentViewMode = 'dish';
         btnViewDish.className = 'px-3 py-1 bg-orange-500 text-white rounded-md text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
-        btnViewTable!.className = 'px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
+        btnViewTable!.className = 'px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
         currentKitchenDataHash = "";
         renderKDS();
     });
@@ -1755,7 +1755,7 @@ const initStationAndFilters = () => {
     btnViewTable?.addEventListener('click', () => {
         currentViewMode = 'table';
         btnViewTable.className = 'px-3 py-1 bg-orange-500 text-white rounded-md text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
-        btnViewDish!.className = 'px-3 py-1 text-slate-400 hover:text-white rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
+        btnViewDish!.className = 'px-3 py-1 text-slate-600 hover:text-slate-900 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer';
         currentKitchenDataHash = "";
         renderKDS();
     });
@@ -1778,10 +1778,10 @@ if (navKds && navMenu && viewKds && viewMenu) {
         viewMenu.classList.remove('flex');
         navKds.querySelector('.active-indicator')?.classList.remove('hidden');
         navMenu.querySelector('.active-indicator')?.classList.add('hidden');
-        navKds.classList.add('text-orange-500', 'bg-orange-500/20');
-        navKds.classList.remove('text-slate-500');
-        navMenu.classList.remove('text-orange-500', 'bg-orange-500/20');
-        navMenu.classList.add('text-slate-500');
+        navKds.classList.add('text-orange-600', 'bg-orange-50', 'border-orange-200');
+        navKds.classList.remove('text-slate-400', 'border-transparent');
+        navMenu.classList.remove('text-orange-600', 'bg-orange-50', 'border-orange-200');
+        navMenu.classList.add('text-slate-400', 'border-transparent');
         renderKDS();
     });
 
@@ -1794,10 +1794,10 @@ if (navKds && navMenu && viewKds && viewMenu) {
         viewKds.classList.remove('flex');
         navMenu.querySelector('.active-indicator')?.classList.remove('hidden');
         navKds.querySelector('.active-indicator')?.classList.add('hidden');
-        navMenu.classList.add('text-orange-500', 'bg-orange-500/20');
-        navMenu.classList.remove('text-slate-500');
-        navKds.classList.remove('text-orange-500', 'bg-orange-500/20');
-        navKds.classList.add('text-slate-500');
+        navMenu.classList.add('text-orange-600', 'bg-orange-50', 'border-orange-200');
+        navMenu.classList.remove('text-slate-400', 'border-transparent');
+        navKds.classList.remove('text-orange-600', 'bg-orange-50', 'border-orange-200');
+        navKds.classList.add('text-slate-400', 'border-transparent');
         renderMenuTab(true);
     });
 }
@@ -1853,7 +1853,7 @@ const renderKitchenCategoryPills = () => {
     if (!container) return;
 
     let html = `
-        <button data-cat="all" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${kitchenSelectedCategory === 'all' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'}">
+        <button data-cat="all" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${kitchenSelectedCategory === 'all' ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm'}">
             Tất cả danh mục (${mangMonAn.length})
         </button>
     `;
@@ -1863,7 +1863,7 @@ const renderKitchenCategoryPills = () => {
         const count = mangMonAn.filter(m => getDishCategoryId(m) === catId).length;
         const isActive = kitchenSelectedCategory === catId;
         html += `
-            <button data-cat="${catId}" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${isActive ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'}">
+            <button data-cat="${catId}" class="btn-kitchen-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${isActive ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20' : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-sm'}">
                 ${cat.name} (${count})
             </button>
         `;
@@ -1920,9 +1920,9 @@ const initKitchenMenuControls = () => {
 
             statusBtns.forEach(b => {
                 b.classList.remove('bg-orange-500', 'text-white', 'shadow-md', 'shadow-orange-500/20');
-                b.classList.add('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
+                b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200', 'shadow-sm');
             });
-            target.classList.remove('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
+            target.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200', 'shadow-sm');
             target.classList.add('bg-orange-500', 'text-white', 'shadow-md', 'shadow-orange-500/20');
 
             renderKitchenFilteredGrid();
@@ -1976,24 +1976,24 @@ const renderKitchenFilteredGrid = () => {
     filtered.forEach(mon => {
         const maxPortions = getDishMaxPortions(mon.id);
         const isOut = isDishOutOfStock(mon);
-        const cardBg = isOut ? 'bg-red-950/20 border-red-500/30' : 'bg-slate-800/90 border-slate-700/80 hover:border-slate-600';
+        const cardBg = isOut ? 'bg-red-50/70 border-red-200' : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm';
         const stockText = maxPortions >= 0 ? `Tồn kho: ${maxPortions} phần` : 'Tồn kho: Vô hạn';
-        const stockColor = (maxPortions >= 0 && maxPortions <= 5) ? 'text-amber-400 font-bold' : 'text-slate-400';
+        const stockColor = (maxPortions >= 0 && maxPortions <= 5) ? 'text-amber-600 font-bold' : 'text-slate-500';
 
         html += `
-            <div class="rounded-2xl p-4 shadow-lg border ${cardBg} flex flex-col items-center text-center transition-all duration-200 relative group">
+            <div class="rounded-2xl p-4 shadow-sm border ${cardBg} flex flex-col items-center text-center transition-all duration-200 relative group hover:shadow-md">
                 <div class="relative mb-3">
-                    <img src="${mon.image}" loading="lazy" decoding="async" class="w-20 h-20 object-cover rounded-full shadow-md border-2 ${isOut ? 'border-red-500/50 grayscale' : 'border-slate-700'}" onerror="this.src='https://via.placeholder.com/150'">
-                    ${isOut ? '<span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">ĐÃ KHÓA</span>' : ''}
+                    <img src="${mon.image}" loading="lazy" decoding="async" class="w-20 h-20 object-cover rounded-full shadow-sm border-2 ${isOut ? 'border-red-400 grayscale' : 'border-slate-200'}" onerror="this.src='https://via.placeholder.com/150'">
+                    ${isOut ? '<span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">ĐÃ KHÓA</span>' : ''}
                 </div>
-                <h4 class="font-black text-white text-base mb-1 leading-tight line-clamp-2 min-h-[2.5rem]">${mon.name}</h4>
+                <h4 class="font-black text-slate-900 text-base mb-1 leading-tight line-clamp-2 min-h-[2.5rem]">${mon.name}</h4>
                 <div class="text-xs ${stockColor} mb-3">${stockText}</div>
-                <div class="flex items-center justify-between w-full mt-auto bg-slate-900/60 p-2.5 rounded-xl border ${isOut ? 'border-red-500/20' : 'border-slate-700/60'}">
-                    <span class="text-xs font-bold ${isOut ? 'text-red-400' : 'text-emerald-400'}">
+                <div class="flex items-center justify-between w-full mt-auto bg-slate-50 p-2.5 rounded-xl border ${isOut ? 'border-red-200' : 'border-slate-200'}">
+                    <span class="text-xs font-bold ${isOut ? 'text-red-600' : 'text-emerald-600'}">
                         ${isOut ? '🔴 Đã khóa' : '🟢 Đang bán'}
                     </span>
                     <button data-id="${mon.id}" data-name="${mon.name}" data-current="${isOut ? 'Out_of_stock' : 'Available'}" 
-                        class="btn-toggle-menu relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none cursor-pointer ${!isOut ? 'bg-emerald-500' : 'bg-slate-600'}">
+                        class="btn-toggle-menu relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none cursor-pointer ${!isOut ? 'bg-emerald-500' : 'bg-slate-300'}">
                         <span class="inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${!isOut ? 'translate-x-6' : 'translate-x-1'} shadow-sm"></span>
                     </button>
                 </div>
