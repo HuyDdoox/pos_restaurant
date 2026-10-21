@@ -1391,6 +1391,23 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
             `</div>`;
     }
 
+    const catName = cat ? cat.name : (item.is_combo ? 'Set Combo' : 'Chưa phân loại');
+    let categoryCellHtml = '';
+    if (item.is_combo) {
+        categoryCellHtml = `
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold whitespace-nowrap" title="Set Combo">
+                <i class="fa-solid fa-boxes-stacked text-amber-400 text-xs"></i>
+                <span>${catName}</span>
+            </div>
+        `;
+    } else {
+        categoryCellHtml = `
+            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700/80 text-slate-300 text-xs font-bold whitespace-nowrap">
+                ${catName}
+            </span>
+        `;
+    }
+
     return `
         <tr class="hover:bg-slate-700/10 border-b border-slate-800/60">
             <td class="px-6 py-4 whitespace-nowrap">
@@ -1398,11 +1415,13 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
             </td>
             <td class="px-6 py-4 font-bold text-white whitespace-nowrap">
                 <div class="flex items-center gap-2">
-                    <span class="whitespace-nowrap">${item.name}</span>
-                    ${item.is_combo ? `<span class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap"><i class="fa-solid fa-boxes-stacked mr-1"></i>Combo</span>` : ''}
+                    <span class="whitespace-nowrap text-sm text-white">${item.name}</span>
                 </div>
-                <p class="text-xs text-slate-400 font-semibold mb-0.5 whitespace-nowrap">${cat ? cat.name : ''} ${item.serving_size ? `• Khẩu phần: ${item.serving_size}` : ''}</p>
+                ${item.serving_size ? `<p class="text-[11px] text-slate-400 font-medium mt-0.5 whitespace-nowrap"><i class="fa-solid fa-users text-[10px] mr-1 text-slate-500"></i>${item.serving_size}</p>` : ''}
                 ${tagsHtml}
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+                ${categoryCellHtml}
             </td>
             <td class="px-6 py-4 text-orange-400 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>
             <td class="px-6 py-4 whitespace-nowrap">${variantConfigBtn}</td>
@@ -1428,7 +1447,7 @@ const renderNextMenuItemsBatch = () => {
     if (currentMenuRenderedCount < currentMenuFilteredList.length) {
         const sentinel = document.createElement('tr');
         sentinel.id = 'menu-lazy-sentinel';
-        sentinel.innerHTML = `<td colspan="6" class="px-6 py-4 text-center text-xs text-slate-500 font-bold"><i class="fa-solid fa-spinner fa-spin mr-2 text-orange-500"></i>Đang cuộn tải thêm (${currentMenuRenderedCount}/${currentMenuFilteredList.length} món)...</td>`;
+        sentinel.innerHTML = `<td colspan="7" class="px-6 py-4 text-center text-xs text-slate-500 font-bold"><i class="fa-solid fa-spinner fa-spin mr-2 text-orange-500"></i>Đang cuộn tải thêm (${currentMenuRenderedCount}/${currentMenuFilteredList.length} món)...</td>`;
         tbody.appendChild(sentinel);
 
         if (!menuSentinelObserver) {
@@ -1448,7 +1467,7 @@ const renderMenuItemsTable = (data: any[]) => {
     if (!tbody) return;
     
     if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-500">Không tìm thấy món ăn nào.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-slate-500">Không tìm thấy món ăn nào.</td></tr>`;
         return;
     }
     
