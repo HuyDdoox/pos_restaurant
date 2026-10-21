@@ -325,10 +325,10 @@ const initBranchSelector = async () => {
         });
 
         // Xây dựng Custom Dropdown HTML
-        let optionsHtml = `<button data-value="" class="branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-orange-500 bg-orange-500/10 hover:bg-slate-700/50 transition-colors flex items-center justify-between mb-1">Toàn hệ thống <i class="fa-solid fa-circle-info text-sm"></i></button>`;
+        let optionsHtml = `<button data-value="" class="branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors flex items-center justify-between mb-1">Toàn hệ thống <i class="fa-solid fa-circle-info text-sm"></i></button>`;
         
         branches.forEach((b: any) => {
-            optionsHtml += `<button data-value="${b.id}" class="branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors mb-1 last:mb-0">${b.name}</button>`;
+            optionsHtml += `<button data-value="${b.id}" class="branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors mb-1 last:mb-0">${b.name}</button>`;
         });
         
         menu.innerHTML = optionsHtml;
@@ -373,10 +373,10 @@ const initBranchSelector = async () => {
             // Cập nhật style Option đang chọn
             menu.querySelectorAll('.branch-option').forEach(el => {
                 if (el === target) {
-                    el.className = 'branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-orange-500 bg-orange-500/10 hover:bg-slate-700/50 transition-colors flex items-center justify-between mb-1 last:mb-0';
+                    el.className = 'branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors flex items-center justify-between mb-1 last:mb-0';
                     if (!el.querySelector('svg')) el.innerHTML += ` <i class="fa-solid fa-circle-info text-sm"></i>`;
                 } else {
-                    el.className = 'branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors mb-1 last:mb-0';
+                    el.className = 'branch-option w-full text-left px-4 py-3 rounded-lg text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors mb-1 last:mb-0';
                     const svg = el.querySelector('svg');
                     if(svg) svg.remove();
                 }

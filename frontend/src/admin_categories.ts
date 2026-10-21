@@ -382,23 +382,23 @@ const renderCategoriesTable = () => {
         const iconClass = cat.icon || 'fa-utensils';
 
         return `
-            <tr class="hover:bg-slate-800/40 transition-colors border-b border-slate-800/60">
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
                 <!-- Danh mục & Icon -->
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400 flex items-center justify-center text-base shrink-0 shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 text-orange-600 flex items-center justify-center text-base shrink-0 shadow-sm">
                             <i class="fa-solid ${iconClass}"></i>
                         </div>
                         <div>
-                            <div class="font-black text-white text-sm whitespace-nowrap">${cat.name}</div>
-                            <div class="text-[11px] text-slate-400 font-mono mt-0.5 whitespace-nowrap">${iconClass}</div>
+                            <div class="font-bold text-slate-900 text-sm whitespace-nowrap">${cat.name}</div>
+                            <div class="text-[11px] text-slate-500 font-mono mt-0.5 whitespace-nowrap">${iconClass}</div>
                         </div>
                     </div>
                 </td>
 
                 <!-- Mô tả -->
-                <td class="px-6 py-4 text-slate-300 text-xs max-w-xs truncate font-medium whitespace-nowrap">
-                    ${cat.description || '<span class="text-slate-500 italic">Không có mô tả</span>'}
+                <td class="px-6 py-4 text-slate-600 text-xs max-w-xs truncate font-medium whitespace-nowrap">
+                    ${cat.description || '<span class="text-slate-400 italic">Không có mô tả</span>'}
                 </td>
 
                 <!-- Thứ tự -->
@@ -412,8 +412,8 @@ const renderCategoriesTable = () => {
                 <td class="px-6 py-4 text-center whitespace-nowrap">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-sm ${
                         dishCount > 0 
-                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' 
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                            : 'bg-slate-100 text-slate-600 border border-slate-200'
                     }">
                         <i class="fa-solid fa-bowl-food text-[10px]"></i>
                         <span>${dishCount} món</span>
@@ -425,10 +425,10 @@ const renderCategoriesTable = () => {
                     <button type="button" 
                         class="btn-toggle-category-status inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-xs ${
                         isActive 
-                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25' 
-                            : 'bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-200'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100' 
+                            : 'bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 hover:text-slate-800'
                     }" data-id="${cat.id}" data-name="${cat.name}" data-status="${cat.status || (isActive ? 'Active' : 'Inactive')}" title="Nhấn để ${isActive ? 'ẩn' : 'hiển thị lại'} danh mục">
-                        <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}"></span>
+                        <span class="w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}"></span>
                         ${isActive ? 'Đang hiển thị' : 'Tạm ẩn'}
                     </button>
                 </td>
@@ -438,7 +438,7 @@ const renderCategoriesTable = () => {
                     <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
                         <!-- NÚT XEM MÓN TRONG DANH MỤC (ICON ONLY) -->
                         <button type="button" 
-                            class="btn-view-category-dishes w-8 h-8 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 border border-blue-500/30 flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
+                            class="btn-view-category-dishes w-8 h-8 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
                             data-id="${cat.id}" 
                             data-name="${cat.name}"
                             title="Xem ${dishCount} món trong danh mục ${cat.name}">
@@ -447,7 +447,7 @@ const renderCategoriesTable = () => {
 
                         <!-- NÚT CHỈNH SỬA (ICON ONLY) -->
                         <button type="button" 
-                            class="btn-edit-category w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" 
+                            class="btn-edit-category w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" 
                             data-id="${cat.id}"
                             title="Chỉnh sửa danh mục ${cat.name}">
                             <i class="fa-solid fa-pen text-xs"></i>
@@ -533,11 +533,11 @@ const renderDishesInModal = () => {
         if (currentCategoryDishes.length === 0) {
             container.innerHTML = `
                 <div class="text-center py-12 px-4">
-                    <div class="w-16 h-16 rounded-3xl bg-slate-800 text-slate-500 flex items-center justify-center text-3xl mx-auto mb-4 border border-slate-700">
+                    <div class="w-16 h-16 rounded-3xl bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mx-auto mb-4 border border-slate-200">
                         <i class="fa-solid fa-utensils"></i>
                     </div>
-                    <h4 class="text-base font-bold text-white mb-1">Chưa có món ăn nào trong danh mục này</h4>
-                    <p class="text-xs text-slate-400 mb-5 max-w-sm mx-auto">Danh mục này hiện chưa có món ăn nào được phân loại. Bạn có thể thêm món ăn mới ngay bây giờ!</p>
+                    <h4 class="text-base font-bold text-slate-900 mb-1">Chưa có món ăn nào trong danh mục này</h4>
+                    <p class="text-xs text-slate-500 mb-5 max-w-sm mx-auto">Danh mục này hiện chưa có món ăn nào được phân loại. Bạn có thể thêm món ăn mới ngay bây giờ!</p>
                 </div>
             `;
         } else {
@@ -567,10 +567,10 @@ const renderDishesInModal = () => {
                             ${dish.is_combo ? '<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-black border border-amber-200 shrink-0">COMBO</span>' : ''}
                         </div>
                         <div class="flex items-center gap-2.5 mt-1 text-xs">
-                            <span class="font-black text-orange-400">${formatMoney(dish.base_price)}</span>
-                            <span class="text-slate-600">•</span>
-                            <span class="text-[11px] font-medium ${isAvailable ? 'text-emerald-400' : 'text-slate-500'}">
-                                <i class="fa-solid ${isAvailable ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-slate-500'} text-[10px]"></i>
+                            <span class="font-black text-orange-600">${formatMoney(dish.base_price)}</span>
+                            <span class="text-slate-400">•</span>
+                            <span class="text-[11px] font-medium ${isAvailable ? 'text-emerald-600' : 'text-slate-500'}">
+                                <i class="fa-solid ${isAvailable ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-slate-400'} text-[10px]"></i>
                                 ${isAvailable ? 'Đang bán' : 'Tạm ngưng'}
                             </span>
                         </div>
@@ -579,7 +579,7 @@ const renderDishesInModal = () => {
 
                 <div class="flex items-center gap-2 shrink-0 ml-3 whitespace-nowrap">
                     <button type="button" 
-                        class="btn-go-to-menu-dish w-8 h-8 rounded-xl bg-slate-800 hover:bg-orange-500 hover:text-white text-slate-300 border border-slate-700 transition-all cursor-pointer flex items-center justify-center hover:scale-105 active:scale-95"
+                        class="btn-go-to-menu-dish w-8 h-8 rounded-xl bg-slate-100 hover:bg-orange-500 hover:text-white text-slate-600 border border-slate-200 transition-all cursor-pointer flex items-center justify-center hover:scale-105 active:scale-95"
                         data-id="${dish.id}"
                         title="Quản lý món này trong Thực đơn">
                         <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>

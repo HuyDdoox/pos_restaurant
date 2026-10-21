@@ -1359,19 +1359,19 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
     }
     
     const btnToggleAction = item.status === 'Archived' 
-        ? `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Mở lại món ${item.name}"><i class="fa-solid fa-eye text-xs"></i></button>`
-        : `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Ẩn món ${item.name}"><i class="fa-solid fa-eye-slash text-xs"></i></button>`;
+        ? `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Mở lại món ${item.name}"><i class="fa-solid fa-eye text-xs"></i></button>`
+        : `<button data-id="${item.id}" data-status="${item.status}" class="btn-toggle-menu-status w-8 h-8 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Ẩn món ${item.name}"><i class="fa-solid fa-eye-slash text-xs"></i></button>`;
 
     const actionHtml = `
         <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
-            ${canUpdate ? `<button data-id="${item.id}" class="btn-edit-price w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa món ${item.name}"><i class="fa-solid fa-pen text-xs"></i></button>` : ''}
+            ${canUpdate ? `<button data-id="${item.id}" class="btn-edit-price w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa món ${item.name}"><i class="fa-solid fa-pen text-xs"></i></button>` : ''}
             ${canUpdate ? btnToggleAction : ''}
         </div>
     `;
 
     const variantConfigBtn = item.is_combo 
-        ? `<button data-id="${item.id}" class="btn-view-combo-details px-3 py-1.5 rounded-xl border border-amber-500/60 bg-amber-500/10 text-amber-400 text-xs font-bold hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center gap-1.5 cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95" title="Xem và sửa món thành phần trong Combo"><i class="fa-solid fa-boxes-stacked text-xs"></i><span>Món (${item.combo_items ? item.combo_items.length : 0})</span></button>`
-        : `<button data-id="${item.id}" data-name="${item.name}" class="btn-config-variants px-3 py-1.5 rounded-xl border border-orange-500/60 bg-orange-500/10 text-orange-400 text-xs font-bold hover:bg-orange-500 hover:text-white transition-all shadow-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95" title="Cấu hình biến thể cho ${item.name}"><i class="fa-solid fa-sliders text-xs mr-1"></i>Cấu hình</button>`;
+        ? `<button data-id="${item.id}" class="btn-view-combo-details px-3 py-1.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-700 text-xs font-bold hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center gap-1.5 cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95" title="Xem và sửa món thành phần trong Combo"><i class="fa-solid fa-boxes-stacked text-xs"></i><span>Món (${item.combo_items ? item.combo_items.length : 0})</span></button>`
+        : `<button data-id="${item.id}" data-name="${item.name}" class="btn-config-variants px-3 py-1.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-700 text-xs font-bold hover:bg-orange-500 hover:text-white transition-all shadow-sm whitespace-nowrap cursor-pointer hover:scale-105 active:scale-95" title="Cấu hình biến thể cho ${item.name}"><i class="fa-solid fa-sliders text-xs mr-1"></i>Cấu hình</button>`;
     
     let tagsHtml = '';
     if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
@@ -1431,21 +1431,21 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
     }
 
     return `
-        <tr class="hover:bg-slate-700/10 border-b border-slate-800/60">
+        <tr class="hover:bg-slate-50 border-b border-slate-200">
             <td class="px-6 py-4 whitespace-nowrap">
-                <img src="${item.image || 'https://placehold.co/150x150/orange/white?text=Food'}" alt="${item.name}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-700 bg-slate-800">
+                <img src="${item.image || 'https://placehold.co/150x150/orange/white?text=Food'}" alt="${item.name}" loading="lazy" decoding="async" class="w-12 h-12 rounded-xl object-cover border border-slate-200 bg-slate-100">
             </td>
-            <td class="px-6 py-4 font-bold text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">
                 <div class="flex items-center gap-2">
-                    <span class="whitespace-nowrap text-sm text-white">${item.name}</span>
+                    <span class="whitespace-nowrap text-sm text-slate-900 font-bold">${item.name}</span>
                 </div>
-                ${item.serving_size ? `<p class="text-[11px] text-slate-400 font-medium mt-0.5 whitespace-nowrap"><i class="fa-solid fa-users text-[10px] mr-1 text-slate-500"></i>${item.serving_size}</p>` : ''}
+                ${item.serving_size ? `<p class="text-[11px] text-slate-500 font-medium mt-0.5 whitespace-nowrap"><i class="fa-solid fa-users text-[10px] mr-1 text-slate-400"></i>${item.serving_size}</p>` : ''}
                 ${tagsHtml}
             </td>
             <td class="px-4 py-4 text-center whitespace-nowrap">
                 ${categoryCellHtml}
             </td>
-            <td class="px-6 py-4 text-orange-400 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>
+            <td class="px-6 py-4 text-orange-600 font-black whitespace-nowrap">${item.base_price.toLocaleString('vi-VN')} đ</td>
             <td class="px-6 py-4 whitespace-nowrap">${variantConfigBtn}</td>
             <td class="px-6 py-4 whitespace-nowrap">${statusHtml}</td>
             <td class="px-6 py-4 text-right whitespace-nowrap">${actionHtml}</td>

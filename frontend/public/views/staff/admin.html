@@ -527,21 +527,23 @@
                             <h3 class="font-black text-slate-900" id="report-top-title">Top món bán chạy</h3>
                             <span id="report-top-badge" class="text-xs text-orange-700 font-bold bg-orange-100 border border-orange-200 px-3 py-1 rounded-lg">Toàn thời gian</span>
                         </div>
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="border-b border-slate-200 bg-slate-50/50">
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">#</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tên món</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Danh mục</th>
-                                    <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Số lượng</th>
-                                    <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Doanh thu</th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tỷ lệ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="report-top-items-body" class="divide-y divide-slate-100 text-slate-800">
-                                <!-- Rendered dynamically by admin_reports.ts -->
-                            </tbody>
-                        </table>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-200 bg-slate-50/50">
+                                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">#</th>
+                                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tên món</th>
+                                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Danh mục</th>
+                                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Số lượng</th>
+                                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Doanh thu</th>
+                                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tỷ lệ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report-top-items-body" class="divide-y divide-slate-100 text-slate-800">
+                                    <!-- Rendered dynamically by admin_reports.ts -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -678,30 +680,31 @@
                     </div>
                 </div>
 
+                <!-- Thanh tìm kiếm & Sắp xếp P&L -->
+                <div class="admin-sticky-filter flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h3 class="text-base font-black text-slate-900 whitespace-nowrap">Phân tích Lợi nhuận theo Món ăn</h3>
+                            <span id="admin-pnl-active-sort-indicator" class="hidden text-xs px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-200 font-bold items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-arrow-down-wide-short"></i> <span id="admin-pnl-active-sort-text">Đang xếp: Doanh thu cao nhất</span>
+                                <button id="btn-admin-pnl-reset-sort" class="text-slate-400 hover:text-slate-600 p-0.5 transition-colors cursor-pointer" title="Đặt lại mặc định">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-0.5">Theo dõi giá vốn nguyên liệu và tỷ suất lợi nhuận biên của từng món</p>
+                    </div>
+                    <div class="relative w-full md:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="admin-pnl-search-dish" placeholder="Tìm tên món ăn..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:border-orange-500 font-medium">
+                    </div>
+                </div>
+
                 <!-- Bảng Phân Tích Lợi Nhuận Từng Món (Dish-level P&L Breakdown) -->
                 <div id="admin-pnl-table-section" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                    <div class="p-6 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <div class="flex flex-wrap items-center gap-3">
-                                <h3 class="text-lg font-black text-slate-900 whitespace-nowrap">Phân tích Chi tiết Lợi nhuận theo Món ăn</h3>
-                                <span id="admin-pnl-active-sort-indicator" class="hidden text-xs px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-200 font-bold items-center gap-2 whitespace-nowrap">
-                                    <i class="fa-solid fa-arrow-down-wide-short"></i> <span id="admin-pnl-active-sort-text">Đang xếp: Doanh thu cao nhất</span>
-                                    <button id="btn-admin-pnl-reset-sort" class="text-slate-400 hover:text-slate-600 p-0.5 transition-colors cursor-pointer" title="Đặt lại mặc định">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-0.5">Theo dõi giá vốn nguyên liệu và tỷ suất lợi nhuận biên của từng món</p>
-                        </div>
-                        <div class="relative w-full md:w-64">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="text" id="admin-pnl-search-dish" placeholder="Tìm tên món ăn..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-800 focus:bg-white focus:outline-none focus:border-orange-500 font-medium">
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left text-xs min-w-[1000px]">
-                            <thead class="bg-slate-50 text-slate-500 uppercase font-bold tracking-wider border-b border-slate-200 select-none">
+                            <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 text-slate-500 uppercase font-bold tracking-wider border-b border-slate-200 select-none">
                                 <tr>
                                     <th class="py-3.5 px-4 whitespace-nowrap min-w-[170px]">Món ăn</th>
                                     <th class="py-3.5 px-3 whitespace-nowrap min-w-[90px]">Danh mục</th>
@@ -1029,23 +1032,25 @@
                 </div>
                 <div class="space-y-6">
                     <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
-                        <table class="w-full text-left text-sm">
-                            <thead
-                                class="admin-sticky-thead text-slate-500 text-xs font-bold uppercase border-b border-slate-200 bg-slate-50">
-                                <tr>
-                                    <th class="px-6 py-4 whitespace-nowrap">Ảnh</th>
-                                    <th class="px-6 py-4 whitespace-nowrap">Tên món</th>
-                                    <th class="px-4 py-4 text-center whitespace-nowrap">Danh mục</th>
-                                    <th class="px-6 py-4 whitespace-nowrap">Giá bán</th>
-                                    <th class="px-6 py-4 whitespace-nowrap">Biến thể</th>
-                                    <th class="px-6 py-4 whitespace-nowrap">Trạng thái</th>
-                                    <th class="px-6 py-4 text-right whitespace-nowrap">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody id="menu-table-body" class="text-slate-800 font-bold divide-y divide-slate-100 bg-white">
-                                <!-- Được render từ API -->
-                            </tbody>
-                        </table>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-sm">
+                                <thead
+                                    class="admin-sticky-thead text-slate-500 text-xs font-bold uppercase border-b border-slate-200 bg-slate-50">
+                                    <tr>
+                                        <th class="px-6 py-4 whitespace-nowrap">Ảnh</th>
+                                        <th class="px-6 py-4 whitespace-nowrap">Tên món</th>
+                                        <th class="px-4 py-4 text-center whitespace-nowrap">Danh mục</th>
+                                        <th class="px-6 py-4 whitespace-nowrap">Giá bán</th>
+                                        <th class="px-6 py-4 whitespace-nowrap">Biến thể</th>
+                                        <th class="px-6 py-4 whitespace-nowrap">Trạng thái</th>
+                                        <th class="px-6 py-4 text-right whitespace-nowrap">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menu-table-body" class="text-slate-800 font-bold divide-y divide-slate-100 bg-white">
+                                    <!-- Được render từ API -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

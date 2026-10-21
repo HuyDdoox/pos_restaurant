@@ -320,22 +320,22 @@ export const updateAdminPnlReport = async () => {
         }
 
         tbodyHtml += `
-            <tr class="hover:bg-slate-800/60 transition-colors">
+            <tr class="hover:bg-slate-50 transition-colors">
                 <td class="py-3 px-4 whitespace-nowrap">
-                    <div class="font-bold text-white text-xs whitespace-nowrap">${row.name}</div>
+                    <div class="font-bold text-slate-900 text-xs whitespace-nowrap">${row.name}</div>
                     <div class="text-[10px] text-slate-500 font-mono whitespace-nowrap">#${row.id}</div>
                 </td>
-                <td class="py-3 px-3 text-slate-400 text-xs whitespace-nowrap">${row.categoryName}</td>
-                <td class="py-3 px-3 text-right font-mono text-slate-200 text-xs whitespace-nowrap">${formatMoney(row.price)}&nbsp;đ</td>
-                <td class="py-3 px-3 text-right font-mono text-rose-400 text-xs whitespace-nowrap">${formatMoney(row.cogs)}&nbsp;đ</td>
-                <td class="py-3 px-3 text-right font-mono text-emerald-400 text-xs whitespace-nowrap font-bold">${formatMoney(row.unitProfit)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-slate-600 text-xs whitespace-nowrap">${row.categoryName}</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-800 text-xs whitespace-nowrap">${formatMoney(row.price)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-right font-mono text-rose-600 text-xs whitespace-nowrap">${formatMoney(row.cogs)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-right font-mono text-emerald-700 text-xs whitespace-nowrap font-bold">${formatMoney(row.unitProfit)}&nbsp;đ</td>
                 <td class="py-3 px-3 text-center whitespace-nowrap font-mono">
-                    <span class="px-2 py-0.5 rounded bg-slate-800 text-white font-bold text-xs">${row.soldQty}</span>
+                    <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200">${row.soldQty}</span>
                 </td>
-                <td class="py-3 px-3 text-right font-mono font-bold text-white text-xs whitespace-nowrap">${formatMoney(row.totalRevenue)}&nbsp;đ</td>
-                <td class="py-3 px-3 text-right font-mono text-slate-400 text-xs whitespace-nowrap">${formatMoney(row.totalCogs)}&nbsp;đ</td>
-                <td class="py-3 px-3 text-right font-mono font-black text-emerald-400 text-xs whitespace-nowrap">${formatMoney(row.grossProfit)}&nbsp;đ</td>
-                <td class="py-3 px-3 text-center font-mono font-bold text-xs text-orange-400 whitespace-nowrap">${row.marginPercent.toFixed(1)}%</td>
+                <td class="py-3 px-3 text-right font-mono font-bold text-slate-900 text-xs whitespace-nowrap">${formatMoney(row.totalRevenue)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-right font-mono text-slate-600 text-xs whitespace-nowrap">${formatMoney(row.totalCogs)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-right font-mono font-black text-emerald-700 text-xs whitespace-nowrap">${formatMoney(row.grossProfit)}&nbsp;đ</td>
+                <td class="py-3 px-3 text-center font-mono font-bold text-xs text-orange-600 whitespace-nowrap">${row.marginPercent.toFixed(1)}%</td>
                 <td class="py-3 px-4 text-center whitespace-nowrap">${marginBadge}</td>
             </tr>
         `;
@@ -358,16 +358,16 @@ export const updateAdminPnlReport = async () => {
             topProfitHtml += `
                 <div>
                     <div class="flex justify-between items-center text-xs mb-1">
-                        <span class="font-bold text-white flex items-center gap-2 whitespace-nowrap truncate max-w-[200px]">
-                            <span class="w-5 h-5 rounded-full bg-slate-800 text-amber-400 font-black text-[10px] flex items-center justify-center shrink-0">${index + 1}</span>
+                        <span class="font-bold text-slate-900 flex items-center gap-2 whitespace-nowrap truncate max-w-[200px]">
+                            <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 font-black text-[10px] flex items-center justify-center shrink-0 border border-amber-200">${index + 1}</span>
                             ${item.name}
                         </span>
                         <div class="text-right whitespace-nowrap font-mono">
-                            <span class="font-black text-emerald-400 text-xs">${formatMoney(item.grossProfit)}&nbsp;đ</span>
-                            <span class="text-[10px] text-slate-400 ml-1">(${item.soldQty} phần)</span>
+                            <span class="font-black text-emerald-700 text-xs">${formatMoney(item.grossProfit)}&nbsp;đ</span>
+                            <span class="text-[10px] text-slate-500 ml-1">(${item.soldQty} phần)</span>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-gradient-to-r from-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
                 </div>
@@ -387,12 +387,12 @@ export const updateAdminPnlReport = async () => {
             topMarginHtml += `
                 <div>
                     <div class="flex justify-between items-center text-xs mb-1">
-                        <span class="font-bold text-white flex items-center gap-2 whitespace-nowrap truncate max-w-[200px]">
-                            <span class="w-5 h-5 rounded-full bg-slate-800 text-emerald-400 font-black text-[10px] flex items-center justify-center shrink-0">${index + 1}</span>
+                        <span class="font-bold text-slate-900 flex items-center gap-2 whitespace-nowrap truncate max-w-[200px]">
+                            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 font-black text-[10px] flex items-center justify-center shrink-0 border border-emerald-200">${index + 1}</span>
                             ${item.name}
                         </span>
                         <div class="text-right whitespace-nowrap font-mono">
-                            <span class="font-black text-orange-400 text-xs">${item.marginPercent.toFixed(1)}%</span>
+                            <span class="font-black text-orange-600 text-xs">${item.marginPercent.toFixed(1)}%</span>
                             <span class="text-[10px] text-slate-400 ml-1">COGS: ${formatMoney(item.cogs)}&nbsp;đ</span>
                         </div>
                     </div>

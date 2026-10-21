@@ -550,19 +550,19 @@ function renderIngredientsTable(data: any[] = inventoryIngredients) {
     tbody.innerHTML = data.map(ing => {
         const fmt = formatQuantityForDisplay(ing.stock_quantity, ing.unit);
         return `
-        <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/60">
-            <td class="px-6 py-4 text-slate-400 whitespace-nowrap">#${ing.id}</td>
-            <td class="px-6 py-4 font-bold text-white editable-ingredient-cell cursor-pointer group whitespace-nowrap" data-id="${ing.id}" data-field="name" data-value="${ing.name}" title="Nhấn đúp để sửa tên">
-                <span class="border-b border-transparent group-hover:border-slate-500 border-dashed pb-0.5 whitespace-nowrap">${ing.name}</span>
-                ${(ing.status === 'Inactive' || ing.status === 'Archived') ? '<span class="ml-2 bg-slate-500/20 text-slate-400 px-2 py-0.5 rounded-full text-[10px] uppercase whitespace-nowrap">Ngừng dùng</span>' : ''}
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+            <td class="px-6 py-4 text-slate-500 font-mono whitespace-nowrap">#${ing.id}</td>
+            <td class="px-6 py-4 font-bold text-slate-900 editable-ingredient-cell cursor-pointer group whitespace-nowrap" data-id="${ing.id}" data-field="name" data-value="${ing.name}" title="Nhấn đúp để sửa tên">
+                <span class="border-b border-transparent group-hover:border-slate-400 border-dashed pb-0.5 whitespace-nowrap">${ing.name}</span>
+                ${(ing.status === 'Inactive' || ing.status === 'Archived') ? '<span class="ml-2 bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold whitespace-nowrap border border-slate-200">Ngừng dùng</span>' : ''}
             </td>
             <td class="px-6 py-4 text-right whitespace-nowrap">
-                <span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-lg font-black border border-orange-500/20 whitespace-nowrap">
+                <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-lg font-black border border-orange-200 whitespace-nowrap">
                     ${fmt.displayQty}
                 </span>
             </td>
-            <td class="px-6 py-4 text-slate-400 font-bold whitespace-nowrap ${fmt.displayUnit === 'kg' || fmt.displayUnit === 'lít' ? 'text-orange-400' : ''}">${fmt.displayUnit}</td>
-            <td class="px-6 py-4 text-right text-emerald-400 font-bold editable-ingredient-cell cursor-pointer group whitespace-nowrap" data-id="${ing.id}" data-field="cost_per_unit" data-value="${ing.cost_per_unit || 0}" title="Nhấn đúp để sửa giá">
+            <td class="px-6 py-4 text-slate-600 font-bold whitespace-nowrap ${fmt.displayUnit === 'kg' || fmt.displayUnit === 'lít' ? 'text-orange-600' : ''}">${fmt.displayUnit}</td>
+            <td class="px-6 py-4 text-right text-emerald-700 font-bold editable-ingredient-cell cursor-pointer group whitespace-nowrap" data-id="${ing.id}" data-field="cost_per_unit" data-value="${ing.cost_per_unit || 0}" title="Nhấn đúp để sửa giá">
                 <span class="border-b border-transparent group-hover:border-emerald-500/50 border-dashed pb-0.5 whitespace-nowrap">${ing.cost_per_unit ? ing.cost_per_unit.toLocaleString('vi-VN') + ' đ' : '0 đ'}</span>
             </td>
             <td class="px-6 py-4 text-right whitespace-nowrap">
@@ -895,7 +895,7 @@ async function loadRecipeForMenu(menuItemId: string) {
             const stockQty = ing ? ing.stock_quantity : (r._populatedIng ? r._populatedIng.stock_quantity : 0);
             
             const isLowStock = stockQty < r.quantity_required;
-            const ingNameClass = isLowStock ? 'text-red-500 font-bold' : 'text-white';
+            const ingNameClass = isLowStock ? 'text-red-500 font-bold' : 'text-slate-900 font-bold';
             const lowStockBadge = isLowStock ? `<span class="text-[9px] text-red-500 bg-red-500/10 px-1 py-0.5 rounded border border-red-500/20 ml-2 animate-pulse" title="Tồn kho hiện tại không đủ để làm 1 phần món này">Thiếu tồn kho</span>` : '';
             
             const costForThis = ingCost * r.quantity_required;
@@ -911,9 +911,9 @@ async function loadRecipeForMenu(menuItemId: string) {
             }
             
             return `
-                <tr class="hover:bg-slate-700/20">
+                <tr class="hover:bg-slate-50 transition-colors">
                     <td class="py-3 px-2 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded bg-slate-700 flex items-center justify-center text-slate-400 text-xs font-black shrink-0">
+                        <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 text-xs font-black shrink-0 border border-slate-200">
                             ${ingName.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -922,7 +922,7 @@ async function loadRecipeForMenu(menuItemId: string) {
                         </div>
                     </td>
                     <td class="py-3 px-2 text-right editable-recipe-cell cursor-pointer relative group" data-id="${r.id}" data-qty="${displayQty}" data-unit="${displayUnit}" data-base-unit="${ingUnit}" title="Double click để sửa">
-                        <span class="font-black text-orange-400 group-hover:underline decoration-orange-400/50 underline-offset-2 recipe-qty-display">${displayQty}</span>
+                        <span class="font-black text-orange-600 group-hover:underline decoration-orange-500/50 underline-offset-2 recipe-qty-display">${displayQty}</span>
                         <span class="text-slate-400 ml-1 font-bold recipe-unit-display ${displayUnit === 'kg' || displayUnit === 'lít' ? 'text-orange-400' : ''}">${displayUnit}</span>
                     </td>
                     <td class="py-3 px-2 text-right whitespace-nowrap">

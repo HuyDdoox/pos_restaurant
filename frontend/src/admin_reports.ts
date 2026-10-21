@@ -241,10 +241,10 @@ const renderBreakdowns = (orders: any[], allDetails: any[], menuItems: any[], ca
                 return `
                     <div>
                         <div class="flex justify-between text-sm font-bold mb-1.5">
-                            <span class="text-slate-300">${catName}</span>
-                            <span class="text-white">${pct}% (${rev.toLocaleString('vi-VN')} đ)</span>
+                            <span class="text-slate-700">${catName}</span>
+                            <span class="text-slate-900 font-bold">${pct}% (${rev.toLocaleString('vi-VN')} đ)</span>
                         </div>
-                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
                             <div class="${color} h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
                         </div>
                     </div>
@@ -270,9 +270,9 @@ const renderBreakdowns = (orders: any[], allDetails: any[], menuItems: any[], ca
         const pctToi = total > 0 ? Math.round((countToi / total) * 100) : 0;
 
         shiftContainer.innerHTML = `
-            <div class="flex justify-between text-sm"><span class="text-slate-400 font-bold">Ca sáng (8–14h)</span><span class="text-white font-black">${pctSang}% (${countSang} đơn)</span></div>
-            <div class="flex justify-between text-sm"><span class="text-slate-400 font-bold">Ca chiều (14–20h)</span><span class="text-white font-black">${pctChieu}% (${countChieu} đơn)</span></div>
-            <div class="flex justify-between text-sm"><span class="text-slate-400 font-bold">Ca tối (20–22h)</span><span class="text-white font-black">${pctToi}% (${countToi} đơn)</span></div>
+            <div class="flex justify-between text-sm"><span class="text-slate-600 font-bold">Ca sáng (8–14h)</span><span class="text-slate-900 font-black">${pctSang}% (${countSang} đơn)</span></div>
+            <div class="flex justify-between text-sm"><span class="text-slate-600 font-bold">Ca chiều (14–20h)</span><span class="text-slate-900 font-black">${pctChieu}% (${countChieu} đơn)</span></div>
+            <div class="flex justify-between text-sm"><span class="text-slate-600 font-bold">Ca tối (20–22h)</span><span class="text-slate-900 font-black">${pctToi}% (${countToi} đơn)</span></div>
         `;
     }
 };
@@ -345,14 +345,14 @@ const renderTopSellingItems = (orders: any[], allDetails: any[], menuItems: any[
         }
 
         return `
-            <tr class="hover:bg-slate-700/10 transition-colors border-b border-slate-700/40">
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
                 <td class="px-6 py-4 whitespace-nowrap">${badge}</td>
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">${it.name}</td>
-                <td class="px-6 py-4 text-slate-400 whitespace-nowrap">${it.catName}</td>
-                <td class="px-6 py-4 text-right font-black text-white whitespace-nowrap">${it.quantity}</td>
-                <td class="px-6 py-4 text-right font-black text-orange-400 whitespace-nowrap">${it.revenue.toLocaleString('vi-VN')} đ</td>
+                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${it.name}</td>
+                <td class="px-6 py-4 text-slate-600 whitespace-nowrap">${it.catName}</td>
+                <td class="px-6 py-4 text-right font-black text-slate-900 whitespace-nowrap">${it.quantity}</td>
+                <td class="px-6 py-4 text-right font-black text-orange-600 whitespace-nowrap">${it.revenue.toLocaleString('vi-VN')} đ</td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="w-24 bg-slate-700 rounded-full h-2">
+                    <div class="w-24 bg-slate-200 rounded-full h-2">
                         <div class="${barColor} h-2 rounded-full" style="width: ${pct}%"></div>
                     </div>
                 </td>

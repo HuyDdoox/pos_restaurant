@@ -126,30 +126,30 @@ const renderVouchersTable = () => {
         const usageStr = `${v.usedCount || 0} / ${v.usageLimit ? v.usageLimit : '∞'}`;
 
         html += `
-            <tr class="hover:bg-slate-700/30 transition-colors border-b border-slate-700/60">
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
                 <td class="p-4 whitespace-nowrap">
-                    <span class="font-mono font-black text-sm px-2.5 py-1 bg-orange-500/20 text-orange-400 rounded-lg border border-orange-500/30 whitespace-nowrap">
+                    <span class="font-mono font-black text-sm px-2.5 py-1 bg-orange-50 text-orange-700 rounded-lg border border-orange-200 whitespace-nowrap">
                         ${v.code}
                     </span>
                 </td>
-                <td class="p-4 font-bold text-white whitespace-nowrap">${v.name}</td>
+                <td class="p-4 font-bold text-slate-900 whitespace-nowrap">${v.name}</td>
                 <td class="p-4 whitespace-nowrap">
-                    <div class="font-black text-emerald-400 whitespace-nowrap">${discountStr}<span class="text-xs text-slate-400 font-normal">${maxStr}</span></div>
+                    <div class="font-black text-emerald-700 whitespace-nowrap">${discountStr}<span class="text-xs text-slate-500 font-normal">${maxStr}</span></div>
                     <div class="text-xs text-slate-500 whitespace-nowrap">${minOrderStr}</div>
                 </td>
-                <td class="p-4 text-xs font-mono text-slate-300 whitespace-nowrap">${dateRange}</td>
-                <td class="p-4 text-xs font-bold text-slate-300 font-mono whitespace-nowrap">${usageStr}</td>
+                <td class="p-4 text-xs font-mono text-slate-600 whitespace-nowrap">${dateRange}</td>
+                <td class="p-4 text-xs font-bold text-slate-700 font-mono whitespace-nowrap">${usageStr}</td>
                 <td class="p-4 whitespace-nowrap">
-                    <button data-id="${v.id}" data-status="${v.status}" class="btn-toggle-voucher-status px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${isActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-400 border border-slate-600'}">
+                    <button data-id="${v.id}" data-status="${v.status}" class="btn-toggle-voucher-status px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${isActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200'}">
                         ${isActive ? '🟢 Đang áp dụng' : '⚪ Tạm ngưng'}
                     </button>
                 </td>
                 <td class="p-4 text-right whitespace-nowrap">
                     <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
-                        <button data-id="${v.id}" class="btn-edit-voucher w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa voucher ${v.code}">
+                        <button data-id="${v.id}" class="btn-edit-voucher w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa voucher ${v.code}">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
-                        <button data-id="${v.id}" data-code="${v.code}" class="btn-delete-voucher w-8 h-8 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng voucher ${v.code}">
+                        <button data-id="${v.id}" data-code="${v.code}" class="btn-delete-voucher w-8 h-8 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng voucher ${v.code}">
                             <i class="fa-solid fa-eye-slash text-xs"></i>
                         </button>
                     </div>
@@ -385,29 +385,29 @@ const renderCustomersTable = () => {
         const points = Number(c.points || 0);
 
         html += `
-            <tr class="hover:bg-slate-700/30 transition-colors border-b border-slate-700/60">
-                <td class="p-4 font-mono font-bold text-xs text-slate-400">${c.id}</td>
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+                <td class="p-4 font-mono font-bold text-xs text-slate-500">${c.id}</td>
                 <td class="p-4 whitespace-nowrap">
-                    <div class="font-bold text-white text-base whitespace-nowrap">${c.name}</div>
-                    <div class="text-xs text-slate-400 whitespace-nowrap">${c.email || 'Chưa có email'}</div>
+                    <div class="font-bold text-slate-900 text-base whitespace-nowrap">${c.name}</div>
+                    <div class="text-xs text-slate-500 whitespace-nowrap">${c.email || 'Chưa có email'}</div>
                 </td>
-                <td class="p-4 font-mono font-bold text-sm text-slate-300 whitespace-nowrap">${c.phone}</td>
+                <td class="p-4 font-mono font-bold text-sm text-slate-700 whitespace-nowrap">${c.phone}</td>
                 <td class="p-4 whitespace-nowrap">${getTierBadge(c.tier)}</td>
                 <td class="p-4 whitespace-nowrap">
                     <div class="flex items-center gap-2 whitespace-nowrap">
-                        <span class="font-black text-amber-400 text-base font-mono whitespace-nowrap">${points.toLocaleString('vi-VN')} điểm</span>
-                        <button data-id="${c.id}" class="btn-adjust-points w-8 h-8 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Cộng / Trừ điểm cho ${c.name}">
+                        <span class="font-black text-amber-700 text-base font-mono whitespace-nowrap">${points.toLocaleString('vi-VN')} điểm</span>
+                        <button data-id="${c.id}" class="btn-adjust-points w-8 h-8 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Cộng / Trừ điểm cho ${c.name}">
                             <i class="fa-solid fa-sliders text-xs"></i>
                         </button>
                     </div>
                 </td>
-                <td class="p-4 font-bold text-emerald-400 font-mono whitespace-nowrap">${spentStr}</td>
+                <td class="p-4 font-bold text-emerald-700 font-mono whitespace-nowrap">${spentStr}</td>
                 <td class="p-4 text-right whitespace-nowrap">
                     <div class="flex items-center justify-end gap-1.5 whitespace-nowrap">
-                        <button data-id="${c.id}" class="btn-edit-customer w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa hội viên ${c.name}">
+                        <button data-id="${c.id}" class="btn-edit-customer w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Chỉnh sửa hội viên ${c.name}">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
-                        <button data-id="${c.id}" data-name="${c.name}" class="btn-delete-customer w-8 h-8 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng hội viên ${c.name}">
+                        <button data-id="${c.id}" data-name="${c.name}" class="btn-delete-customer w-8 h-8 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Tạm ngưng hội viên ${c.name}">
                             <i class="fa-solid fa-user-slash text-xs"></i>
                         </button>
                     </div>
@@ -546,8 +546,8 @@ export const initAdminPromotions = () => {
 
     btnTabVouchers?.addEventListener('click', () => {
         currentPromotionsTab = 'vouchers';
-        btnTabVouchers.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-all';
-        btnTabVip!.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition-all';
+        btnTabVouchers.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-all cursor-pointer';
+        btnTabVip!.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-transparent text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
         viewVouchers?.classList.remove('hidden');
         viewVip?.classList.add('hidden');
         loadVouchers();
@@ -555,8 +555,8 @@ export const initAdminPromotions = () => {
 
     btnTabVip?.addEventListener('click', () => {
         currentPromotionsTab = 'vip';
-        btnTabVip.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-all';
-        btnTabVouchers!.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition-all';
+        btnTabVip.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-all cursor-pointer';
+        btnTabVouchers!.className = 'px-5 py-2.5 rounded-xl font-bold text-sm bg-transparent text-slate-600 hover:text-slate-900 transition-all cursor-pointer';
         viewVip?.classList.remove('hidden');
         viewVouchers?.classList.add('hidden');
         loadCustomers();

@@ -393,13 +393,13 @@ const renderAuditLogsTable = () => {
         const timeStr = l.timestamp ? new Date(l.timestamp).toLocaleString('vi-VN') : 'Vừa xong';
 
         html += `
-            <tr class="hover:bg-slate-700/30 transition-colors border-b border-slate-700/60 text-xs">
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200 text-xs">
                 <td class="p-4 text-center">${getSeverityIcon(l.severity)}</td>
-                <td class="p-4 font-mono text-slate-400 whitespace-nowrap">${timeStr}</td>
+                <td class="p-4 font-mono text-slate-500 whitespace-nowrap">${timeStr}</td>
                 <td class="p-4 whitespace-nowrap">${getCategoryBadge(l.category)}</td>
-                <td class="p-4 font-bold text-slate-200 whitespace-nowrap">${l.actor || 'Hệ thống'}</td>
-                <td class="p-4 font-black text-white whitespace-nowrap">${l.action}</td>
-                <td class="p-4 text-slate-300 leading-relaxed">${l.detail}</td>
+                <td class="p-4 font-bold text-slate-700 whitespace-nowrap">${l.actor || 'Hệ thống'}</td>
+                <td class="p-4 font-bold text-slate-900 whitespace-nowrap">${l.action}</td>
+                <td class="p-4 text-slate-600 leading-relaxed">${l.detail}</td>
             </tr>
         `;
     });
@@ -481,7 +481,7 @@ export const initAdminAuditOps = () => {
             currentAuditCategory = cat;
 
             document.querySelectorAll('.btn-audit-cat-filter').forEach(b => {
-                b.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:text-white border border-slate-700';
+                b.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200 cursor-pointer';
             });
             target.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20';
 
@@ -511,7 +511,7 @@ export const initAdminAuditOps = () => {
                 if (bCat === currentAuditCategory) {
                     b.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-orange-500 text-white shadow-md shadow-orange-500/20';
                 } else {
-                    b.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:text-white border border-slate-700';
+                    b.className = 'btn-audit-cat-filter px-4 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200 border border-slate-200 cursor-pointer';
                 }
             });
 

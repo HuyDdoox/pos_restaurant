@@ -212,13 +212,13 @@ function renderLowStockAlerts() {
     }
 
     tbody.innerHTML = filtered.map(ing => `
-        <tr class="hover:bg-slate-800/50 transition-colors border-b border-slate-800/50">
-            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">#${ing.id}</td>
-            <td class="px-6 py-4 font-bold text-white whitespace-nowrap">${ing.name}</td>
-            <td class="px-6 py-4 text-right text-xl font-black whitespace-nowrap ${Number(ing.stock_quantity) <= 0 ? 'text-rose-500' : 'text-red-400'}">${ing.stock_quantity}</td>
-            <td class="px-6 py-4 text-slate-400 font-bold whitespace-nowrap">${ing.unit}</td>
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+            <td class="px-6 py-4 text-slate-500 font-mono whitespace-nowrap">#${ing.id}</td>
+            <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${ing.name}</td>
+            <td class="px-6 py-4 text-right text-xl font-black whitespace-nowrap ${Number(ing.stock_quantity) <= 0 ? 'text-rose-600' : 'text-red-600'}">${ing.stock_quantity}</td>
+            <td class="px-6 py-4 text-slate-600 font-bold whitespace-nowrap">${ing.unit}</td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-                <span class="px-3 py-1 ${Number(ing.stock_quantity) <= 0 ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-red-500/10 text-red-500 border border-red-500/20'} rounded-lg text-xs font-black uppercase tracking-wider whitespace-nowrap">
+                <span class="px-3 py-1 ${Number(ing.stock_quantity) <= 0 ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-red-50 text-red-700 border border-red-200'} rounded-lg text-xs font-black uppercase tracking-wider whitespace-nowrap">
                     ${Number(ing.stock_quantity) <= 0 ? 'Hết hàng' : 'Cần nhập gấp'}
                 </span>
             </td>
@@ -316,18 +316,18 @@ export function renderLossReportsTable() {
     }
 
     const html = filtered.map((r: any) => `
-            <tr class="hover:bg-slate-800/50 transition-colors border-b border-slate-800/50">
-                <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">${new Date(r.createdAt).toLocaleDateString('vi-VN')}</td>
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">${r.ingredientName}</td>
-                <td class="px-6 py-4 text-right text-slate-400 whitespace-nowrap">${r.systemStock} ${r.unit}</td>
-                <td class="px-6 py-4 text-right font-bold text-white whitespace-nowrap">${r.actualStock} ${r.unit}</td>
-                <td class="px-6 py-4 text-right whitespace-nowrap ${r.lossAmount > 0 ? 'text-red-400 font-black' : 'text-emerald-400 font-black'}">${r.lossAmount > 0 ? '-' : '+'}${Math.abs(r.lossAmount)} ${r.unit}</td>
-                <td class="px-6 py-4 text-right text-orange-400 font-bold whitespace-nowrap">${r.lossCost ? r.lossCost.toLocaleString('vi-VN') + ' đ' : '0 đ'}</td>
-                <td class="px-6 py-4 text-slate-400 text-xs whitespace-nowrap">
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+                <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">${new Date(r.createdAt).toLocaleDateString('vi-VN')}</td>
+                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${r.ingredientName}</td>
+                <td class="px-6 py-4 text-right text-slate-600 whitespace-nowrap">${r.systemStock} ${r.unit}</td>
+                <td class="px-6 py-4 text-right font-bold text-slate-900 whitespace-nowrap">${r.actualStock} ${r.unit}</td>
+                <td class="px-6 py-4 text-right whitespace-nowrap ${r.lossAmount > 0 ? 'text-rose-600 font-black' : 'text-emerald-600 font-black'}">${r.lossAmount > 0 ? '-' : '+'}${Math.abs(r.lossAmount)} ${r.unit}</td>
+                <td class="px-6 py-4 text-right text-orange-600 font-bold whitespace-nowrap">${r.lossCost ? r.lossCost.toLocaleString('vi-VN') + ' đ' : '0 đ'}</td>
+                <td class="px-6 py-4 text-slate-600 text-xs whitespace-nowrap">
                     ${r.reason || 'Kiểm kê định kỳ'}
                 </td>
                 <td class="px-6 py-4 text-center whitespace-nowrap">
-                    ${r.isAbnormal ? '<span class="px-2.5 py-1 bg-red-500/20 text-red-500 rounded text-[10px] font-black uppercase tracking-wider border border-red-500/30 whitespace-nowrap">Vượt định mức</span>' : '<span class="text-slate-500 text-xs">-</span>'}
+                    ${r.isAbnormal ? '<span class="px-2.5 py-1 bg-rose-50 text-rose-700 rounded text-[10px] font-black uppercase tracking-wider border border-rose-200 whitespace-nowrap">Vượt định mức</span>' : '<span class="text-slate-400 text-xs">-</span>'}
                 </td>
             </tr>
         `).join('');

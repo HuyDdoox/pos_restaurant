@@ -214,21 +214,21 @@ const syncRoleTabsUI = (role: string) => {
     tabRoles.querySelectorAll('.tab-role-btn').forEach(el => {
         const r = el.getAttribute('data-role');
         if (r === role) {
-            el.classList.remove('bg-transparent', 'text-slate-400');
+            el.classList.remove('bg-transparent', 'text-slate-600', 'text-slate-400');
             el.classList.add('bg-orange-500', 'text-white', 'shadow-md');
         } else {
             el.classList.remove('bg-orange-500', 'text-white', 'shadow-md');
-            el.classList.add('bg-transparent', 'text-slate-400');
+            el.classList.add('bg-transparent', 'text-slate-600');
         }
     });
 };
 
 const updateCardStyles = () => {
     const cardDefs = [
-        { id: 'card-filter-total', type: 'total', activeBorder: 'border-orange-500 ring-2 ring-orange-500/20 bg-slate-800/90 shadow-lg' },
-        { id: 'card-filter-online', type: 'online', activeBorder: 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-950/20 shadow-lg' },
-        { id: 'card-filter-admin', type: 'admin', activeBorder: 'border-blue-500 ring-2 ring-blue-500/20 bg-blue-950/20 shadow-lg' },
-        { id: 'card-filter-locked', type: 'locked', activeBorder: 'border-rose-500 ring-2 ring-rose-500/20 bg-rose-950/20 shadow-lg' },
+        { id: 'card-filter-total', type: 'total', activeBorder: 'border-orange-500 ring-2 ring-orange-500/20 bg-orange-50/70 shadow-sm' },
+        { id: 'card-filter-online', type: 'online', activeBorder: 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-50/70 shadow-sm' },
+        { id: 'card-filter-admin', type: 'admin', activeBorder: 'border-blue-500 ring-2 ring-blue-500/20 bg-blue-50/70 shadow-sm' },
+        { id: 'card-filter-locked', type: 'locked', activeBorder: 'border-rose-500 ring-2 ring-rose-500/20 bg-rose-50/70 shadow-sm' },
     ];
 
     cardDefs.forEach(c => {
@@ -330,24 +330,24 @@ const createUserRowHtml = (user: IUser): string => {
     const opacityClass = isActive ? '' : 'opacity-50 grayscale-[50%]';
 
     return `
-        <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/50 last:border-0 ${opacityClass}">
+        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200 last:border-0 ${opacityClass}">
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center gap-3">
                     ${roleInitial}
                     <div>
-                        <p class="font-bold text-white whitespace-nowrap">${fullName}</p>
-                        <p class="text-xs text-slate-400 whitespace-nowrap">${userName}</p>
+                        <p class="font-bold text-slate-900 whitespace-nowrap">${fullName}</p>
+                        <p class="text-xs text-slate-500 whitespace-nowrap">${userName}</p>
                     </div>
                 </div>
             </td>
-            <td class="px-6 py-4 font-bold text-slate-300 whitespace-nowrap">${user.id}</td>
+            <td class="px-6 py-4 font-bold text-slate-700 whitespace-nowrap font-mono text-xs">${user.id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td>
-            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Theo ca</td>
-            <td class="px-6 py-4 text-slate-400 font-medium whitespace-nowrap">Vừa xong</td>
+            <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">Theo ca</td>
+            <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">Vừa xong</td>
             <td class="px-6 py-4 text-center whitespace-nowrap">${statusBadge}</td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
                 <button data-id="${user.id}" data-status="${user.status || 'Active'}" 
-                    class="btn-toggle-status w-8 h-8 rounded-xl ${isActive ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'} inline-flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
+                    class="btn-toggle-status w-8 h-8 rounded-xl ${isActive ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200'} inline-flex items-center justify-center transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95" 
                     title="${isActive ? 'Khóa tài khoản ' + fullName : 'Mở khóa tài khoản ' + fullName}">
                     <i class="fa-solid ${isActive ? 'fa-lock' : 'fa-lock-open'} text-xs"></i>
                 </button>
@@ -475,10 +475,10 @@ const updatePaginationInfo = () => {
         }
 
         const isComplete = currentRenderedUsersCount >= total;
-        infoEl.innerHTML = `Đã tải <span class="text-white font-bold">${currentRenderedUsersCount}</span> trên tổng số <span class="text-white font-bold">${total}</span> tài khoản${filterLabel} ${
+        infoEl.innerHTML = `Đã tải <span class="text-slate-900 font-bold">${currentRenderedUsersCount}</span> trên tổng số <span class="text-slate-900 font-bold">${total}</span> tài khoản${filterLabel} ${
             isComplete 
-                ? '<span class="ml-2 text-xs font-semibold text-emerald-400"><i class="fa-solid fa-circle-check text-[11px] mr-1"></i>Đã tải toàn bộ</span>' 
-                : '<span class="ml-2 text-xs font-medium text-slate-400 italic">(Cuộn chuột xuống để tự động tải tiếp)</span>'
+                ? '<span class="ml-2 text-xs font-semibold text-emerald-600"><i class="fa-solid fa-circle-check text-[11px] mr-1"></i>Đã tải toàn bộ</span>' 
+                : '<span class="ml-2 text-xs font-medium text-slate-500 italic">(Cuộn chuột xuống để tự động tải tiếp)</span>'
         }`;
     }
 
@@ -497,7 +497,7 @@ const updatePaginationInfo = () => {
     if (controls) {
         if (currentRenderedUsersCount < total) {
             controls.innerHTML = `
-                <button id="btn-manual-load-more" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95" title="Bấm để tải thêm tài khoản">
+                <button id="btn-manual-load-more" type="button" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200 transition flex items-center gap-1.5 cursor-pointer shadow-sm hover:scale-105 active:scale-95" title="Bấm để tải thêm tài khoản">
                     <i class="fa-solid fa-arrow-down text-[10px]"></i> Tải thêm
                 </button>
             `;
@@ -507,7 +507,7 @@ const updatePaginationInfo = () => {
         } else {
             controls.innerHTML = `
                 <span class="text-xs font-bold text-slate-500 flex items-center gap-1">
-                    <i class="fa-solid fa-check text-emerald-400"></i> Hết danh sách
+                    <i class="fa-solid fa-check text-emerald-600"></i> Hết danh sách
                 </span>
             `;
         }
@@ -516,11 +516,11 @@ const updatePaginationInfo = () => {
 
 const getRoleBadge = (role: string) => {
     switch (role) {
-        case 'Admin': return `<span class="bg-orange-500/20 text-orange-500 px-3 py-1 rounded-full text-xs font-black border border-orange-500/30">Quản trị viên</span>`;
-        case 'Cashier': return `<span class="bg-blue-500/20 text-blue-500 px-3 py-1 rounded-full text-xs font-black border border-blue-500/30">Thu ngân</span>`;
-        case 'Waiter': return `<span class="bg-purple-500/20 text-purple-500 px-3 py-1 rounded-full text-xs font-black border border-purple-500/30">Phục vụ</span>`;
-        case 'Chef': return `<span class="bg-emerald-500/20 text-emerald-500 px-3 py-1 rounded-full text-xs font-black border border-emerald-500/30">Đầu bếp</span>`;
-        default: return `<span class="bg-slate-700 text-slate-400 px-3 py-1 rounded-full text-xs font-black border border-slate-600">Khác</span>`;
+        case 'Admin': return `<span class="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-xs font-black border border-orange-200">Quản trị viên</span>`;
+        case 'Cashier': return `<span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-black border border-blue-200">Thu ngân</span>`;
+        case 'Waiter': return `<span class="bg-purple-50 text-purple-600 px-3 py-1 rounded-full text-xs font-black border border-purple-200">Phục vụ</span>`;
+        case 'Chef': return `<span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-xs font-black border border-emerald-200">Đầu bếp</span>`;
+        default: return `<span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-black border border-slate-300">Khác</span>`;
     }
 };
 
