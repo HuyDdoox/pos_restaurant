@@ -1361,20 +1361,20 @@ const renderTableMap = async () => {
             ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-400 text-amber-950 text-[8px] sm:text-[9px] font-black border border-amber-300 shadow-xs uppercase tracking-tighter leading-none select-none"><i class="fa-solid fa-crown text-[7px] sm:text-[8px]"></i>VIP</span>` 
             : `<span class="w-2.5"></span>`;
 
-        let bgColor = 'bg-emerald-500 text-white border-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:brightness-110';
+        let bgColor = 'bg-white text-emerald-800 border-2 border-emerald-500/50 shadow-xs hover:border-emerald-600 hover:bg-emerald-50/40 hover:shadow-sm';
         let statusText = 'Trống';
         let cursor = 'cursor-pointer';
 
         if (table.status === 'Locked') {
-            bgColor = 'bg-red-500 text-white border-red-600 opacity-70 cursor-not-allowed shadow-[0_0_15px_rgba(239,68,68,0.4)]';
+            bgColor = 'bg-slate-100 text-slate-400 border border-slate-300 opacity-60 cursor-not-allowed';
             statusText = 'Đang gộp';
             cursor = 'cursor-not-allowed';
         } else if (activeOrder || table.status === 'Occupied' || table.status === 'Waiting_Payment') {
             if ((activeOrder && (activeOrder.status === 'Waiting_Payment' || activeOrder.paymentStatus === 'Pending')) || table.status === 'Waiting_Payment') {
-                bgColor = 'bg-amber-500 text-white border-amber-600 shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse hover:brightness-110 transform scale-105 z-10';
+                bgColor = 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-md shadow-amber-400/30 animate-pulse hover:brightness-105 transform scale-105 z-10';
                 statusText = 'Chờ bill';
             } else {
-                bgColor = 'bg-orange-500 text-white border-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.4)] hover:brightness-110 transform scale-105 z-10';
+                bgColor = 'bg-orange-500 text-white border-orange-600 shadow-md shadow-orange-500/30 hover:brightness-105 transform scale-105 z-10';
                 statusText = 'Có khách';
             }
         }
@@ -1382,18 +1382,18 @@ const renderTableMap = async () => {
         const hasRequestedBill = tablesRequestedBill.has(String(tableName)) || tablesRequestedBill.has(String(table.id)) || tablesRequestedBill.has(String(table.tableNumber));
         let rightIndicator = `<span class="w-2.5"></span>`;
         if (hasRequestedBill) {
-            bgColor = 'bg-amber-500 text-white border-amber-600 shadow-[0_0_20px_rgba(245,158,11,0.8)] animate-pulse hover:brightness-110 transform scale-105 z-20';
+            bgColor = 'bg-amber-400 text-slate-950 border-2 border-amber-600 shadow-lg shadow-amber-400/50 animate-pulse hover:brightness-105 transform scale-105 z-20';
             statusText = 'Yêu cầu Bill!';
-            rightIndicator = `<span class="inline-flex items-center gap-0.5 bg-amber-400 text-slate-900 text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shadow border border-white animate-bounce leading-none select-none"><i class="fa-solid fa-receipt text-[7px]"></i>Bill</span>`;
+            rightIndicator = `<span class="inline-flex items-center gap-0.5 bg-rose-500 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shadow border border-white animate-bounce leading-none select-none"><i class="fa-solid fa-receipt text-[7px]"></i>Bill</span>`;
         } else if (table.status === 'Waiting_Payment' || (activeOrder && (activeOrder.status === 'Waiting_Payment' || activeOrder.paymentStatus === 'Pending'))) {
-            rightIndicator = `<span class="w-2 h-2 rounded-full bg-amber-300 border border-white shadow-xs animate-bounce"></span>`;
+            rightIndicator = `<span class="w-2 h-2 rounded-full bg-amber-600 border border-white shadow-xs animate-bounce"></span>`;
         } else if (activeOrder || table.status === 'Occupied') {
-            rightIndicator = `<span class="w-2 h-2 rounded-full bg-orange-400 border border-white shadow-xs animate-pulse"></span>`;
+            rightIndicator = `<span class="w-2 h-2 rounded-full bg-white border border-orange-600 shadow-xs animate-pulse"></span>`;
         }
 
         // Highlight bàn đang chọn
         if (selectedOrder && isOrderForTable(selectedOrder, table)) {
-            bgColor += ' ring-4 ring-white ring-offset-2 ring-offset-[#0f172a]';
+            bgColor += ' ring-4 ring-orange-500 ring-offset-2 ring-offset-slate-50';
         }
 
         let displayNum = table.tableNumber || (isNaN(parseInt(tableName.replace('T', ''), 10)) ? tableName : parseInt(tableName.replace('T', ''), 10));
@@ -1503,23 +1503,23 @@ const hienThiChiTietHoaDon = async (order: any) => {
 
             let variantHtml = '';
             if (variantText) {
-                variantHtml = `<span class="inline-block mt-0.5 text-[10px] text-slate-400 font-bold bg-[#0f172a]/60 px-1.5 py-0.5 rounded border border-slate-700">${variantText}</span>`;
+                variantHtml = `<span class="inline-block mt-0.5 text-[10px] text-slate-600 font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">${variantText}</span>`;
             }
             let notesHtml = '';
             if (actualNotes) {
-                notesHtml = `<span class="block mt-0.5 text-[10px] text-orange-400 italic">${actualNotes}</span>`;
+                notesHtml = `<span class="block mt-0.5 text-[10px] text-orange-600 italic font-medium">${actualNotes}</span>`;
             }
 
             h += `
-                <div class="flex items-center py-2.5 border-b border-slate-800/80 px-1">
-                    <div class="flex-1 pr-2">
-                        <p class="text-white font-bold text-xs leading-tight">${monName}</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5">${formatMoney(itemPrice)} đ</p>
+                <div class="flex items-center py-2.5 border-b border-slate-100 px-1">
+                    <div class="flex-1 pr-2 min-w-0">
+                        <p class="text-slate-900 font-bold text-xs leading-tight truncate">${monName}</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5 font-medium">${formatMoney(itemPrice)} đ</p>
                         ${variantHtml}
                         ${notesHtml}
                     </div>
-                    <div class="w-12 text-center text-white font-bold text-xs bg-slate-800/80 py-1 rounded-md border border-slate-700">${d.quantity}</div>
-                    <div class="w-24 text-right font-black text-orange-400 text-xs">${formatMoney(lineTotal)} đ</div>
+                    <div class="w-12 text-center text-slate-800 font-bold text-xs bg-slate-100 py-1 rounded-md border border-slate-200">${d.quantity}</div>
+                    <div class="w-24 text-right font-black text-orange-600 text-xs font-mono">${formatMoney(lineTotal)} đ</div>
                 </div>
             `;
         });

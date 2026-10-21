@@ -32,15 +32,15 @@ body {
     display: none;
 }
 
-/* Modern Radio & Checkbox Styles (Cashier Dark Theme) */
+/* Modern Radio & Checkbox Styles (Cashier Light Theme) */
 input[type="radio"]:not(.sr-only),
 input[type="checkbox"]:not(.sr-only) {
     appearance: none;
     -webkit-appearance: none;
     width: 1.25rem;
     height: 1.25rem;
-    border: 2px solid #475569;
-    background-color: #1e293b;
+    border: 2px solid #cbd5e1;
+    background-color: #ffffff;
     outline: none;
     cursor: pointer;
     display: inline-grid;
