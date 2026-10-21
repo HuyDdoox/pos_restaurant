@@ -4,6 +4,13 @@ const fs = require('fs');
 const http = require('http');
 
 const server = jsonServer.create();
+
+process.on('uncaughtException', (err) => {
+    console.error('Unhandled Exception caught:', err);
+});
+process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Rejection at reason:', reason);
+});
 const router = jsonServer.router(path.join(__dirname, 'db.json'));
 const middlewares = jsonServer.defaults();
 
@@ -101,8 +108,13 @@ server.post(['/api/login', '/login'], (req, res) => {
     );
 
     if (user) {
-        // Plain text check or standard demo password '123456'
-        const isMatch = user.password === password || password === '123456' || (user.password && user.password.startsWith('$2b$'));
+        let isMatch = user.password === password || password === '123456';
+        if (!isMatch && user.password && user.password.startsWith('$2b$')) {
+            try {
+                const bcrypt = require('../backend/node_modules/bcryptjs');
+                isMatch = bcrypt.compareSync(password, user.password);
+            } catch (_) {}
+        }
         if (isMatch) {
             return res.status(200).json({
                 success: true,
@@ -235,18 +247,81 @@ server.post(['/api/orders', '/orders'], (req, res) => {
     const menuItems = db.get('menu').value() || [];
     const formattedItems = rawItems.map(it => {
         const dish = menuItems.find(m => (m._id === it.menuItem_id || m.id === it.menuItem_id));
+        const itemPrice = Number(it.priceAtOrder !== undefined ? it.priceAtOrder : (it.price !== undefined ? it.price : (dish ? (dish.price || dish.base_price) : 0))) || 0;
         return {
             menuItem_id: it.menuItem_id,
             name: dish ? dish.name : (it.name || 'Món ăn'),
             image: dish ? dish.image : '',
             quantity: it.quantity,
-            price: it.price,
+            price: itemPrice,
+            priceAtOrder: itemPrice,
             variants_selected: it.variants_selected || [],
             variantNote: it.variantNote || '',
-            status: 'Pending',
+            status: 'Unconfirmed',
             createdAt: new Date().toISOString()
         };
     });
+
+    // Kiểm tra xem bàn này đã có đơn mở chưa (để gộp món gọi thêm vào cùng 1 đơn)
+    const tableId = body.table_id;
+    let existingOrder = null;
+    if (tableId) {
+        const allOrders = db.get('orders').value() || [];
+        existingOrder = allOrders.find(o => 
+            (String(o.table_id) === String(tableId) || (typeof o.table_id === 'object' && String(o.table_id?._id || o.table_id?.id) === String(tableId))) &&
+            o.status !== 'Completed' && o.status !== 'Cancelled' &&
+            o.paymentStatus !== 'Paid'
+        );
+    }
+
+    if (existingOrder) {
+        if (!Array.isArray(existingOrder.items)) {
+            existingOrder.items = [];
+        }
+        existingOrder.items = existingOrder.items.concat(formattedItems);
+        const addedTotal = (formattedItems || []).reduce((s, it) => s + (it.priceAtOrder * it.quantity), 0);
+        existingOrder.total = (Number(existingOrder.total) || 0) + addedTotal;
+        existingOrder.totalAmount = (Number(existingOrder.totalAmount) || 0) + addedTotal;
+        existingOrder.updatedAt = new Date().toISOString();
+        if (body.notes) {
+            existingOrder.notes = existingOrder.notes ? `${existingOrder.notes}; ${body.notes}` : body.notes;
+        }
+
+        // Save order-details for tracking linked to existingOrder._id
+        const orderDetails = db.get('order-details').value() || [];
+        formattedItems.forEach(fi => {
+            const odId = new Date().getTime().toString(16) + Math.random().toString(16).substring(2, 8);
+            orderDetails.push({
+                _id: odId,
+                id: odId,
+                order_id: existingOrder._id || existingOrder.id,
+                menuItem_id: fi.menuItem_id,
+                name: fi.name,
+                quantity: fi.quantity,
+                price: fi.price,
+                priceAtOrder: fi.priceAtOrder,
+                status: 'Unconfirmed',
+                variantNote: fi.variantNote,
+                variants_selected: fi.variants_selected,
+                createdAt: new Date().toISOString()
+            });
+        });
+
+        // Ensure table status and currentOrder_id point to existingOrder
+        const table = db.get('tables').find({ _id: tableId }).value() || db.get('tables').find({ id: tableId }).value();
+        if (table) {
+            table.status = 'Occupied';
+            table.currentOrder_id = existingOrder._id || existingOrder.id;
+        }
+
+        db.write();
+
+        return res.status(200).json({
+            status: 1,
+            message: 'Đã thêm món vào đơn hiện tại của bàn',
+            data: existingOrder
+        });
+    }
 
     const order = {
         _id: newId,
@@ -255,15 +330,15 @@ server.post(['/api/orders', '/orders'], (req, res) => {
         customerInfo: body.customerInfo || 'Khách vãng lai',
         customerPhone: body.customerPhone || null,
         status: body.status || 'In_Progress',
-        paymentStatus: body.paymentStatus || 'unpaid',
+        paymentStatus: body.paymentStatus || 'Unpaid',
         discountType: body.discountType || 'none',
         discountPercent: body.discountPercent || 0,
         discountAmount: body.discountAmount || 0,
         discountReason: body.discountReason || null,
         notes: body.notes || '',
         items: formattedItems,
-        total: (rawItems || []).reduce((s, it) => s + (it.price * it.quantity), 0) - (body.discountAmount || 0),
-        totalAmount: (rawItems || []).reduce((s, it) => s + (it.price * it.quantity), 0) - (body.discountAmount || 0),
+        total: (formattedItems || []).reduce((s, it) => s + (it.priceAtOrder * it.quantity), 0) - (body.discountAmount || 0),
+        totalAmount: (formattedItems || []).reduce((s, it) => s + (it.priceAtOrder * it.quantity), 0) - (body.discountAmount || 0),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };
@@ -288,18 +363,19 @@ server.post(['/api/orders', '/orders'], (req, res) => {
             name: fi.name,
             quantity: fi.quantity,
             price: fi.price,
-            status: 'Pending',
+            priceAtOrder: fi.priceAtOrder,
+            status: 'Unconfirmed',
             variantNote: fi.variantNote,
             variants_selected: fi.variants_selected,
             createdAt: new Date().toISOString()
         });
     });
 
-    // Update table status to occupied
+    // Update table status to Occupied
     if (order.table_id) {
         const table = db.get('tables').find({ _id: order.table_id }).value() || db.get('tables').find({ id: order.table_id }).value();
         if (table) {
-            table.status = 'occupied';
+            table.status = 'Occupied';
             table.currentOrder_id = order._id;
         }
     }

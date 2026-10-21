@@ -1,7 +1,8 @@
 import {
     layDanhSachBan, capNhatTrangThaiBan, taoDonHang, layDonHangDangMoCuaBan,
     layChiTietCuaDon, capNhatChiTietDonHang, taoChiTietDonHang, layDanhSachMonAn,
-    layDanhSachDanhMuc, capNhatTrangThaiMenu, layTatCaDonHang, layDanhSachMonSanSang, layDanhSachVariants
+    layDanhSachDanhMuc, capNhatTrangThaiMenu, layTatCaDonHang, layDanhSachMonSanSang, layDanhSachVariants,
+    capNhatDonHang
 } from './api';
 import { API_ORDERS_URL, API_ORDER_DETAILS_URL, API_TABLES_URL } from './config';
 import { showSuccessToast, showConfirmModal, showPromptModal, showWarningToast, showMoveMergeModal, showNumberPromptModal } from './utils/ui';
@@ -187,7 +188,10 @@ kdsChannel.onmessage = (event) => {
     }
 };
 
-const formatMoney = (amount: number) => amount.toLocaleString('vi-VN') + ' đ';
+const formatMoney = (amount: number) => {
+    const val = Number(amount);
+    return (isNaN(val) ? 0 : val).toLocaleString('vi-VN') + ' đ';
+};
 
 // --- EVENT LISTENER FOR TABS ---
 window.addEventListener('tabChanged', (e: any) => {
@@ -311,10 +315,11 @@ const renderTables = () => {
     }
 
     filtered.forEach(table => {
-        const isOccupied = table.status === 'Occupied';
-        const isWaitingPayment = table.status === 'Waiting_Payment';
-        const isLocked = table.status === 'Locked';
-        const isReserved = table.status === 'Reserved';
+        const tStatus = (table.status || '').toLowerCase();
+        const isOccupied = tStatus === 'occupied';
+        const isWaitingPayment = tStatus === 'waiting_payment';
+        const isLocked = tStatus === 'locked';
+        const isReserved = tStatus === 'reserved';
         const isSelected = table.id === selectedTableId;
         
         let bgClass = 'bg-emerald-500 text-white border-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.2)]'; // Default green for empty
@@ -489,7 +494,8 @@ const handleTableClick = async (table: any, isSilent = false) => {
     const rightPanelOccupied = document.getElementById('table-detail-panel')!;
     const rightPanelEmpty = document.getElementById('table-empty-panel')!;
     
-    if (table.status === 'Available') {
+    const tStatus = (table.status || '').toLowerCase();
+    if (tStatus === 'available') {
         rightPanelOccupied.classList.add('hidden');
         rightPanelEmpty.classList.remove('hidden');
         rightPanelEmpty.innerHTML = `
@@ -673,9 +679,31 @@ const handleTableClick = async (table: any, isSilent = false) => {
         try {
             const orders = await layDonHangDangMoCuaBan(table.id);
             if (orders.length > 0) {
-                const order = orders[0];
-                currentOrderId = order.id;
-                const details = await layChiTietCuaDon(order.id);
+                const order = (table.currentOrder_id && orders.find((o: any) => (o.id || o._id) === table.currentOrder_id)) || orders[orders.length - 1];
+                currentOrderId = order.id || order._id;
+                let details: any[] = [];
+                if (currentOrderId) {
+                    details = await layChiTietCuaDon(currentOrderId);
+                }
+                // Nếu bàn có nhiều đơn đang mở, gộp toàn bộ chi tiết món của các đơn để không bị mất món
+                if (orders && orders.length > 1) {
+                    const seenIds = new Set(details.map((d: any) => String(d.id || d._id)));
+                    for (const otherOrd of orders) {
+                        const oid = otherOrd.id || otherOrd._id;
+                        if (oid && String(oid) !== String(currentOrderId)) {
+                            const moreDetails = await layChiTietCuaDon(oid);
+                            if (Array.isArray(moreDetails)) {
+                                for (const md of moreDetails) {
+                                    const mid = String(md.id || md._id);
+                                    if (!seenIds.has(mid)) {
+                                        seenIds.add(mid);
+                                        details.push(md);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 let calculatedTotal = 0;
                 let calculatedCount = 0;
@@ -683,20 +711,22 @@ const handleTableClick = async (table: any, isSilent = false) => {
                 let hasPendingOrReady = false;
                 
                 details.forEach((curr: any) => {
-                    calculatedTotal += (curr.priceAtOrder || 0) * curr.quantity;
+                    const price = curr.priceAtOrder !== undefined ? curr.priceAtOrder : (curr.price || 0);
+                    calculatedTotal += price * curr.quantity;
                     calculatedCount += curr.quantity;
                     
                     const st = (curr.status || '').toLowerCase();
-                    if (st === 'pending' || st === 'cooking' || st === 'ready') {
+                    if (st === 'unconfirmed' || st === 'pending' || st === 'cooking' || st === 'ready') {
                         hasPendingOrReady = true;
                         const mId = (curr.menuItem_id && typeof curr.menuItem_id === 'object') ? String(curr.menuItem_id.id || curr.menuItem_id._id) : String(curr.menuItem_id || '');
                         const mon = allMenuItems.find(m => String(m.id || m._id) === mId);
-                        const mName = (curr.menuItem_id && typeof curr.menuItem_id === 'object' && curr.menuItem_id.name) ? curr.menuItem_id.name : (mon ? mon.name : (curr.name || 'Món ẩn'));
+                        const mName = (curr.menuItem_id && typeof curr.menuItem_id === 'object' && curr.menuItem_id.name) ? curr.menuItem_id.name : (mon ? mon.name : (curr.name || 'Món ăn'));
                         
                         let badge = '';
-                        if (st === 'pending') badge = `<span class="whitespace-nowrap shrink-0 bg-slate-700 text-slate-300 text-[10px] px-1.5 py-0.5 rounded">Chờ bếp</span>`;
-                        if (st === 'cooking') badge = `<span class="whitespace-nowrap shrink-0 bg-orange-500/20 text-orange-400 border border-orange-500/20 text-[10px] px-1.5 py-0.5 rounded animate-pulse">Đang nấu</span>`;
-                        if (st === 'ready') badge = `<span class="whitespace-nowrap shrink-0 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-[10px] px-1.5 py-0.5 rounded font-black shadow-lg shadow-emerald-500/20">Sẵn sàng!</span>`;
+                        if (st === 'unconfirmed') badge = `<span class="whitespace-nowrap shrink-0 bg-yellow-500/20 text-yellow-400 border border-yellow-500/20 text-[10px] px-1.5 py-0.5 rounded animate-pulse">Chờ duyệt</span>`;
+                        else if (st === 'pending') badge = `<span class="whitespace-nowrap shrink-0 bg-slate-700 text-slate-300 text-[10px] px-1.5 py-0.5 rounded">Chờ bếp</span>`;
+                        else if (st === 'cooking') badge = `<span class="whitespace-nowrap shrink-0 bg-orange-500/20 text-orange-400 border border-orange-500/20 text-[10px] px-1.5 py-0.5 rounded animate-pulse">Đang nấu</span>`;
+                        else if (st === 'ready') badge = `<span class="whitespace-nowrap shrink-0 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-[10px] px-1.5 py-0.5 rounded font-black shadow-lg shadow-emerald-500/20">Sẵn sàng!</span>`;
                         
                         itemsHtml += `
                             <li class="flex justify-between items-center bg-[#1e293b]/80 border border-orange-500/20 p-2 rounded-lg">
@@ -884,6 +914,7 @@ const openTable = async (tableId: string) => {
 // ==========================================
 let currentTableDetailsHash = "";
 const loadTableDetails = async (tableId: string, tableNumber: string, isBackground = false) => {
+    selectedTableId = tableId;
     document.getElementById('detail-table-title')!.innerText = tableNumber;
     document.getElementById('detail-table-name')!.innerText = tableNumber;
     
@@ -910,10 +941,10 @@ const loadTableDetails = async (tableId: string, tableNumber: string, isBackgrou
         
         const orders = await layDonHangDangMoCuaBan(tableId);
         if (orders.length === 0) return;
-        currentOrderId = orders[0].id;
+        const activeOrder = (table?.currentOrder_id && orders.find((o: any) => (o.id || o._id) === table.currentOrder_id)) || orders[orders.length - 1];
+        currentOrderId = activeOrder.id || activeOrder._id;
         
         // Hiển thị ghi chú toàn bàn nếu có
-        const activeOrder = orders[0];
         const tableNoteEl = document.getElementById('detail-table-order-note');
         const tableNoteText = document.getElementById('detail-table-order-note-text');
         if (tableNoteEl && tableNoteText) {
@@ -926,7 +957,30 @@ const loadTableDetails = async (tableId: string, tableNumber: string, isBackgrou
             }
         }
         
-        const details = await layChiTietCuaDon(currentOrderId!);
+        const tableOrders = await layDonHangDangMoCuaBan(tableId);
+        let details: any[] = [];
+        if (currentOrderId) {
+            details = await layChiTietCuaDon(currentOrderId);
+        }
+        // Nếu bàn có nhiều đơn đang mở, gộp toàn bộ chi tiết món của các đơn để không bị mất món
+        if (tableOrders && tableOrders.length > 1) {
+            const seenIds = new Set(details.map((d: any) => String(d.id || d._id)));
+            for (const otherOrd of tableOrders) {
+                const oid = otherOrd.id || otherOrd._id;
+                if (oid && String(oid) !== String(currentOrderId)) {
+                    const moreDetails = await layChiTietCuaDon(oid);
+                    if (Array.isArray(moreDetails)) {
+                        for (const md of moreDetails) {
+                            const mid = String(md.id || md._id);
+                            if (!seenIds.has(mid)) {
+                                seenIds.add(mid);
+                                details.push(md);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         cachedCurrentOrderDetails = details;
         cachedCurrentPax = table?.current_pax || 0;
         
@@ -979,12 +1033,13 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         const mId = (item.menuItem_id && typeof item.menuItem_id === 'object') ? String(item.menuItem_id.id || item.menuItem_id._id) : String(item.menuItem_id || '');
         const noteStr = (item.notes || item.variantNote || item.note || '').trim();
         const key = `${mId}_${(item.status || '').toLowerCase()}_${noteStr}`;
+        const itemId = String(item.id || item._id || '');
         if (!groupedMap.has(key)) {
-            groupedMap.set(key, { ...item, notes: noteStr, variantNote: noteStr, ids: [item.id] });
+            groupedMap.set(key, { ...item, notes: noteStr, variantNote: noteStr, ids: [itemId] });
         } else {
             const existing = groupedMap.get(key);
             existing.quantity += item.quantity;
-            existing.ids.push(item.id);
+            existing.ids.push(itemId);
         }
     });
 
@@ -1014,6 +1069,7 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         const img = (item.menuItem_id && typeof item.menuItem_id === 'object' && item.menuItem_id.image) ? item.menuItem_id.image : (menuObj ? menuObj.image : '');
         const compositeId = item.ids.join(',');
         const rawStatus = (item.status || '').toLowerCase();
+        const itemPrice = Number(item.priceAtOrder !== undefined && item.priceAtOrder !== null ? item.priceAtOrder : (item.price !== undefined && item.price !== null ? item.price : (menuObj ? (menuObj.price || menuObj.base_price) : 0))) || 0;
         
         let statusBadge = '';
         let fastActionBtn = '';
@@ -1129,8 +1185,8 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
                 </td>
                 <!-- 5. Thành tiền -->
                 <td class="py-3 px-3 text-right align-middle">
-                    <div class="text-xs font-black text-orange-400 whitespace-nowrap">${formatMoney(item.priceAtOrder * item.quantity)}</div>
-                    ${item.quantity > 1 ? `<div class="text-[10px] text-slate-400 font-semibold whitespace-nowrap">${formatMoney(item.priceAtOrder)}/phần</div>` : ''}
+                    <div class="text-xs font-black text-orange-400 whitespace-nowrap">${formatMoney(itemPrice * item.quantity)}</div>
+                    ${item.quantity > 1 ? `<div class="text-[10px] text-slate-400 font-semibold whitespace-nowrap">${formatMoney(itemPrice)}/phần</div>` : ''}
                 </td>
                 <!-- 6. Trạng thái & Thao tác -->
                 <td class="py-3 px-4 text-right align-middle">
@@ -1169,7 +1225,7 @@ document.getElementById('btn-request-checkout')?.addEventListener('click', async
 
 document.getElementById('btn-confirm-order')?.addEventListener('click', async () => {
     if (!currentOrderId) return;
-    const isConfirmed = await showConfirmModal("Xác nhận", "Bạn có chắc chắn muốn gửi lệnh order các món này xuống bếp?");
+    const isConfirmed = await showConfirmModal("Xác nhận", "Bạn có chắc chắn muốn duyệt và gửi lệnh order các món này xuống bếp?");
     if (!isConfirmed) return;
     
     const btn = document.getElementById('btn-confirm-order') as HTMLButtonElement;
@@ -1183,27 +1239,61 @@ document.getElementById('btn-confirm-order')?.addEventListener('click', async ()
         const details = await layChiTietCuaDon(currentOrderId);
         let count = 0;
         for (const item of details) {
-            if (item.status === 'unconfirmed' || item.status === 'Unconfirmed') {
-                await capNhatChiTietDonHang(item.id, { status: 'Pending' });
-                await new Promise(r => setTimeout(r, 100));
+            const st = (item.status || '').toLowerCase();
+            if (st === 'unconfirmed') {
+                const targetId = item.id || item._id;
+                await capNhatChiTietDonHang(targetId, { status: 'Pending' });
+                await new Promise(r => setTimeout(r, 60));
                 count++;
             }
         }
         
+        let activeTableId = selectedTableId;
+        if (!activeTableId) {
+            try {
+                const allOrders = await layTatCaDonHang();
+                const ord = (allOrders || []).find((o: any) => (o.id || o._id) === currentOrderId);
+                if (ord) {
+                    activeTableId = ord.table_id?._id || ord.table_id?.id || ord.table_id;
+                    selectedTableId = activeTableId;
+                }
+            } catch (_) {}
+        }
+
         if (count > 0) {
+            // Đồng bộ mảng items trong Order nếu có
+            try {
+                if (activeTableId) {
+                    const orders = await layDonHangDangMoCuaBan(activeTableId);
+                    const ord = (orders || []).find((o: any) => (o.id || o._id) === currentOrderId);
+                    if (ord && Array.isArray(ord.items)) {
+                        ord.items.forEach((it: any) => {
+                            if ((it.status || '').toLowerCase() === 'unconfirmed') it.status = 'Pending';
+                        });
+                        await capNhatDonHang(currentOrderId, { items: ord.items });
+                    }
+                }
+            } catch (_) {}
+
             showSuccessToast(`Đã duyệt ${count} món và đẩy xuống Bếp!`);
             kdsChannel.postMessage({
                 type: 'FOODHUB_NEW_ORDER',
                 count,
+                orderId: currentOrderId,
+                tableId: activeTableId,
                 message: `Có ${count} món mới chuyển xuống bếp!`
             });
         } else {
             showWarningToast('Không có món nào cần duyệt!');
         }
         
-        loadTableDetails(selectedTableId!, document.getElementById('detail-table-title')!.innerText);
+        if (activeTableId) {
+            const tableTitle = document.getElementById('detail-table-title')?.innerText || 'Bàn';
+            loadTableDetails(activeTableId, tableTitle);
+        }
     } catch (e) {
         console.error(e);
+        showWarningToast('Có lỗi xảy ra khi duyệt món!');
     } finally {
         if (btn) {
             btn.innerHTML = btn.dataset.original || '';
@@ -1397,7 +1487,7 @@ document.getElementById('btn-cancel-item')?.addEventListener('click', async () =
     // Recalculate order total
     const details = await layChiTietCuaDon(currentOrderId);
     const activeDetails = details.filter((d: any) => (d.status || '').toLowerCase() !== 'cancelled');
-    const newTotal = activeDetails.reduce((sum: number, it: any) => sum + (it.priceAtOrder * it.quantity), 0);
+    const newTotal = activeDetails.reduce((sum: number, it: any) => sum + ((Number(it.priceAtOrder !== undefined && it.priceAtOrder !== null ? it.priceAtOrder : it.price) || 0) * it.quantity), 0);
     await fetch(`${API_ORDERS_URL}/${currentOrderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -1888,7 +1978,8 @@ const renderMenuTab = () => {
         };
         catList.appendChild(allBtn);
 
-        allCategories.forEach(c => {
+        const visibleCategories = allCategories.filter(c => c.status !== 'Inactive' && c.status !== 'Archived' && c.status !== 'Hidden');
+        visibleCategories.forEach(c => {
             const isActive = currentWaiterMenuCategory === c.id;
             const btn = document.createElement('button');
             btn.className = `w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs transition-all border ${
@@ -1917,6 +2008,10 @@ const renderMenuTab = () => {
     grid.innerHTML = '';
 
     const filtered = allMenuItems.filter(item => {
+        if (item.status === 'Archived' || item.status === 'Inactive' || item.status === 'Hidden') return false;
+        const parentCat = allCategories.find(c => String(c.id || (c as any)._id) === String(typeof item.category_id === 'object' && item.category_id !== null ? (item.category_id._id || item.category_id.id) : item.category_id));
+        if (parentCat && (parentCat.status === 'Inactive' || parentCat.status === 'Archived' || parentCat.status === 'Hidden')) return false;
+
         if (currentWaiterMenuCategory !== 'all') {
             const catId2 = (typeof item.category_id === 'object' && item.category_id !== null)
                 ? (item.category_id._id || item.category_id.id || '')
@@ -2970,7 +3065,7 @@ const initTransferItemModal = () => {
 
             // Recalculate totals
             const sourceDetails = await layChiTietCuaDon(currentOrderId);
-            const sourceTotal = sourceDetails.reduce((sum: number, it: any) => sum + (it.priceAtOrder * it.quantity), 0);
+            const sourceTotal = sourceDetails.reduce((sum: number, it: any) => sum + ((Number(it.priceAtOrder !== undefined && it.priceAtOrder !== null ? it.priceAtOrder : it.price) || 0) * it.quantity), 0);
             await fetch(`${API_ORDERS_URL}/${currentOrderId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -2978,7 +3073,7 @@ const initTransferItemModal = () => {
             });
 
             const targetDetails = await layChiTietCuaDon(targetOrder.id);
-            const targetTotal = targetDetails.reduce((sum: number, it: any) => sum + (it.priceAtOrder * it.quantity), 0);
+            const targetTotal = targetDetails.reduce((sum: number, it: any) => sum + ((Number(it.priceAtOrder !== undefined && it.priceAtOrder !== null ? it.priceAtOrder : it.price) || 0) * it.quantity), 0);
             await fetch(`${API_ORDERS_URL}/${targetOrder.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },

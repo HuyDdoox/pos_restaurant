@@ -30,7 +30,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="../../css/admin.css?v=20261021_01">
+    <link rel="stylesheet" href="../../css/admin.css?v=20261021_05">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -38,8 +38,8 @@
 <body class="bg-[#0f172a] text-slate-300 h-screen overflow-hidden flex selection:bg-orange-500 selection:text-white">
 
     <!-- SIDEBAR -->
-    <aside id="admin-sidebar" class="w-64 bg-[#1e293b] border-r border-slate-700/50 flex flex-col shrink-0 transition-all duration-300">
-        <div class="h-20 flex items-center px-6 border-b border-slate-700/50">
+    <aside id="admin-sidebar" class="w-64 bg-[#1e293b] border-r border-slate-700/50 flex flex-col shrink-0 h-screen max-h-screen overflow-hidden transition-all duration-300">
+        <div class="h-20 flex items-center px-6 border-b border-slate-700/50 shrink-0">
             <div
                 class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-xl shrink-0">
                 FH</div>
@@ -48,9 +48,9 @@
                 <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Quản trị hệ thống</p>
             </div>
         </div>
-        <nav class="flex-1 py-6 px-3 space-y-1">
+        <nav class="flex-1 overflow-y-auto min-h-0 py-4 px-3 space-y-1 custom-scrollbar">
             <button onclick="switchPage('overview')" data-page="overview"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl bg-orange-500/10 text-orange-500 font-bold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-orange-500/10 text-orange-500 font-bold relative text-left transition-all">
                 <div class="nav-bar absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
                 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@
                 Tổng quan
             </button>
             <button onclick="switchPage('reports')" data-page="reports"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -72,7 +72,7 @@
                 Báo cáo
             </button>
             <button onclick="switchPage('pnl')" data-page="pnl"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -84,7 +84,7 @@
                 Tài chính & P&L
             </button>
             <button onclick="switchPage('users')" data-page="users"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -96,7 +96,7 @@
                 Người dùng
             </button>
             <button onclick="switchPage('menu')" data-page="menu"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -108,7 +108,7 @@
                 Thực đơn & Biến thể
             </button>
             <button onclick="switchPage('categories')" data-page="categories"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -116,7 +116,7 @@
                 Quản lý Danh mục
             </button>
             <button onclick="switchPage('inventory')" data-page="inventory"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -127,7 +127,7 @@
                 Kho & Định lượng
             </button>
             <button onclick="switchPage('loss-report')" data-page="loss-report"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -138,7 +138,7 @@
                 Báo cáo thất thoát
             </button>
             <button onclick="switchPage('promotions')" data-page="promotions"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -150,7 +150,7 @@
                 Khuyến mãi & VIP
             </button>
             <button onclick="switchPage('audit-log')" data-page="audit-log"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
+                class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-700/50 font-semibold relative text-left transition-all">
                 <div
                     class="nav-bar hidden absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-orange-500 rounded-r-full">
                 </div>
@@ -164,7 +164,7 @@
         </nav>
 
         <!-- User bottom -->
-        <div class="p-4 border-t border-slate-700/50">
+        <div class="p-4 border-t border-slate-700/50 shrink-0 bg-[#1e293b]">
             <div
                 class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-700/30 transition-colors cursor-pointer">
                 <div
@@ -1083,14 +1083,14 @@
                     </div>
                 </div>
                 <div class="space-y-6">
-                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 shadow-lg">
+                    <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 overflow-hidden shadow-lg">
                         <table class="w-full text-left text-sm">
                             <thead
                                 class="admin-sticky-thead text-slate-400 text-xs font-bold uppercase border-b border-slate-700 bg-[#1e293b]">
                                 <tr>
                                     <th class="px-6 py-4 whitespace-nowrap">Ảnh</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Tên món</th>
-                                    <th class="px-4 py-4 whitespace-nowrap">Danh mục</th>
+                                    <th class="px-4 py-4 text-center whitespace-nowrap">Danh mục</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Giá bán</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Biến thể</th>
                                     <th class="px-6 py-4 whitespace-nowrap">Trạng thái</th>
@@ -1791,8 +1791,8 @@
                 </div>
 
                 <!-- Bảng danh mục -->
-                <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 shadow-xl">
-                    <div class="overflow-x-auto">
+                <div class="bg-[#1e293b] rounded-2xl border border-slate-700/50 overflow-hidden shadow-xl">
+                    <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left text-sm">
                             <thead class="admin-sticky-thead text-slate-400 text-xs font-black uppercase tracking-wider border-b border-slate-700 bg-[#1e293b]">
                                 <tr>
@@ -2789,7 +2789,7 @@
         const initialPage = window.location.hash.replace('#', '') || 'overview';
         switchPage(initialPage);
     </script>
-    <script src="../../js/admin.js?v=20261021_03"></script>
+    <script src="../../js/admin.js?v=20261021_06"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Toggle Sidebar
@@ -2826,6 +2826,16 @@
                         }
                     }
                 });
+            });
+
+            // Đảm bảo lăn chuột bất kỳ vị trí nào trên sidebar đều cuộn menu mượt mà
+            if (sidebar) {
+                sidebar.addEventListener('wheel', (e) => {
+                    const nav = sidebar.querySelector('nav');
+                    if (nav && e.target && !nav.contains(e.target)) {
+                        nav.scrollTop += e.deltaY;
+                    }
+                }, { passive: true });
             });
         });
     </script>
