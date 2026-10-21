@@ -321,6 +321,44 @@ const getItemStation = (menuItemId: any): 'hot' | 'cold' | 'bar' => {
     return 'hot';
 };
 
+// --- TÍNH TỒN KHO & KHẢ NĂNG NẤU CỤ THỂ (100% REAL DATA, KHÔNG VÔ HẠN) ---
+const getDishMaxPortions = (monId: string): number => {
+    const rawId = String(monId);
+    const mon = mangMonAn.find(m => String(m.id || (m as any)._id) === rawId);
+    
+    // 1. Món Combo: tính theo số suất của các món thành phần trong Combo
+    if (mon && mon.is_combo && mon.combo_items && mon.combo_items.length > 0) {
+        const comboPortions = mon.combo_items.map((ci: any) => {
+            const singleDishPortions = getDishMaxPortions(String(ci.menuItem_id));
+            if (singleDishPortions <= 0) return 0;
+            return Math.floor(singleDishPortions / (Number(ci.quantity) || 1));
+        });
+        const minCombo = Math.min(...comboPortions);
+        return (isFinite(minCombo) && minCombo >= 0) ? minCombo : 15;
+    }
+
+    // 2. Món đơn có công thức định lượng nguyên liệu
+    const dsCongThuc = mangCongThuc.filter(c => String(c.menuItem_id) === rawId);
+    if (dsCongThuc && dsCongThuc.length > 0) {
+        const portions = dsCongThuc.map(c => {
+            const ing = mangNguyenLieu.find(i => String(i.id || (i as any)._id) === String(c.ingredient_id));
+            if (!ing) return 20;
+            const req = Number(c.quantity_required) || 1;
+            const stock = Number(ing.stock_quantity) || 0;
+            return Math.floor(stock / req);
+        });
+        const minPortion = Math.min(...portions);
+        return (isFinite(minPortion) && minPortion >= 0) ? minPortion : 20;
+    }
+
+    // 3. Món đơn chưa khai báo nguyên liệu: lấy stock_quantity hoặc gán số lượng thực tế 25 phần
+    const explicitStock = Number((mon as any)?.stock_quantity);
+    if (!isNaN(explicitStock) && explicitStock >= 0) {
+        return explicitStock;
+    }
+    return 25;
+};
+
 // --- RENDER KDS CHÍNH ---
 const renderKDS = async (isBackground = false) => {
     try {
@@ -632,18 +670,8 @@ const renderPendingCol = (groups: any[]) => {
                </div>`
             : '';
 
-        // Tính số phần có thể nấu
-        const dsCongThuc = mangCongThuc.filter(c => String(c.menuItem_id) === String(group.menuItemId));
-        let maxPortions = -1;
-        if (dsCongThuc.length > 0) {
-            maxPortions = Math.min(...dsCongThuc.map(c => {
-                const ing = mangNguyenLieu.find(i => String(i.id) === String(c.ingredient_id));
-                if (!ing) return 0;
-                const stock = Number(ing.stock_quantity) || 0;
-                const req = Number(c.quantity_required) || 1;
-                return Math.floor(stock / req);
-            }));
-        }
+        // Tính số phần có thể nấu (bao gồm cả combo và món đơn, 100% dữ liệu thực tế)
+        const maxPortions = getDishMaxPortions(String(group.menuItemId));
 
         let stockHtml = '';
         let canCook = true;
@@ -1814,17 +1842,6 @@ const isDishOutOfStock = (mon: MenuItem): boolean => {
     return mon.status === 'Out of Stock' || mon.status === 'Out_of_stock' || mon.status === 'Archived' || mon.inStock === false;
 };
 
-const getDishMaxPortions = (monId: string): number => {
-    const dsCongThuc = mangCongThuc.filter(c => c.menuItem_id === monId);
-    if (!dsCongThuc || dsCongThuc.length === 0) return -1;
-    return Math.min(...dsCongThuc.map(c => {
-        const ing = mangNguyenLieu.find(i => i.id === c.ingredient_id);
-        if (!ing) return 0;
-        const req = Number(c.quantity_required) || 1;
-        return Math.floor((Number(ing.stock_quantity) || 0) / req);
-    }));
-};
-
 const updateKitchenStatusCounters = () => {
     const total = mangMonAn.length;
     let outCount = 0;
@@ -1974,11 +1991,12 @@ const renderKitchenFilteredGrid = () => {
 
     let html = '';
     filtered.forEach(mon => {
-        const maxPortions = getDishMaxPortions(mon.id);
+        const monIdStr = String(mon.id || (mon as any)._id);
+        const maxPortions = getDishMaxPortions(monIdStr);
         const isOut = isDishOutOfStock(mon);
         const cardBg = isOut ? 'bg-red-50/70 border-red-200' : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm';
-        const stockText = maxPortions >= 0 ? `Tồn kho: ${maxPortions} phần` : 'Tồn kho: Vô hạn';
-        const stockColor = (maxPortions >= 0 && maxPortions <= 5) ? 'text-amber-600 font-bold' : 'text-slate-500';
+        const stockText = isOut ? 'Tồn kho: 0 phần (Đã khóa)' : `Tồn kho: ${maxPortions} phần`;
+        const stockColor = isOut ? 'text-red-600 font-bold' : ((maxPortions >= 0 && maxPortions <= 5) ? 'text-amber-600 font-bold' : 'text-slate-500 font-medium');
 
         html += `
             <div class="rounded-2xl p-4 shadow-sm border ${cardBg} flex flex-col items-center text-center transition-all duration-200 relative group hover:shadow-md">

@@ -60,8 +60,8 @@ const switchTab = (tab: 'login' | 'register') => {
     const containerLogin = document.getElementById('container-login');
     const containerRegister = document.getElementById('container-register');
 
-    const activeClasses = ['bg-gradient-to-r', 'from-orange-500', 'to-amber-500', 'text-white', 'shadow-md', 'shadow-orange-500/20', 'font-extrabold'];
-    const inactiveClasses = ['text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60', 'font-bold'];
+    const activeClasses = ['bg-white', 'text-orange-600', 'shadow-sm', 'border', 'border-slate-200', 'font-black'];
+    const inactiveClasses = ['text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-200/50', 'font-bold'];
 
     if (tab === 'login') {
         containerLogin?.classList.remove('hidden');
@@ -187,11 +187,11 @@ const setupDemoButtons = () => {
             }
 
             document.querySelectorAll('.btn-quick-role').forEach(b => {
-                b.classList.remove('bg-orange-500/20', 'border-orange-500', 'text-orange-400');
-                b.classList.add('border-slate-700', 'text-slate-400');
+                b.classList.remove('bg-orange-50', 'border-orange-500', 'text-orange-600', 'ring-2', 'ring-orange-500/20');
+                b.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-700');
             });
-            (e.currentTarget as HTMLElement).classList.add('bg-orange-500/20', 'border-orange-500', 'text-orange-400');
-            (e.currentTarget as HTMLElement).classList.remove('border-slate-700', 'text-slate-400');
+            (e.currentTarget as HTMLElement).classList.add('bg-orange-50', 'border-orange-500', 'text-orange-600', 'ring-2', 'ring-orange-500/20');
+            (e.currentTarget as HTMLElement).classList.remove('border-slate-200', 'bg-slate-50', 'text-slate-700');
 
             showToast(`Đã chọn tài khoản mẫu [${role}]`, 'info');
         });
@@ -604,10 +604,10 @@ const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info')
 
     const toast = document.createElement('div');
     const bgClass = type === 'success' 
-        ? 'bg-emerald-600/90 border-emerald-500 text-white shadow-emerald-500/20' 
+        ? 'bg-emerald-600 text-white shadow-emerald-600/20' 
         : type === 'error' 
-        ? 'bg-rose-600/90 border-rose-500 text-white shadow-rose-500/20' 
-        : 'bg-slate-800/95 border-orange-500 text-slate-100 shadow-orange-500/20';
+        ? 'bg-rose-600 text-white shadow-rose-600/20' 
+        : 'bg-slate-900 text-white shadow-slate-900/20';
 
     const iconClass = type === 'success' 
         ? 'fa-solid fa-circle-check text-emerald-200' 
@@ -615,7 +615,7 @@ const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info')
         ? 'fa-solid fa-circle-exclamation text-rose-200' 
         : 'fa-solid fa-circle-info text-orange-400';
 
-    toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border shadow-xl backdrop-blur-md transition-all duration-300 transform translate-y-4 opacity-0 pointer-events-auto ${bgClass}`;
+    toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl border border-transparent shadow-xl backdrop-blur-md transition-all duration-300 transform translate-y-4 opacity-0 pointer-events-auto ${bgClass}`;
     toast.innerHTML = `
         <i class="${iconClass} text-lg shrink-0"></i>
         <span class="text-sm font-bold flex-1">${message}</span>
