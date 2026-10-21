@@ -322,14 +322,14 @@ const renderTables = () => {
         const isReserved = tStatus === 'reserved';
         const isSelected = table.id === selectedTableId;
         
-        let bgClass = 'bg-emerald-500 text-white border-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.2)]'; // Default green for empty
-        if (isOccupied) bgClass = 'bg-orange-500 text-white border-orange-600 shadow-[0_0_15px_rgba(249,115,22,0.4)]'; // Orange for occupied
-        if (isWaitingPayment) bgClass = 'bg-amber-500 text-white border-amber-600 shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse'; // Amber blinking
-        if (isReserved) bgClass = 'bg-blue-600 text-white border-blue-700 shadow-[0_0_15px_rgba(37,99,235,0.4)]'; // Blue for reserved
-        if (isLocked) bgClass = 'bg-red-500 text-white border-red-600 opacity-75 shadow-[0_0_15px_rgba(239,68,68,0.4)]'; // Red for locked/merged
+        let bgClass = 'bg-white text-emerald-800 border-2 border-emerald-500/50 shadow-xs hover:border-emerald-600 hover:bg-emerald-50/40 hover:shadow-sm'; // Default light green card for empty
+        if (isOccupied) bgClass = 'bg-orange-500 text-white border-orange-600 shadow-md hover:brightness-105'; // Orange for occupied
+        if (isWaitingPayment) bgClass = 'bg-amber-400 text-slate-950 border-2 border-amber-500 shadow-md animate-pulse'; // Amber blinking
+        if (isReserved) bgClass = 'bg-blue-50 text-blue-900 border-2 border-blue-400 shadow-xs hover:border-blue-600'; // Blue for reserved
+        if (isLocked) bgClass = 'bg-slate-100 text-slate-400 border border-slate-300 opacity-60 cursor-not-allowed'; // Red for locked/merged
 
         if (isSelected) {
-            bgClass += ' ring-4 ring-white ring-offset-4 ring-offset-[#0f172a] transform scale-105 z-10';
+            bgClass += ' ring-4 ring-orange-500 ring-offset-2 ring-offset-slate-50 transform scale-105 z-10';
         }
 
         // Kiểm tra yêu cầu phục vụ từ khách
@@ -338,10 +338,10 @@ const renderTables = () => {
         if (serviceCall) {
             if (serviceCall.type === 'CALL') {
                 rightIndicator = `<span class="inline-flex items-center gap-0.5 bg-red-600 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shadow border border-white animate-bounce leading-none select-none"><i class="fa-solid fa-bell text-[7px]"></i>Gọi</span>`;
-                bgClass += ' ring-4 ring-red-500 ring-offset-2 ring-offset-[#0f172a]';
+                bgClass += ' ring-4 ring-red-500 ring-offset-2 ring-offset-slate-50';
             } else {
                 rightIndicator = `<span class="inline-flex items-center gap-0.5 bg-amber-400 text-amber-950 text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shadow border border-white animate-bounce leading-none select-none"><i class="fa-solid fa-receipt text-[7px]"></i>Bill</span>`;
-                bgClass += ' ring-4 ring-amber-400 ring-offset-2 ring-offset-[#0f172a]';
+                bgClass += ' ring-4 ring-amber-400 ring-offset-2 ring-offset-slate-50';
             }
         } else if (isReserved) {
             rightIndicator = `<span class="inline-flex items-center gap-0.5 bg-blue-500 text-white text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shadow border border-white leading-none select-none"><i class="fa-solid fa-calendar-check text-[7px]"></i>${table.reservation?.time || 'Đặt'}</span>`;
@@ -499,17 +499,17 @@ const handleTableClick = async (table: any, isSilent = false) => {
         rightPanelOccupied.classList.add('hidden');
         rightPanelEmpty.classList.remove('hidden');
         rightPanelEmpty.innerHTML = `
-            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-black border border-emerald-500/30 mb-3">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-2xl font-black border border-emerald-500/20 mb-3">
                 <i class="fa-solid fa-utensils"></i>
             </div>
-            <p class="font-bold text-white text-lg mb-1">${table.tableNumber} đang trống</p>
-            <p class="text-xs text-amber-300 font-bold mb-1 flex items-center justify-center gap-1.5"><i class="fa-solid fa-location-dot text-[11px]"></i> ${table.zone || (table.tableNumber.toLowerCase().includes('vip') ? 'Phòng VIP' : 'Khu vực Tầng 1')}</p>
-            <p class="text-xs text-slate-400 mb-5">Sức chứa: ${table.max_capacity || 4} khách</p>
+            <p class="font-bold text-slate-900 text-lg mb-1">${table.tableNumber} đang trống</p>
+            <p class="text-xs text-amber-600 font-bold mb-1 flex items-center justify-center gap-1.5"><i class="fa-solid fa-location-dot text-[11px]"></i> ${table.zone || (table.tableNumber.toLowerCase().includes('vip') ? 'Phòng VIP' : 'Khu vực Tầng 1')}</p>
+            <p class="text-xs text-slate-500 mb-5">Sức chứa: ${table.max_capacity || 4} khách</p>
             <div class="flex flex-col gap-2.5 w-full max-w-[220px]">
-                <button id="btn-open-table" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 cursor-pointer">
+                <button id="btn-open-table" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-play text-sm"></i> Mở bàn
                 </button>
-                <button id="btn-open-reserve-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-blue-600/30 flex items-center justify-center gap-2 text-xs cursor-pointer">
+                <button id="btn-open-reserve-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 text-xs cursor-pointer">
                     <i class="fa-solid fa-calendar-check text-sm"></i> Đặt trước bàn
                 </button>
             </div>
@@ -521,40 +521,40 @@ const handleTableClick = async (table: any, isSilent = false) => {
         rightPanelEmpty.classList.remove('hidden');
         const res = table.reservation || {};
         rightPanelEmpty.innerHTML = `
-            <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-black border border-blue-500/30 mb-2">
+            <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center text-2xl font-black border border-blue-500/20 mb-2">
                 <i class="fa-solid fa-calendar-check"></i>
             </div>
-            <p class="font-bold text-white text-lg mb-1">${table.tableNumber}</p>
-            <span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold px-3 py-1 rounded-full mb-4">ĐÃ ĐẶT TRƯỚC</span>
+            <p class="font-bold text-slate-900 text-lg mb-1">${table.tableNumber}</p>
+            <span class="bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1 rounded-full mb-4">ĐÃ ĐẶT TRƯỚC</span>
             
-            <div class="w-full bg-[#0f172a] rounded-2xl border border-slate-700/60 p-4 mb-5 text-left text-xs space-y-2.5">
-                <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                    <span class="text-slate-400">Khách hàng:</span>
-                    <span class="font-bold text-white text-sm">${res.guestName || 'Chưa có tên'}</span>
+            <div class="w-full bg-slate-50 rounded-2xl border border-slate-200 p-4 mb-5 text-left text-xs space-y-2.5">
+                <div class="flex justify-between border-b border-slate-200/80 pb-1.5">
+                    <span class="text-slate-500">Khách hàng:</span>
+                    <span class="font-bold text-slate-900 text-sm">${res.guestName || 'Chưa có tên'}</span>
                 </div>
-                <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                    <span class="text-slate-400">Số điện thoại:</span>
-                    <span class="font-bold text-blue-400 font-mono">${res.phone || '--'}</span>
+                <div class="flex justify-between border-b border-slate-200/80 pb-1.5">
+                    <span class="text-slate-500">Số điện thoại:</span>
+                    <span class="font-bold text-blue-600 font-mono">${res.phone || '--'}</span>
                 </div>
-                <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                    <span class="text-slate-400">Giờ hẹn đến:</span>
-                    <span class="font-bold text-amber-400 font-mono">${res.time || '--'}</span>
+                <div class="flex justify-between border-b border-slate-200/80 pb-1.5">
+                    <span class="text-slate-500">Giờ hẹn đến:</span>
+                    <span class="font-bold text-amber-600 font-mono">${res.time || '--'}</span>
                 </div>
-                <div class="flex justify-between border-b border-slate-800 pb-1.5">
-                    <span class="text-slate-400">Số khách:</span>
-                    <span class="font-bold text-white">${res.pax || 2} người</span>
+                <div class="flex justify-between border-b border-slate-200/80 pb-1.5">
+                    <span class="text-slate-500">Số khách:</span>
+                    <span class="font-bold text-slate-900">${res.pax || 2} người</span>
                 </div>
                 ${res.notes ? `
-                <div class="pt-1 text-slate-300 italic">
+                <div class="pt-1 text-slate-700 italic">
                     <span class="text-slate-500 not-italic">Ghi chú:</span> ${res.notes}
                 </div>` : ''}
             </div>
 
             <div class="flex flex-col gap-2.5 w-full">
-                <button id="btn-checkin-reserve" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 cursor-pointer">
+                <button id="btn-checkin-reserve" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-solid fa-user-check"></i> Khách đến - Mở bàn
                 </button>
-                <button id="btn-cancel-reserve-table" class="w-full bg-slate-700 hover:bg-red-600 text-slate-300 hover:text-white font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-xs cursor-pointer">
+                <button id="btn-cancel-reserve-table" class="w-full bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 border border-slate-200 font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-xs cursor-pointer">
                     <i class="fa-solid fa-trash-can"></i> Hủy đặt trước
                 </button>
             </div>
@@ -566,18 +566,18 @@ const handleTableClick = async (table: any, isSilent = false) => {
         rightPanelEmpty.classList.remove('hidden');
         const parentTable = allTables.find(t => t.id === table.merged_with);
         rightPanelEmpty.innerHTML = `
-            <div class="w-14 h-14 rounded-2xl bg-red-500/20 text-red-400 flex items-center justify-center text-2xl font-black border border-red-500/30 mb-2">
+            <div class="w-14 h-14 rounded-2xl bg-red-500/10 text-red-600 flex items-center justify-center text-2xl font-black border border-red-500/20 mb-2">
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <p class="font-bold text-white text-lg mb-1">${table.tableNumber}</p>
-            <span class="bg-red-500/20 text-red-300 border border-red-500/30 text-xs font-bold px-3 py-1 rounded-full mb-4">BÀN ĐÃ GỘP</span>
+            <p class="font-bold text-slate-900 text-lg mb-1">${table.tableNumber}</p>
+            <span class="bg-red-50 text-red-700 border border-red-200 text-xs font-bold px-3 py-1 rounded-full mb-4">BÀN ĐÃ GỘP</span>
             
-            <div class="w-full bg-[#0f172a] rounded-2xl border border-slate-700/60 p-4 mb-5 text-left text-xs space-y-2">
-                <p class="text-slate-300">Bàn này đang được ghép chung vào bàn chính: <strong class="text-white text-sm">${parentTable ? parentTable.tableNumber : 'Khác'}</strong></p>
+            <div class="w-full bg-slate-50 rounded-2xl border border-slate-200 p-4 mb-5 text-left text-xs space-y-2">
+                <p class="text-slate-700">Bàn này đang được ghép chung vào bàn chính: <strong class="text-slate-900 text-sm">${parentTable ? parentTable.tableNumber : 'Khác'}</strong></p>
                 <p class="text-slate-500 text-[11px]">Tất cả đơn hàng và phục vụ đều được ghi nhận vào bàn chính.</p>
             </div>
 
-            <button id="btn-unmerge-single-table" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 cursor-pointer">
+            <button id="btn-unmerge-single-table" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-link-slash"></i> Tách bàn này (Mở lại)
             </button>
         `;
@@ -723,14 +723,14 @@ const handleTableClick = async (table: any, isSilent = false) => {
                         const mName = (curr.menuItem_id && typeof curr.menuItem_id === 'object' && curr.menuItem_id.name) ? curr.menuItem_id.name : (mon ? mon.name : (curr.name || 'Món ăn'));
                         
                         let badge = '';
-                        if (st === 'unconfirmed') badge = `<span class="whitespace-nowrap shrink-0 bg-yellow-500/20 text-yellow-400 border border-yellow-500/20 text-[10px] px-1.5 py-0.5 rounded animate-pulse">Chờ duyệt</span>`;
-                        else if (st === 'pending') badge = `<span class="whitespace-nowrap shrink-0 bg-slate-700 text-slate-300 text-[10px] px-1.5 py-0.5 rounded">Chờ bếp</span>`;
-                        else if (st === 'cooking') badge = `<span class="whitespace-nowrap shrink-0 bg-orange-500/20 text-orange-400 border border-orange-500/20 text-[10px] px-1.5 py-0.5 rounded animate-pulse">Đang nấu</span>`;
-                        else if (st === 'ready') badge = `<span class="whitespace-nowrap shrink-0 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-[10px] px-1.5 py-0.5 rounded font-black shadow-lg shadow-emerald-500/20">Sẵn sàng!</span>`;
+                        if (st === 'unconfirmed') badge = `<span class="whitespace-nowrap shrink-0 bg-yellow-50 text-yellow-700 border border-yellow-200 text-[10px] px-1.5 py-0.5 rounded font-bold animate-pulse">Chờ duyệt</span>`;
+                        else if (st === 'pending') badge = `<span class="whitespace-nowrap shrink-0 bg-slate-100 text-slate-600 border border-slate-200 text-[10px] px-1.5 py-0.5 rounded font-bold">Chờ bếp</span>`;
+                        else if (st === 'cooking') badge = `<span class="whitespace-nowrap shrink-0 bg-orange-50 text-orange-700 border border-orange-200 text-[10px] px-1.5 py-0.5 rounded font-bold animate-pulse">Đang nấu</span>`;
+                        else if (st === 'ready') badge = `<span class="whitespace-nowrap shrink-0 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-1.5 py-0.5 rounded font-black shadow-xs">Sẵn sàng!</span>`;
                         
                         itemsHtml += `
-                            <li class="flex justify-between items-center bg-[#1e293b]/80 border border-orange-500/20 p-2 rounded-lg">
-                                <span class="text-xs font-bold text-white truncate max-w-[140px]" title="${mName}">x${curr.quantity} ${mName}</span>
+                            <li class="flex justify-between items-center bg-white border border-slate-200 p-2 rounded-lg shadow-xs">
+                                <span class="text-xs font-bold text-slate-800 truncate max-w-[140px]" title="${mName}">x${curr.quantity} ${mName}</span>
                                 ${badge}
                             </li>
                         `;
@@ -929,10 +929,10 @@ const loadTableDetails = async (tableId: string, tableNumber: string, isBackgrou
         const statusSpan = document.getElementById('detail-status')!;
         if (table.status === 'Waiting_Payment') {
             statusSpan.innerText = 'CHỜ THANH TOÁN';
-            statusSpan.className = 'bg-amber-500/20 border border-amber-500 text-amber-500 text-sm font-bold px-4 py-2 rounded-lg flex items-center uppercase tracking-wider';
+            statusSpan.className = 'bg-amber-50 text-amber-800 border border-amber-300 text-sm font-bold px-4 py-2 rounded-lg flex items-center uppercase tracking-wider shadow-2xs';
         } else {
             statusSpan.innerText = 'ĐANG PHỤC VỤ';
-            statusSpan.className = 'bg-[#1e293b] border border-slate-700 text-slate-400 text-sm font-bold px-4 py-2 rounded-lg flex items-center uppercase tracking-wider';
+            statusSpan.className = 'bg-white border border-slate-200 text-slate-700 text-sm font-bold px-4 py-2 rounded-lg flex items-center uppercase tracking-wider shadow-2xs';
         }
     }
     
@@ -1004,11 +1004,11 @@ const loadTableDetails = async (tableId: string, tableNumber: string, isBackgrou
     // Rerender styling manually without fetching
     document.querySelectorAll('.order-item-row').forEach(row => {
         if (selectedOrderItemIds.includes(row.getAttribute('data-id') || '')) {
-            row.classList.add('bg-slate-700/80', 'shadow-[inset_4px_0_0_0_#10b981]');
-            row.classList.remove('hover:bg-slate-800/50');
+            row.classList.add('bg-orange-50', 'shadow-[inset_4px_0_0_0_#f97316]');
+            row.classList.remove('hover:bg-slate-50');
         } else {
-            row.classList.remove('bg-slate-700/80', 'shadow-[inset_4px_0_0_0_#10b981]');
-            row.classList.add('hover:bg-slate-800/50');
+            row.classList.remove('bg-orange-50', 'shadow-[inset_4px_0_0_0_#f97316]');
+            row.classList.add('hover:bg-slate-50');
         }
     });
 };
@@ -1130,15 +1130,15 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         }
 
         // Format Biến thể / Topping dạng chip nhỏ gọn, tự xuống dòng
-        let variantHtml = `<span class="text-xs text-slate-600 font-normal">-</span>`;
+        let variantHtml = `<span class="text-xs text-slate-400 font-normal">-</span>`;
         if (variantText && variantText !== '-') {
             const options = variantText.split(',').map((s: string) => s.trim()).filter(Boolean);
             if (options.length > 0) {
                 variantHtml = `
                     <div class="flex flex-wrap gap-1 max-w-full">
                         ${options.map((opt: string) => `
-                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-200 bg-[#0f172a] px-2 py-0.5 rounded-md border border-slate-700/80 shadow-2xs leading-normal">
-                                <span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs leading-normal">
+                                <span class="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></span>
                                 <span>${opt}</span>
                             </span>
                         `).join('')}
@@ -1148,12 +1148,12 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         }
 
         // Format Ghi chú riêng biệt nổi bật màu cam, nhỏ gọn cân đối
-        let notesHtml = `<span class="text-xs text-slate-600 font-normal">-</span>`;
+        let notesHtml = `<span class="text-xs text-slate-400 font-normal">-</span>`;
         if (actualNotes && actualNotes !== '-') {
             notesHtml = `
                 <div class="max-w-full">
-                    <span class="inline-flex items-start gap-1 text-[11px] font-bold text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md border border-amber-500/30 shadow-2xs leading-tight break-words">
-                        <i class="fa-solid fa-pen-to-square text-amber-400 text-[9px] mt-0.5 shrink-0"></i>
+                    <span class="inline-flex items-start gap-1 text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-2xs leading-tight break-words">
+                        <i class="fa-solid fa-pen-to-square text-amber-600 text-[9px] mt-0.5 shrink-0"></i>
                         <span>${actualNotes}</span>
                     </span>
                 </div>
@@ -1161,17 +1161,17 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         }
 
         const isSelected = selectedOrderItemIds.includes(compositeId);
-        const bgClass = isSelected ? 'bg-slate-700/80 shadow-[inset_4px_0_0_0_#10b981]' : 'hover:bg-slate-800/50';
+        const bgClass = isSelected ? 'bg-orange-50 shadow-[inset_4px_0_0_0_#f97316]' : 'hover:bg-slate-50';
 
         list.innerHTML += `
-            <tr onclick="selectOrderItem('${compositeId}')" data-id="${compositeId}" class="order-item-row transition-colors cursor-pointer ${bgClass}">
+            <tr onclick="selectOrderItem('${compositeId}')" data-id="${compositeId}" class="order-item-row border-b border-slate-100 transition-colors cursor-pointer ${bgClass}">
                 <!-- 1. Món ăn -->
                 <td class="py-3 px-4 align-middle">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${img}" loading="lazy" decoding="async" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-700/60 shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80'">
+                        <img src="${img}" loading="lazy" decoding="async" class="w-11 h-11 rounded-xl object-cover shrink-0 border border-slate-200 shadow-xs" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80'">
                         <div class="min-w-0">
-                            <div class="text-sm font-black text-white leading-snug break-words">${name}</div>
-                            ${item.is_combo ? '<span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-black bg-purple-500/20 text-purple-300 border border-purple-500/30">Set Combo</span>' : ''}
+                            <div class="text-sm font-black text-slate-900 leading-snug break-words">${name}</div>
+                            ${item.is_combo ? '<span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[9px] font-black bg-purple-50 text-purple-700 border border-purple-200">Set Combo</span>' : ''}
                         </div>
                     </div>
                 </td>
@@ -1181,12 +1181,12 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
                 <td class="py-3 px-2.5 align-middle">${notesHtml}</td>
                 <!-- 4. Số lượng -->
                 <td class="py-3 px-1 text-center align-middle">
-                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-[#0f172a] text-white font-black text-[11px] border border-slate-700 shadow-2xs">${item.quantity}</span>
+                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-slate-100 text-slate-800 font-black text-[11px] border border-slate-200 shadow-2xs">${item.quantity}</span>
                 </td>
                 <!-- 5. Thành tiền -->
                 <td class="py-3 px-3 text-right align-middle">
-                    <div class="text-xs font-black text-orange-400 whitespace-nowrap">${formatMoney(itemPrice * item.quantity)}</div>
-                    ${item.quantity > 1 ? `<div class="text-[10px] text-slate-400 font-semibold whitespace-nowrap">${formatMoney(itemPrice)}/phần</div>` : ''}
+                    <div class="text-xs font-black text-orange-600 whitespace-nowrap font-mono">${formatMoney(itemPrice * item.quantity)}</div>
+                    ${item.quantity > 1 ? `<div class="text-[10px] text-slate-500 font-semibold whitespace-nowrap">${formatMoney(itemPrice)}/phần</div>` : ''}
                 </td>
                 <!-- 6. Trạng thái & Thao tác -->
                 <td class="py-3 px-4 text-right align-middle">
@@ -1510,9 +1510,9 @@ const initDetailStatusFilter = () => {
             const target = e.currentTarget as HTMLButtonElement;
             document.querySelectorAll('.btn-detail-status-filter').forEach(b => {
                 b.classList.remove('bg-orange-500', 'text-white');
-                b.classList.add('bg-[#0f172a]', 'text-slate-400', 'border', 'border-slate-700');
+                b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
             });
-            target.classList.remove('bg-[#0f172a]', 'text-slate-400', 'border', 'border-slate-700');
+            target.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
             target.classList.add('bg-orange-500', 'text-white');
             currentDetailStatusFilter = target.getAttribute('data-status') || 'all';
             renderOrderDetails(cachedCurrentOrderDetails, cachedCurrentPax);
@@ -1623,10 +1623,10 @@ const getWaiterCategoryIcon = (name: string, icon?: string): string => {
         const isActive = currentModalFilter === id;
         const bgClass = isActive 
             ? 'bg-orange-500 text-white shadow-md border-orange-400 font-black' 
-            : 'bg-[#1e293b]/90 text-slate-300 hover:bg-slate-700/80 hover:text-white border-slate-700/60 font-bold';
+            : 'bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 border-slate-200 font-bold';
         const iconBg = isActive
             ? 'bg-white/20 text-white'
-            : 'bg-slate-800 text-orange-400 border border-slate-700/50';
+            : 'bg-slate-100 text-orange-500 border border-slate-200';
 
         return `
             <button onclick="filterModalMenu('${id}')" title="${name}" 
@@ -1679,15 +1679,15 @@ const getWaiterCategoryIcon = (name: string, icon?: string): string => {
 
     filtered.forEach(item => {
         menuGrid.innerHTML += `
-            <div class="bg-[#0f172a] rounded-xl border border-slate-700/50 p-3 hover:border-orange-500 transition-colors group flex flex-col shadow-sm hover:shadow-md relative">
-                <div class="h-28 overflow-hidden rounded-lg mb-3 bg-slate-800 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">
+            <div class="bg-white rounded-xl border border-slate-200 p-3 hover:border-orange-500 transition-colors group flex flex-col shadow-2xs hover:shadow-md relative">
+                <div class="h-28 overflow-hidden rounded-lg mb-3 bg-slate-100 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">
                     <img src="${item.image}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                 </div>
-                <h4 class="text-white font-bold text-sm mb-1 line-clamp-2 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">${item.name}</h4>
-                <div class="text-xs text-emerald-500 font-bold mb-2">Còn ${item.stock_quantity || 0} phần</div>
+                <h4 class="text-slate-900 font-bold text-sm mb-1 line-clamp-2 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">${item.name}</h4>
+                <div class="text-xs text-emerald-600 font-bold mb-2">Còn ${item.stock_quantity || 0} phần</div>
                 <div class="flex justify-between items-center mt-auto">
-                    <p class="text-orange-500 font-black text-sm">${formatMoney(item.base_price)}</p>
-                    <button onclick="addMenuItemToOrder('${item.id}')" class="w-8 h-8 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-black flex items-center justify-center transition-colors shadow-md active:scale-95">+</button>
+                    <p class="text-orange-600 font-black text-sm font-mono">${formatMoney(item.base_price)}</p>
+                    <button onclick="addMenuItemToOrder('${item.id}')" class="w-8 h-8 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-black flex items-center justify-center transition-colors shadow-xs active:scale-95 cursor-pointer">+</button>
                 </div>
             </div>
         `;
@@ -1756,23 +1756,23 @@ let currentItemVariants: any[] = [];
                 // BẮT BUỘC có mặc định ban đầu cho biến thể radio (nhất là Size) không được để trống
                 const isChecked = !allowMultiple && idx === 0;
                 const priceBadge = opt.extra_price > 0 
-                    ? `<span class="text-[11px] font-black text-orange-400 bg-orange-500/20 px-2 py-0.5 rounded-lg border border-orange-500/30 shrink-0">+${formatMoney(opt.extra_price)}</span>` 
+                    ? `<span class="text-[11px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-lg border border-orange-200 shrink-0">+${formatMoney(opt.extra_price)}</span>` 
                     : '';
                 
                 html += `
-                    <label class="group relative flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-700/80 bg-[#0f172a]/70 hover:border-slate-500 hover:bg-[#0f172a] cursor-pointer transition-all duration-200 active:scale-[0.98] select-none shadow-sm has-[:checked]:border-orange-500 has-[:checked]:bg-gradient-to-r has-[:checked]:from-orange-500/15 has-[:checked]:to-orange-500/5 has-[:checked]:shadow-lg has-[:checked]:shadow-orange-500/10 has-[:checked]:ring-1 has-[:checked]:ring-orange-500/50">
+                    <label class="group relative flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50 cursor-pointer transition-all duration-200 active:scale-[0.98] select-none shadow-xs has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50/50 has-[:checked]:ring-1 has-[:checked]:ring-orange-500/50">
                         <input type="${inputType}" name="${inputName}" value="${opt.name}" ${isChecked ? 'checked' : ''} class="sr-only" data-price="${opt.extra_price}">
                         <div class="flex items-center gap-2.5 min-w-0">
                             ${allowMultiple ? `
-                                <div class="w-5 h-5 rounded-lg border-2 border-slate-600 bg-slate-800/90 flex items-center justify-center shrink-0 transition-all duration-200 group-hover:border-slate-400 group-has-[:checked]:border-orange-500 group-has-[:checked]:bg-orange-500 group-has-[:checked]:shadow-[0_0_10px_rgba(249,115,22,0.4)]">
+                                <div class="w-5 h-5 rounded-lg border-2 border-slate-300 bg-slate-100 flex items-center justify-center shrink-0 transition-all duration-200 group-hover:border-slate-400 group-has-[:checked]:border-orange-500 group-has-[:checked]:bg-orange-500">
                                     <i class="fa-solid fa-check text-white text-[10px] scale-0 group-has-[:checked]:scale-100 transition-transform duration-200"></i>
                                 </div>
                             ` : `
-                                <div class="w-5 h-5 rounded-full border-2 border-slate-600 bg-slate-800/90 flex items-center justify-center shrink-0 transition-all duration-200 group-hover:border-slate-400 group-has-[:checked]:border-orange-500 group-has-[:checked]:bg-orange-500 group-has-[:checked]:shadow-[0_0_10px_rgba(249,115,22,0.4)]">
+                                <div class="w-5 h-5 rounded-full border-2 border-slate-300 bg-slate-100 flex items-center justify-center shrink-0 transition-all duration-200 group-hover:border-slate-400 group-has-[:checked]:border-orange-500 group-has-[:checked]:bg-orange-500">
                                     <div class="w-2 h-2 rounded-full bg-white scale-0 group-has-[:checked]:scale-100 transition-transform duration-200"></div>
                                 </div>
                             `}
-                            <span class="text-slate-200 text-xs font-black tracking-wide group-hover:text-white group-has-[:checked]:text-white transition-colors truncate">${opt.name}</span>
+                            <span class="text-slate-800 text-xs font-bold tracking-wide group-hover:text-slate-900 group-has-[:checked]:text-orange-950 transition-colors truncate">${opt.name}</span>
                         </div>
                         ${priceBadge}
                     </label>
@@ -1869,20 +1869,20 @@ document.getElementById('btn-confirm-variant')?.addEventListener('click', () => 
         const lineTotal = cartItem.item.base_price * cartItem.quantity;
         total += lineTotal;
         
-        const variantHtml = cartItem.variant ? `<span class="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded ml-1">${cartItem.variant}</span>` : '';
-        const noteHtml = cartItem.note ? `<div class="text-[10px] text-slate-400 mt-0.5 italic">Ghi chú: ${cartItem.note}</div>` : '';
+        const variantHtml = cartItem.variant ? `<span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded ml-1 font-semibold">${cartItem.variant}</span>` : '';
+        const noteHtml = cartItem.note ? `<div class="text-[10px] text-amber-700 mt-0.5 italic">Ghi chú: ${cartItem.note}</div>` : '';
         
         html += `
-            <div class="flex items-center justify-between p-3 border border-slate-700/50 rounded-xl bg-[#1e293b]/50">
+            <div class="flex items-center justify-between p-3 border border-slate-200 rounded-xl bg-slate-50">
                 <div class="flex-1">
-                    <h5 class="text-white font-bold text-sm mb-1">${cartItem.item.name} ${variantHtml}</h5>
-                    <p class="text-orange-500 font-bold text-xs">${formatMoney(lineTotal)}</p>
+                    <h5 class="text-slate-900 font-bold text-sm mb-1">${cartItem.item.name} ${variantHtml}</h5>
+                    <p class="text-orange-600 font-bold text-xs font-mono">${formatMoney(lineTotal)}</p>
                     ${noteHtml}
                 </div>
-                <div class="flex items-center gap-2 bg-[#0f172a] rounded-lg p-1 border border-slate-700 ml-2">
-                    <button onclick="changeDraftQuantity(${index}, -1)" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white rounded-md hover:bg-slate-700 transition">-</button>
-                    <span class="text-white font-black text-sm w-4 text-center">${cartItem.quantity}</span>
-                    <button onclick="changeDraftQuantity(${index}, 1)" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white rounded-md hover:bg-slate-700 transition">+</button>
+                <div class="flex items-center gap-2 bg-white rounded-lg p-1 border border-slate-200 ml-2 shadow-2xs">
+                    <button onclick="changeDraftQuantity(${index}, -1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 rounded-md hover:bg-slate-100 transition cursor-pointer font-bold">-</button>
+                    <span class="text-slate-900 font-black text-sm w-4 text-center font-mono">${cartItem.quantity}</span>
+                    <button onclick="changeDraftQuantity(${index}, 1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:text-slate-900 rounded-md hover:bg-slate-100 transition cursor-pointer font-bold">+</button>
                 </div>
             </div>
         `;
@@ -1964,10 +1964,10 @@ const renderMenuTab = () => {
         allBtn.className = `w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs transition-all border ${
             isAllActive 
                 ? 'bg-orange-500 text-white border-orange-400 shadow-md font-black' 
-                : 'bg-[#1e293b]/60 text-slate-300 hover:bg-[#1e293b] hover:text-white border-slate-800 font-bold'
+                : 'bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900 border-slate-200 font-bold'
         } cursor-pointer active:scale-[0.98] text-left`;
         allBtn.innerHTML = `
-            <div class="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isAllActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-orange-400 border border-slate-700/50'}">
+            <div class="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isAllActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-orange-600 border border-slate-200'}">
                 <i class="fa-solid fa-border-all text-[11px]"></i>
             </div>
             <span class="truncate leading-tight">Tất cả</span>
@@ -1985,12 +1985,12 @@ const renderMenuTab = () => {
             btn.className = `w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs transition-all border ${
                 isActive 
                     ? 'bg-orange-500 text-white border-orange-400 shadow-md font-black' 
-                    : 'bg-[#1e293b]/60 text-slate-300 hover:bg-[#1e293b] hover:text-white border-slate-800 font-bold'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900 border-slate-200 font-bold'
             } cursor-pointer active:scale-[0.98] text-left`;
             btn.title = c.name;
             const icon = getWaiterCategoryIcon(c.name, c.icon);
             btn.innerHTML = `
-                <div class="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-orange-400 border border-slate-700/50'}">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-orange-600 border border-slate-200'}">
                     <i class="fa-solid ${icon} text-[11px]"></i>
                 </div>
                 <span class="truncate leading-tight">${c.name}</span>
@@ -2024,11 +2024,11 @@ const renderMenuTab = () => {
     if (filtered.length === 0) {
         grid.innerHTML = `
             <div class="col-span-full py-20 flex flex-col items-center justify-center text-center">
-                <div class="w-16 h-16 bg-[#0f172a] rounded-full flex items-center justify-center text-slate-500 mb-4 border border-slate-800">
+                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4 border border-slate-200">
                     <i class="fa-solid fa-magnifying-glass text-2xl"></i>
                 </div>
-                <h4 class="text-white font-bold text-lg mb-1">Không tìm thấy món ăn nào</h4>
-                <p class="text-slate-400 text-sm max-w-sm mb-4">
+                <h4 class="text-slate-900 font-bold text-lg mb-1">Không tìm thấy món ăn nào</h4>
+                <p class="text-slate-500 text-sm max-w-sm mb-4">
                     ${waiterMenuSearchKeyword ? `Không có kết quả nào phù hợp với từ khóa "${waiterMenuSearchKeyword}".` : 'Danh mục này hiện chưa có món ăn.'} Vui lòng thử tìm từ khóa khác.
                 </p>
                 <button id="btn-reset-menu-filter" class="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl transition shadow-lg shadow-orange-500/20 flex items-center gap-2">
@@ -2074,17 +2074,17 @@ const renderMenuTab = () => {
         }
         
         grid.innerHTML += `
-            <div class="bg-[#0f172a] rounded-2xl border border-slate-700/50 flex flex-col overflow-hidden group relative">
+            <div class="bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden group relative shadow-2xs hover:shadow-md">
                 ${tagsHtml}
-                <div class="h-32 overflow-hidden bg-slate-800">
+                <div class="h-32 overflow-hidden bg-slate-100">
                     <img src="${item.image}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ${!isAvailable ? 'opacity-40 grayscale' : ''}">
                 </div>
                 <div class="p-4 flex flex-col flex-1">
-                    <h3 class="text-white font-bold text-sm leading-tight mb-1">${item.name}</h3>
-                    <p class="text-orange-500 font-black text-sm mb-4">${formatMoney(item.base_price)}</p>
+                    <h3 class="text-slate-900 font-bold text-sm leading-tight mb-1">${item.name}</h3>
+                    <p class="text-orange-600 font-black text-sm font-mono mb-4">${formatMoney(item.base_price)}</p>
                     
                     <div class="mt-auto flex justify-between items-center">
-                        <span class="text-xs font-bold ${isAvailable ? 'text-emerald-500' : 'text-slate-500'}">${isAvailable ? 'Còn ' + (item.stock_quantity || 0) + ' phần' : 'Hết hàng'}</span>
+                        <span class="text-xs font-bold ${isAvailable ? 'text-emerald-600' : 'text-slate-400'}">${isAvailable ? 'Còn ' + (item.stock_quantity || 0) + ' phần' : 'Hết hàng'}</span>
                     </div>
                 </div>
             </div>
@@ -2164,12 +2164,12 @@ const loadOrders = async () => {
                 const readyBadgeHtml = readyItems > 0 ? `<span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-black animate-pulse shadow-lg ml-2 border border-red-400/50">${readyItems} món xong!</span>` : '';
 
                 list.innerHTML += `
-                    <button onclick="viewOrderBill('${order.id}', '${tId}')" class="w-full bg-[#1e293b] border border-slate-700/50 hover:border-orange-500 p-4 rounded-2xl flex justify-between items-center transition text-left mb-3">
+                    <button onclick="viewOrderBill('${order.id}', '${tId}')" class="w-full bg-white border border-slate-200 hover:border-orange-500 p-4 rounded-2xl flex justify-between items-center transition text-left mb-3 shadow-xs hover:shadow-sm">
                         <div>
-                            <h4 class="text-white font-bold flex items-center">${tName} ${readyBadgeHtml}</h4>
-                            <span class="text-xs text-slate-500 font-semibold">${table?.current_pax || 0} khách</span>
+                            <h4 class="text-slate-900 font-bold flex items-center">${tName} ${readyBadgeHtml}</h4>
+                            <span class="text-xs text-slate-500 font-medium">${table?.current_pax || 0} khách</span>
                         </div>
-                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-bold">Đang phục vụ</span>
+                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-3 py-1 rounded-full font-bold">Đang phục vụ</span>
                     </button>
                 `;
             }
@@ -2243,33 +2243,33 @@ const loadOrders = async () => {
                 });
                 displayNote = [vText, ...noteParts].filter(Boolean).join(' | ');
             }
-            const notesHtml = displayNote ? `<div class="text-xs text-orange-400 mt-0.5">${displayNote}</div>` : '';
+            const notesHtml = displayNote ? `<div class="text-xs text-amber-700 mt-0.5">${displayNote}</div>` : '';
             // Badge trạng thái
             const s = (item.status || '').toLowerCase();
             let badge = '';
-            if (s === 'unconfirmed') badge = `<span class="inline-flex items-center gap-1 bg-yellow-500/20 text-yellow-500 text-xs font-bold px-2.5 py-1 rounded-full animate-pulse border border-yellow-500/20"><span class="w-1.5 h-1.5 rounded-full bg-yellow-500 inline-block"></span>Chờ duyệt</span>`;
-            else if (s === 'pending') badge = `<span class="inline-flex items-center gap-1 bg-slate-700 text-slate-300 text-xs font-bold px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>Chờ bếp</span>`;
-            else if (s === 'cooking') badge = `<span class="inline-flex items-center gap-1 bg-orange-500/20 text-orange-400 text-xs font-bold px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block animate-pulse"></span>Đang nấu</span>`;
-            else if (s === 'ready') badge = `<span class="inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>Sẵn sàng!</span>`;
-            else if (s === 'served') badge = `<span class="inline-flex items-center gap-1 bg-blue-500/20 text-blue-400 text-xs font-bold px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block"></span>Đã phục vụ</span>`;
+            if (s === 'unconfirmed') badge = `<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-bold px-2.5 py-1 rounded-full animate-pulse border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>Chờ duyệt</span>`;
+            else if (s === 'pending') badge = `<span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-full border border-slate-200"><span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>Chờ bếp</span>`;
+            else if (s === 'cooking') badge = `<span class="inline-flex items-center gap-1 bg-orange-50 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full border border-orange-200"><span class="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block animate-pulse"></span>Đang nấu</span>`;
+            else if (s === 'ready') badge = `<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>Sẵn sàng!</span>`;
+            else if (s === 'served') badge = `<span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full border border-blue-200"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>Đã phục vụ</span>`;
             // Nút mang ra chỉ khi Ready
             const serveBtn = s === 'ready'
-                ? `<button onclick="markServed('${item.id}', '${orderId}', '${tableNumber}')" class="text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1 rounded-full transition-colors">✓ Mang ra</button>`
+                ? `<button onclick="markServed('${item.id}', '${orderId}', '${tableNumber}')" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1 rounded-full transition-colors shadow-sm">✓ Mang ra</button>`
                 : '';
             tbody.innerHTML += `
-                <tr class="border-b border-slate-800/50 last:border-0">
+                <tr class="border-b border-slate-200/80 last:border-0">
                     <td class="py-3">
                         <div class="flex items-center gap-3">
-                            <img src="${(mon && mon.image) ? mon.image : ((item.menuItem_id && item.menuItem_id.image) ? item.menuItem_id.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80')}" loading="lazy" decoding="async" class="w-10 h-10 rounded-md object-cover bg-slate-800 shrink-0">
+                            <img src="${(mon && mon.image) ? mon.image : ((item.menuItem_id && item.menuItem_id.image) ? item.menuItem_id.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80')}" loading="lazy" decoding="async" class="w-10 h-10 rounded-md object-cover bg-slate-100 border border-slate-200 shrink-0">
                             <div>
-                                <span class="text-white font-bold text-sm">${monName}</span>
+                                <span class="text-slate-900 font-bold text-sm">${monName}</span>
                                 ${notesHtml}
                                 <div class="mt-1.5 flex items-center flex-wrap gap-1">${badge}${serveBtn}</div>
                             </div>
                         </div>
                     </td>
-                    <td class="py-3 text-slate-400 font-bold text-center w-10">x${item.quantity}</td>
-                    <td class="py-3 text-white font-bold text-right whitespace-nowrap">${formatMoney(lineTotal)}</td>
+                    <td class="py-3 text-slate-600 font-bold text-center w-10">x${item.quantity}</td>
+                    <td class="py-3 text-slate-900 font-bold text-right whitespace-nowrap">${formatMoney(lineTotal)}</td>
                 </tr>
             `;
         });
@@ -2456,7 +2456,7 @@ document.getElementById('btn-transfer-table')?.addEventListener('click', () => {
     } else {
         availableTables.forEach(t => {
             grid.innerHTML += `
-                <button onclick="selectTransferTable('${t.id}')" id="tfer-btn-${t.id}" class="tfer-table-btn py-3 rounded-xl border-2 border-slate-700 bg-[#0f172a] text-slate-300 font-bold hover:border-orange-500 transition">
+                <button onclick="selectTransferTable('${t.id}')" id="tfer-btn-${t.id}" class="tfer-table-btn py-3 rounded-xl border-2 border-slate-200 bg-white text-slate-700 font-bold hover:border-orange-500 transition shadow-xs">
                     ${t.tableNumber}
                 </button>
             `;
@@ -2474,12 +2474,12 @@ document.getElementById('btn-transfer-table')?.addEventListener('click', () => {
 (window as any).selectTransferTable = (id: string) => {
     tableToTransfer = id;
     document.querySelectorAll('.tfer-table-btn').forEach(b => {
-        b.classList.remove('border-orange-500', 'text-white', 'bg-orange-500/20');
-        b.classList.add('border-slate-700', 'bg-[#0f172a]', 'text-slate-300');
+        b.classList.remove('border-orange-500', 'text-orange-700', 'bg-orange-50');
+        b.classList.add('border-slate-200', 'bg-white', 'text-slate-700');
     });
     const btn = document.getElementById(`tfer-btn-${id}`)!;
-    btn.classList.remove('border-slate-700', 'bg-[#0f172a]', 'text-slate-300');
-    btn.classList.add('border-orange-500', 'text-white', 'bg-orange-500/20');
+    btn.classList.remove('border-slate-200', 'bg-white', 'text-slate-700');
+    btn.classList.add('border-orange-500', 'text-orange-700', 'bg-orange-50');
     
     (document.getElementById('btn-transfer-confirm') as HTMLButtonElement).disabled = false;
     document.getElementById('btn-transfer-confirm')!.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -2651,11 +2651,11 @@ const loadPickupBoard = async () => {
 
         if (readyDetails.length === 0) {
             list.innerHTML = `
-                <div class="py-12 text-center text-slate-400">
-                    <div class="w-16 h-16 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center text-3xl mx-auto mb-3">
-                        <i class="fa-solid fa-check-double text-emerald-500"></i>
+                <div class="py-12 text-center text-slate-500">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-check-double text-emerald-600"></i>
                     </div>
-                    <p class="font-bold text-base text-slate-300">Không có món nào đang chờ bưng ra</p>
+                    <p class="font-bold text-base text-slate-800">Không có món nào đang chờ bưng ra</p>
                     <p class="text-xs text-slate-500 mt-1">Khi bếp hoàn thành món, danh sách sẽ hiển thị tại đây</p>
                 </div>
             `;
@@ -2673,26 +2673,26 @@ const loadPickupBoard = async () => {
             const itemImg = (item.menuItem_id && typeof item.menuItem_id === 'object' && item.menuItem_id.image) ? item.menuItem_id.image : (menuItem ? menuItem.image : '');
 
             html += `
-                <div class="bg-[#0f172a] border border-slate-700/80 hover:border-emerald-500/50 rounded-2xl p-4 flex items-center justify-between gap-4 transition shadow-md">
+                <div class="bg-white border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 flex items-center justify-between gap-4 transition shadow-sm hover:shadow">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${itemImg}" loading="lazy" decoding="async" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-700">
+                        <img src="${itemImg}" loading="lazy" decoding="async" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200 bg-slate-50">
                         <div class="min-w-0">
                             <div class="flex items-center gap-2 mb-1">
-                                <span class="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-black px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                                <span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
                                     <i class="fa-solid fa-utensils text-[10px] mr-1"></i>${tableName}
                                 </span>
-                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2 py-0.5 rounded-full whitespace-nowrap animate-pulse">
+                                <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap animate-pulse">
                                     Bếp đã xong
                                 </span>
                             </div>
-                            <h4 class="font-black text-white text-sm truncate">${itemName}</h4>
-                            <div class="flex items-center gap-2 text-xs text-slate-400">
-                                <span>SL: <strong class="text-emerald-400 text-sm">${item.quantity}</strong></span>
+                            <h4 class="font-bold text-slate-900 text-sm truncate">${itemName}</h4>
+                            <div class="flex items-center gap-2 text-xs text-slate-500">
+                                <span>SL: <strong class="text-emerald-700 text-sm">${item.quantity}</strong></span>
                                 ${item.notes ? `<span class="italic text-slate-500 truncate">(${item.notes})</span>` : ''}
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn-serve-pickup shrink-0 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-black transition-all shadow-lg shadow-emerald-500/20 active:scale-95 flex items-center gap-1.5 cursor-pointer" data-id="${item.id}" data-name="${itemName.replace(/"/g, '&quot;')}" data-table="${tableName}">
+                    <button type="button" class="btn-serve-pickup shrink-0 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1.5 cursor-pointer" data-id="${item.id}" data-name="${itemName.replace(/"/g, '&quot;')}" data-table="${tableName}">
                         <i class="fa-solid fa-check"></i> Đã bưng
                     </button>
                 </div>
@@ -2765,11 +2765,11 @@ const renderServiceCenterList = () => {
     const calls = Object.values(activeServiceCalls);
     if (calls.length === 0) {
         list.innerHTML = `
-            <div class="py-12 text-center text-slate-400">
-                <div class="w-16 h-16 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center text-3xl mx-auto mb-3">
-                    <i class="fa-solid fa-bell-slash text-slate-500"></i>
+            <div class="py-12 text-center text-slate-500">
+                <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-3xl mx-auto mb-3">
+                    <i class="fa-solid fa-bell-slash text-slate-400"></i>
                 </div>
-                <p class="font-bold text-base text-slate-300">Không có yêu cầu phục vụ nào</p>
+                <p class="font-bold text-base text-slate-800">Không có yêu cầu phục vụ nào</p>
                 <p class="text-xs text-slate-500 mt-1">Khi khách bấm chuông gọi tại bàn, thông báo sẽ hiện ở đây</p>
             </div>
         `;
@@ -2780,29 +2780,29 @@ const renderServiceCenterList = () => {
     calls.forEach(call => {
         const isCall = call.type === 'CALL';
         html += `
-            <div class="p-4 rounded-2xl border ${isCall ? 'bg-red-500/10 border-red-500/30 text-red-100' : 'bg-amber-500/10 border-amber-500/30 text-amber-100'} shadow-lg space-y-3">
+            <div class="p-4 rounded-2xl border ${isCall ? 'bg-red-50/60 border-red-200 text-red-900' : 'bg-amber-50/60 border-amber-200 text-amber-900'} shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-lg ${isCall ? 'bg-red-500 text-white' : 'bg-amber-500 text-amber-950'} flex items-center justify-center font-black text-sm">
+                        <span class="w-8 h-8 rounded-lg ${isCall ? 'bg-red-600 text-white' : 'bg-amber-600 text-white'} flex items-center justify-center font-bold text-sm">
                             <i class="fa-solid ${isCall ? 'fa-bell' : 'fa-receipt'}"></i>
                         </span>
                         <div>
-                            <h4 class="font-black text-white text-base">${call.tableName}</h4>
-                            <span class="text-[10px] font-mono text-slate-400">${call.time}</span>
+                            <h4 class="font-bold text-slate-900 text-base">${call.tableName}</h4>
+                            <span class="text-[10px] font-mono text-slate-500">${call.time}</span>
                         </div>
                     </div>
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${isCall ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${isCall ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}">
                         ${isCall ? 'Gọi phục vụ' : 'Tính tiền'}
                     </span>
                 </div>
-                <p class="text-xs font-bold text-slate-300">
+                <p class="text-xs font-semibold text-slate-700">
                     ${isCall ? (call.reason || 'Cần hỗ trợ tại bàn') : `Phương thức: ${call.method || 'Tiền mặt'}`}
                 </p>
                 <div class="flex gap-2">
-                    <button type="button" class="btn-ack-call flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-black transition cursor-pointer flex items-center justify-center gap-1" data-table="${call.tableId}">
+                    <button type="button" class="btn-ack-call flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1 shadow-sm" data-table="${call.tableId}">
                         <i class="fa-solid fa-check"></i> Tiếp nhận
                     </button>
-                    <button type="button" class="btn-goto-table flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1" data-table="${call.tableId}">
+                    <button type="button" class="btn-goto-table flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1" data-table="${call.tableId}">
                         <i class="fa-solid fa-eye"></i> Xem bàn
                     </button>
                 </div>
