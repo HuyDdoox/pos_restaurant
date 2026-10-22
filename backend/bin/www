@@ -1,6 +1,17 @@
 #!/usr/bin/env node
 
 /**
+ * TẤM KHIÊN BẢO VỆ TIẾN TRÌNH NODE.JS (CHỐNG SẬP/CRASH TOÀN CỤC)
+ */
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('⚠️ [Bảo vệ Node.js - Unhandled Rejection]:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('❌ [Bảo vệ Node.js - Uncaught Exception]:', err.message);
+});
+
+/**
  * Module dependencies.
  */
 

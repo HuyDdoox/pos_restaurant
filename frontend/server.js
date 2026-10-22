@@ -418,6 +418,17 @@ server.use((req, res, next) => {
     next();
 });
 
+function checkBackend(callback) {
+    const req = http.get(`http://127.0.0.1:${BACKEND_PORT}/api/menu`, (res) => {
+        callback(res.statusCode < 500);
+    });
+    req.on('error', () => callback(false));
+    req.setTimeout(2000, () => {
+        req.destroy();
+        callback(false);
+    });
+}
+
 // Use standard JSON Server router
 server.use(router);
 

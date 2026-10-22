@@ -2,7 +2,7 @@ import {
     layDanhSachBan, capNhatTrangThaiBan, taoDonHang, layDonHangDangMoCuaBan,
     layChiTietCuaDon, capNhatChiTietDonHang, taoChiTietDonHang, layDanhSachMonAn,
     layDanhSachDanhMuc, capNhatTrangThaiMenu, layTatCaDonHang, layDanhSachMonSanSang, layDanhSachVariants,
-    capNhatDonHang
+    capNhatDonHang, layDanhSachNguyenLieu, layTatCaCongThuc
 } from './api';
 import { API_ORDERS_URL, API_ORDER_DETAILS_URL, API_TABLES_URL } from './config';
 import { showSuccessToast, showConfirmModal, showPromptModal, showWarningToast, showMoveMergeModal, showNumberPromptModal } from './utils/ui';
@@ -32,6 +32,92 @@ const updateDateTime = () => {
 };
 setInterval(updateDateTime, 1000);
 updateDateTime();
+
+const initWaiterUserProfile = () => {
+    const user: any = currentAuthUser || (() => {
+        try {
+            return JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('user') || '{}');
+        } catch { return {}; }
+    })();
+
+    const fullName = user.fullname || user.name || user.username || 'Phục vụ';
+    const words = fullName.trim().split(/\s+/);
+    const initials = words.length > 1 
+        ? (words[0][0] + words[words.length - 1][0]).toUpperCase() 
+        : fullName.slice(0, 2).toUpperCase();
+
+    const avatarEl = document.getElementById('waiter-avatar-initials');
+    if (avatarEl) avatarEl.innerText = initials;
+
+    const nameEl = document.getElementById('global-user-name');
+    if (nameEl) nameEl.innerText = fullName;
+
+    const dropNameEl = document.getElementById('waiter-dropdown-user-name');
+    if (dropNameEl) dropNameEl.innerText = fullName;
+};
+initWaiterUserProfile();
+
+let cachedIngredients: any[] = [];
+let cachedRecipes: any[] = [];
+
+const ensureWaiterIngredientsAndRecipes = async () => {
+    if (cachedIngredients.length === 0 || cachedRecipes.length === 0) {
+        try {
+            const [ings, recs] = await Promise.all([
+                layDanhSachNguyenLieu().catch(() => []),
+                layTatCaCongThuc().catch(() => [])
+            ]);
+            cachedIngredients = Array.isArray(ings) ? ings : [];
+            cachedRecipes = Array.isArray(recs) ? recs : [];
+        } catch (e) {
+            console.error('Lỗi nạp kho & công thức waiter:', e);
+        }
+    }
+};
+
+const calculateWaiterPortions = (dish: any): number => {
+    if (!dish) return 25;
+    const dishId = String(dish.id || dish._id);
+
+    // 1. Nếu là món Combo: tính theo số suất của các món thành phần trong Combo
+    if (dish.is_combo && dish.combo_items && dish.combo_items.length > 0) {
+        const comboPortions = dish.combo_items.map((ci: any) => {
+            const childId = String(ci.menuItem_id?._id || ci.menuItem_id?.id || ci.menuItem_id);
+            const childDish = allMenuItems.find(m => String(m.id || m._id) === childId);
+            const singlePortions = childDish ? calculateWaiterPortions(childDish) : 25;
+            const req = Number(ci.quantity) || 1;
+            return Math.floor(singlePortions / req);
+        });
+        const minP = Math.min(...comboPortions);
+        return (isFinite(minP) && minP >= 0) ? minP : 15;
+    }
+
+    // 2. Món đơn có công thức định lượng
+    if (cachedRecipes.length > 0 && cachedIngredients.length > 0) {
+        const itemRecipes = cachedRecipes.filter((r: any) => {
+            const rMid = String(r.menuItem_id?._id || r.menuItem_id?.id || r.menuItem_id);
+            return rMid === dishId;
+        });
+
+        if (itemRecipes.length > 0) {
+            const portions = itemRecipes.map((r: any) => {
+                const rIngId = String(r.ingredient_id?._id || r.ingredient_id?.id || r.ingredient_id);
+                const ing = cachedIngredients.find((i: any) => String(i.id || i._id) === rIngId);
+                if (!ing) return 25;
+                const stock = Number(ing.stock_quantity) || 0;
+                const req = Number(r.quantity_required) || 1;
+                return Math.floor(stock / req);
+            });
+            const minPortion = Math.min(...portions);
+            return (isFinite(minPortion) && minPortion >= 0) ? minPortion : 20;
+        }
+    }
+
+    // 3. Fallback giá trị tồn kho cụ thể
+    const explicit = Number(dish.stock_quantity);
+    if (!isNaN(explicit) && explicit > 0) return explicit;
+    return 25;
+};
 
 // --- HỆ THỐNG ÂM THANH PHỤC VỤ (WAITER NOTIFICATION CHIME) ---
 let waiterAudioCtx: AudioContext | null = null;
@@ -1075,18 +1161,19 @@ const renderOrderDetails = (details: any[], pax: number = 0) => {
         let fastActionBtn = '';
 
         if (rawStatus === 'unconfirmed') {
-            statusBadge = `<span class="bg-yellow-500/20 text-yellow-500 border border-yellow-500/20 text-xs px-2.5 py-1 rounded-full animate-pulse font-bold whitespace-nowrap">Chờ XN</span>`;
+            statusBadge = `<span class="bg-amber-50 text-amber-800 border border-amber-300 text-xs px-2.5 py-1 rounded-full animate-pulse font-bold whitespace-nowrap">Chờ XN</span>`;
+            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickApproveDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black transition shadow shadow-emerald-500/20 cursor-pointer shrink-0" title="Duyệt món này gửi xuống bếp"><i class="fa-solid fa-check"></i> Duyệt</button>`;
         } else if (rawStatus === 'pending') {
-            statusBadge = `<span class="bg-slate-700 text-slate-300 text-xs px-2.5 py-1 rounded-full whitespace-nowrap">Chờ bếp</span>`;
-            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickRushDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-amber-500/20 hover:bg-amber-500 border border-amber-500/30 text-amber-400 hover:text-white rounded-lg text-[10px] font-black transition cursor-pointer shrink-0" title="Giục món này"><i class="fa-solid fa-bolt"></i> Giục</button>`;
+            statusBadge = `<span class="bg-slate-100 text-slate-700 border border-slate-300 text-xs px-2.5 py-1 rounded-full font-bold whitespace-nowrap">Chờ bếp</span>`;
+            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickRushDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-700 rounded-lg text-[10px] font-black transition cursor-pointer shrink-0" title="Giục món này"><i class="fa-solid fa-bolt"></i> Giục</button>`;
         } else if (rawStatus === 'cooking') {
-            statusBadge = `<span class="bg-orange-500/20 text-orange-500 border border-orange-500/20 text-xs px-2.5 py-1 rounded-full whitespace-nowrap">Đang nấu</span>`;
-            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickRushDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-amber-500/20 hover:bg-amber-500 border border-amber-500/30 text-amber-400 hover:text-white rounded-lg text-[10px] font-black transition cursor-pointer shrink-0" title="Giục món này"><i class="fa-solid fa-bolt"></i> Giục</button>`;
+            statusBadge = `<span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs px-2.5 py-1 rounded-full font-bold whitespace-nowrap">Đang nấu</span>`;
+            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickRushDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-700 rounded-lg text-[10px] font-black transition cursor-pointer shrink-0" title="Giục món này"><i class="fa-solid fa-bolt"></i> Giục</button>`;
         } else if (rawStatus === 'ready') {
-            statusBadge = `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs px-2.5 py-1 rounded-full whitespace-nowrap font-black shadow-sm">Bếp xong</span>`;
-            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickServeDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[10px] font-black transition shadow shadow-emerald-500/20 cursor-pointer shrink-0" title="Đánh dấu đã lên bàn"><i class="fa-solid fa-check"></i> Trả món</button>`;
+            statusBadge = `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2.5 py-1 rounded-full whitespace-nowrap font-black shadow-sm">Bếp xong</span>`;
+            fastActionBtn = `<button type="button" onclick="event.stopPropagation(); quickServeDish('${compositeId}', '${name.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black transition shadow shadow-emerald-500/20 cursor-pointer shrink-0" title="Đánh dấu đã lên bàn"><i class="fa-solid fa-check"></i> Trả món</button>`;
         } else if (rawStatus === 'served') {
-            statusBadge = `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/20 text-xs px-2.5 py-1 rounded-full whitespace-nowrap">Đã phục vụ</span>`;
+            statusBadge = `<span class="bg-blue-50 text-blue-700 border border-blue-200 text-xs px-2.5 py-1 rounded-full font-bold whitespace-nowrap">Đã phục vụ</span>`;
         } else if (rawStatus === 'cancelled') {
             statusBadge = `<span class="bg-red-500/20 text-red-400 text-xs px-2.5 py-1 rounded-full line-through whitespace-nowrap">Đã hủy</span>`;
         }
@@ -1449,6 +1536,23 @@ document.getElementById('btn-request-remake')?.addEventListener('click', async (
     loadTableDetails(selectedTableId!, tableTitle);
 };
 
+(window as any).quickApproveDish = async (compositeId: string, dishName: string) => {
+    const ids = compositeId.split(',');
+    for (const id of ids) {
+        await capNhatChiTietDonHang(id, { status: 'Pending' });
+    }
+    showSuccessToast(`Đã duyệt món "${dishName}" gửi xuống bếp!`);
+    kdsChannel.postMessage({
+        type: 'FOODHUB_NEW_ORDER',
+        count: ids.length,
+        orderId: currentOrderId,
+        tableId: selectedTableId,
+        message: `Đã duyệt món "${dishName}" chuyển xuống bếp!`
+    });
+    const tableTitle = document.getElementById('detail-table-title')?.innerText || 'Bàn';
+    loadTableDetails(selectedTableId!, tableTitle);
+};
+
 // RUSH ORDER (GIỤC BẾP CẢ BÀN)
 document.getElementById('btn-rush-order')?.addEventListener('click', async () => {
     if (!selectedTableId || !currentOrderId) {
@@ -1684,7 +1788,7 @@ const getWaiterCategoryIcon = (name: string, icon?: string): string => {
                     <img src="${item.image}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                 </div>
                 <h4 class="text-slate-900 font-bold text-sm mb-1 line-clamp-2 cursor-pointer" onclick="addMenuItemToOrder('${item.id}')">${item.name}</h4>
-                <div class="text-xs text-emerald-600 font-bold mb-2">Còn ${item.stock_quantity || 0} phần</div>
+                <div class="text-xs text-emerald-600 font-bold mb-2">Còn ${calculateWaiterPortions(item)} phần</div>
                 <div class="flex justify-between items-center mt-auto">
                     <p class="text-orange-600 font-black text-sm font-mono">${formatMoney(item.base_price)}</p>
                     <button onclick="addMenuItemToOrder('${item.id}')" class="w-8 h-8 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-black flex items-center justify-center transition-colors shadow-xs active:scale-95 cursor-pointer">+</button>
@@ -1742,10 +1846,10 @@ let currentItemVariants: any[] = [];
             const allowMultiple = opts[0].allowMultiple;
             html += `<div class="mb-4">
                 <div class="flex items-center justify-between mb-2">
-                    <p class="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-layer-group text-orange-500 text-[11px]"></i>
+                    <p class="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group text-orange-600 text-[11px]"></i>
                         ${gName}
-                        <span class="text-slate-500 font-semibold lowercase text-[11px]">(${allowMultiple ? 'chọn nhiều' : 'bắt buộc chọn 1'})</span>
+                        <span class="text-slate-600 font-semibold lowercase text-[11px]">(${allowMultiple ? 'chọn nhiều' : 'bắt buộc chọn 1'})</span>
                     </p>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -1946,6 +2050,7 @@ document.getElementById('btn-close-modal')?.addEventListener('click', () => {
 // ==========================================
 const loadMenu = async () => {
     try {
+        await ensureWaiterIngredientsAndRecipes();
         allMenuItems = await layDanhSachMonAn();
         allCategories = await layDanhSachDanhMuc();
         renderMenuTab();
@@ -2084,7 +2189,7 @@ const renderMenuTab = () => {
                     <p class="text-orange-600 font-black text-sm font-mono mb-4">${formatMoney(item.base_price)}</p>
                     
                     <div class="mt-auto flex justify-between items-center">
-                        <span class="text-xs font-bold ${isAvailable ? 'text-emerald-600' : 'text-slate-400'}">${isAvailable ? 'Còn ' + (item.stock_quantity || 0) + ' phần' : 'Hết hàng'}</span>
+                        <span class="text-xs font-bold ${isAvailable ? 'text-emerald-600' : 'text-slate-400'}">${isAvailable ? 'Còn ' + calculateWaiterPortions(item) + ' phần' : 'Hết hàng'}</span>
                     </div>
                 </div>
             </div>
@@ -2664,21 +2769,58 @@ const loadPickupBoard = async () => {
 
         let html = '';
         readyDetails.forEach((item: any) => {
-            const order = allOrders.find((o: any) => String(o.id) === String(item.order_id));
-            const table = order ? allTables.find((t: any) => String(t.id) === String(order.table_id)) : null;
-            const tableName = table ? table.tableNumber : ('Đơn #' + item.order_id);
+            let tableName = '';
+            let orderCode = '';
+
+            if (item.order_id && typeof item.order_id === 'object') {
+                const ordObj = item.order_id;
+                const ordId = String(ordObj.id || ordObj._id || '');
+                if (ordId) orderCode = `#${ordId.slice(-6).toUpperCase()}`;
+
+                // 1. Kiểm tra table_id lồng bên trong order_id đã populate
+                if (ordObj.table_id && typeof ordObj.table_id === 'object') {
+                    tableName = ordObj.table_id.tableNumber || '';
+                } else if (ordObj.table_id) {
+                    const table = allTables.find((t: any) => String(t.id || t._id) === String(ordObj.table_id));
+                    if (table) tableName = table.tableNumber;
+                }
+
+                if (!tableName && ordObj.customerInfo && ordObj.customerInfo !== 'Khách lẻ') {
+                    tableName = ordObj.customerInfo;
+                }
+            } else if (item.order_id) {
+                const ordId = String(item.order_id);
+                orderCode = `#${ordId.slice(-6).toUpperCase()}`;
+                const order = allOrders.find((o: any) => String(o.id || o._id) === ordId);
+                if (order) {
+                    if (order.table_id && typeof order.table_id === 'object') {
+                        tableName = order.table_id.tableNumber || '';
+                    } else if (order.table_id) {
+                        const table = allTables.find((t: any) => String(t.id || t._id) === String(order.table_id));
+                        if (table) tableName = table.tableNumber;
+                    }
+                    if (!tableName && order.customerInfo && order.customerInfo !== 'Khách lẻ') {
+                        tableName = order.customerInfo;
+                    }
+                }
+            }
+
+            if (!tableName) {
+                tableName = orderCode ? `Đơn ${orderCode}` : 'Mang đi';
+            }
+
             const mId = (item.menuItem_id && typeof item.menuItem_id === 'object') ? String(item.menuItem_id.id || item.menuItem_id._id) : String(item.menuItem_id || '');
             const menuItem = allMenuItems.find((m: any) => String(m.id || m._id) === mId);
             const itemName = (item.menuItem_id && typeof item.menuItem_id === 'object' && item.menuItem_id.name) ? item.menuItem_id.name : (menuItem ? menuItem.name : (item.name || 'Món ăn'));
             const itemImg = (item.menuItem_id && typeof item.menuItem_id === 'object' && item.menuItem_id.image) ? item.menuItem_id.image : (menuItem ? menuItem.image : '');
 
             html += `
-                <div class="bg-white border border-slate-200 hover:border-emerald-500 rounded-2xl p-4 flex items-center justify-between gap-4 transition shadow-sm hover:shadow">
+                <div class="bg-white border border-slate-200 hover:border-emerald-500 rounded-lg p-4 flex items-center justify-between gap-4 transition shadow-sm hover:shadow">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${itemImg}" loading="lazy" decoding="async" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200 bg-slate-50">
+                        <img src="${itemImg}" loading="lazy" decoding="async" class="w-14 h-14 rounded-lg object-cover shrink-0 border border-slate-200 bg-slate-50">
                         <div class="min-w-0">
                             <div class="flex items-center gap-2 mb-1">
-                                <span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                                <span class="bg-orange-50 text-orange-700 border border-orange-200 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap" title="${orderCode}">
                                     <i class="fa-solid fa-utensils text-[10px] mr-1"></i>${tableName}
                                 </span>
                                 <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap animate-pulse">
@@ -2692,7 +2834,7 @@ const loadPickupBoard = async () => {
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn-serve-pickup shrink-0 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1.5 cursor-pointer" data-id="${item.id}" data-name="${itemName.replace(/"/g, '&quot;')}" data-table="${tableName}">
+                    <button type="button" class="btn-serve-pickup shrink-0 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm active:scale-95 flex items-center gap-1.5 cursor-pointer" data-id="${item.id}" data-name="${itemName.replace(/"/g, '&quot;')}" data-table="${tableName}">
                         <i class="fa-solid fa-check"></i> Đã bưng
                     </button>
                 </div>
@@ -3113,20 +3255,33 @@ initReservationModal();
 initTransferItemModal();
 initDetailStatusFilter();
 
-// Bật Short Polling (3 giây 1 lần)
-setInterval(() => {
-    if (currentTab === 'tables') {
-        loadTables(true);
-        updateReadyPickupBadge();
-        updateServiceCenterBadge();
-    } else if (currentTab === 'details' && selectedTableId) {
-        // Lấy lại table number từ UI (đỡ phải truyền biến)
-        const tableNumber = document.getElementById('detail-table-title')!.innerText;
-        loadTableDetails(selectedTableId, tableNumber, true);
-        updateReadyPickupBadge();
-        updateServiceCenterBadge();
+// Bật Short Polling an toàn có cờ khóa chống nghẽn (3.5 giây 1 lần)
+let isPollingWaiter = false;
+setInterval(async () => {
+    if (isPollingWaiter) return;
+    isPollingWaiter = true;
+    try {
+        if (currentTab === 'tables') {
+            await Promise.all([
+                loadTables(true),
+                updateReadyPickupBadge(),
+                updateServiceCenterBadge()
+            ]);
+        } else if (currentTab === 'details' && selectedTableId) {
+            const tableTitleEl = document.getElementById('detail-table-title');
+            const tableNumber = tableTitleEl ? tableTitleEl.innerText : '';
+            await Promise.all([
+                loadTableDetails(selectedTableId, tableNumber, true),
+                updateReadyPickupBadge(),
+                updateServiceCenterBadge()
+            ]);
+        }
+    } catch (e) {
+        // Tránh gián đoạn hệ thống khi mạng lag
+    } finally {
+        isPollingWaiter = false;
     }
-}, 3000);
+}, 3500);
 
 
 

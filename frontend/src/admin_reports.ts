@@ -142,9 +142,9 @@ const renderKPIs = (orders: any[], allDetails: any[]) => {
     const elCancel = document.getElementById('report-cancelled-count');
     const elCancelTrend = document.getElementById('report-cancelled-trend');
 
-    if (elRev) elRev.innerHTML = `${totalRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-300 ml-1">đ</span>`;
+    if (elRev) elRev.innerHTML = `${totalRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-500 ml-1">đ</span>`;
     if (elOrders) elOrders.innerText = `${orderCount} đơn`;
-    if (elAvg) elAvg.innerHTML = `${avgOrder.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-300 ml-1">đ</span>`;
+    if (elAvg) elAvg.innerHTML = `${avgOrder.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-500 ml-1">đ</span>`;
     if (elCancel) elCancel.innerText = `${cancelledCount} đơn`;
     if (elCancelTrend) elCancelTrend.innerText = `Tỷ lệ hủy: ${cancelRate}%`;
 };
@@ -211,17 +211,21 @@ const renderBreakdowns = (orders: any[], allDetails: any[], menuItems: any[], ca
     // 1. Phân bổ theo Danh mục
     if (categoryContainer) {
         const catMap = new Map<string, string>();
-        categories.forEach(c => catMap.set(c.id, c.name));
+        categories.forEach((c: any) => catMap.set(String(c.id || c._id), c.name));
 
         const itemCatMap = new Map<string, string>();
-        menuItems.forEach(m => itemCatMap.set(m.id, m.category_id || 'Khác'));
+        menuItems.forEach((m: any) => {
+            const cName = (typeof m.category_id === 'object' && m.category_id?.name)
+                ? m.category_id.name
+                : (catMap.get(String(m.category_id?._id || m.category_id?.id || m.category_id)) || (m.is_combo ? 'Combo Tiệc Âu' : 'Món ăn'));
+            itemCatMap.set(String(m.id || m._id), cName);
+        });
 
         const catRevenue: { [key: string]: number } = {};
         let totalCatRev = 0;
 
-        validDetails.forEach(d => {
-            const catId = itemCatMap.get(d.menuItem_id) || 'Khác';
-            const catName = catMap.get(catId) || 'Món ăn';
+        validDetails.forEach((d: any) => {
+            const catName = itemCatMap.get(String(d.menuItem_id?._id || d.menuItem_id?.id || d.menuItem_id)) || 'Món ăn';
             const rev = (d.priceAtOrder || 0) * (d.quantity || 1);
             catRevenue[catName] = (catRevenue[catName] || 0) + rev;
             totalCatRev += rev;

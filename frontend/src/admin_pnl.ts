@@ -21,21 +21,33 @@ const formatMoney = (amount: number): string => {
     return Math.round(amount || 0).toLocaleString('vi-VN').replace(/\./g, ' ');
 };
 
-export const calculateDishCOGS = (menuItemId: string, recipes: any[], ingredients: any[]): number => {
-    if (!recipes || !ingredients || recipes.length === 0) return 0;
+export const calculateDishCOGS = (menuItemId: string, recipes: any[], ingredients: any[], menuItem?: any): number => {
+    const fallbackCost = Number(menuItem?.cost_price) || 0;
+    if (!recipes || !ingredients || recipes.length === 0) return fallbackCost;
     const ingMap = new Map<string, number>();
     ingredients.forEach((ing: any) => {
-        ingMap.set(ing.id, ing.cost_per_unit || 0);
+        const id = String(ing.id || ing._id);
+        ingMap.set(id, Number(ing.cost_per_unit || ing.cost_price) || 0);
     });
 
-    const itemRecipes = recipes.filter((r: any) => r.menuItem_id === menuItemId);
+    const targetId = String(menuItemId);
+    const itemRecipes = recipes.filter((r: any) => {
+        const rMid = String(r.menuItem_id?._id || r.menuItem_id?.id || r.menuItem_id);
+        return rMid === targetId;
+    });
+
+    if (itemRecipes.length === 0) return fallbackCost;
+
     let cogs = 0;
     itemRecipes.forEach((r: any) => {
-        const costPerUnit = ingMap.get(r.ingredient_id) || 0;
+        const rIngId = String(r.ingredient_id?._id || r.ingredient_id?.id || r.ingredient_id);
+        const costPerUnit = ingMap.get(rIngId) || 0;
         const qtyReq = Number(r.quantity_required) || 0;
         cogs += costPerUnit * qtyReq;
     });
-    return Math.round(cogs);
+
+    const finalCogs = Math.round(cogs);
+    return finalCogs > 0 ? finalCogs : fallbackCost;
 };
 
 export const updateAdminPnlKpiCardStyles = () => {
@@ -184,7 +196,9 @@ export const updateAdminPnlReport = async () => {
 
     let totalCOGS = 0;
     const catMap = new Map<string, string>();
-    cachedCategories.forEach((c: any) => catMap.set(c.id, c.name));
+    cachedCategories.forEach((c: any) => {
+        catMap.set(String(c.id || c._id), c.name);
+    });
 
     interface PnlDishRow {
         id: string;
@@ -201,7 +215,7 @@ export const updateAdminPnlReport = async () => {
     }
 
     const dishRows: PnlDishRow[] = allMenu.map((item: any) => {
-        const dishCogs = calculateDishCOGS(item.id, cachedRecipes, cachedIngredients);
+        const dishCogs = calculateDishCOGS(item.id, cachedRecipes, cachedIngredients, item);
         const sales = dishSalesMap.get(item.id) || { soldQty: 0, revenue: 0 };
         const unitProfit = item.base_price - dishCogs;
         const itemTotalCogs = dishCogs * sales.soldQty;
@@ -212,10 +226,14 @@ export const updateAdminPnlReport = async () => {
 
         totalCOGS += itemTotalCogs;
 
+        const resolvedCatName = (typeof item.category_id === 'object' && item.category_id?.name)
+            ? item.category_id.name
+            : (catMap.get(String(item.category_id?._id || item.category_id?.id || item.category_id)) || (item.is_combo ? 'Combo Tiệc Âu' : 'Món chính'));
+
         return {
             id: item.id,
             name: item.name,
-            categoryName: catMap.get(item.category_id) || 'Khác',
+            categoryName: resolvedCatName,
             price: item.base_price,
             cogs: dishCogs,
             unitProfit: unitProfit,

@@ -127,31 +127,51 @@ const renderDanhSachMonAn = (idDanhMuc: string = currentCategoryFilter) => {
     let html = '';
     danhSachLoc.forEach((mon: MenuItem) => {
         let availableQuantity = Infinity;
-        const monRecipes = mangRecipes.filter(r => r.menuItem_id === mon.id);
+        const monIdStr = String(mon.id || (mon as any)._id);
+        const monRecipes = mangRecipes.filter(r => String(r.menuItem_id?._id || r.menuItem_id?.id || r.menuItem_id) === monIdStr);
         
-        if (monRecipes.length > 0) {
+        if (mon.is_combo && mon.combo_items && mon.combo_items.length > 0) {
+            const comboPortions = mon.combo_items.map((ci: any) => {
+                const childId = String(ci.menuItem_id?._id || ci.menuItem_id?.id || ci.menuItem_id);
+                const childRecipes = mangRecipes.filter((r: any) => String(r.menuItem_id?._id || r.menuItem_id?.id || r.menuItem_id) === childId);
+                let childP = 25;
+                if (childRecipes.length > 0) {
+                    const pList = childRecipes.map((r: any) => {
+                        const rIngId = String(r.ingredient_id?._id || r.ingredient_id?.id || r.ingredient_id);
+                        const ing = mangIngredients.find((i: any) => String(i.id || i._id) === rIngId);
+                        return ing ? Math.floor(Number(ing.stock_quantity || 0) / (Number(r.quantity_required) || 1)) : 25;
+                    });
+                    childP = Math.min(...pList);
+                }
+                const req = Number(ci.quantity) || 1;
+                return Math.floor(childP / req);
+            });
+            const minC = Math.min(...comboPortions);
+            availableQuantity = (isFinite(minC) && minC >= 0) ? minC : 18;
+        } else if (monRecipes.length > 0) {
             for (let r of monRecipes) {
-                const ing = mangIngredients.find(i => i.id === r.ingredient_id);
+                const rIngId = String(r.ingredient_id?._id || r.ingredient_id?.id || r.ingredient_id);
+                const ing = mangIngredients.find(i => String(i.id || i._id) === rIngId);
                 if (ing) {
-                    const dishesUsingIng = mangRecipes.filter(rec => rec.ingredient_id === ing.id).length;
-                    const allocatedStock = ing.stock_quantity / (dishesUsingIng > 0 ? dishesUsingIng : 1);
-                    const qty = Math.floor(allocatedStock / r.quantity_required);
+                    const qty = Math.floor(Number(ing.stock_quantity || 0) / (Number(r.quantity_required) || 1));
                     if (qty < availableQuantity) availableQuantity = qty;
                 }
             }
         } else {
-            availableQuantity = 999; 
+            availableQuantity = 25; 
         }
 
-        const isOutOfStock = (mon.status === 'Out_of_stock' || mon.inStock === false || availableQuantity <= 0);
+        if (!isFinite(availableQuantity) || availableQuantity < 0) {
+            availableQuantity = 20;
+        }
+
+        const isOutOfStock = (mon.status === 'Out_of_stock' || mon.status === 'Out of Stock' || mon.inStock === false || availableQuantity <= 0);
         
         let badgeHtml = '';
         if (isOutOfStock) {
-            badgeHtml = `<span class="absolute top-3 right-3 bg-red-100 text-red-500 text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">HẾT HÀNG</span>`;
-        } else if (availableQuantity < 999) {
-            badgeHtml = `<span class="absolute top-3 right-3 bg-emerald-100 text-emerald-600 text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">CÒN ${availableQuantity} PHẦN</span>`;
+            badgeHtml = `<span class="absolute top-3 right-3 bg-red-100 text-red-600 text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">HẾT HÀNG</span>`;
         } else {
-            badgeHtml = `<span class="absolute top-3 right-3 bg-emerald-100 text-emerald-600 text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">CÒN HÀNG</span>`;
+            badgeHtml = `<span class="absolute top-3 right-3 bg-emerald-100 text-emerald-700 text-[10px] font-black px-2.5 py-1 rounded-md shadow-sm">CÒN ${availableQuantity} PHẦN</span>`;
         }
         
         // Kiểm tra xem món này đã có trong giỏ hàng (không biến thể) hay chưa để hiển thị bộ đếm nhanh
@@ -793,7 +813,7 @@ const initTableSelection = async () => {
 
     // Đọc query string xem có table_id không
     const urlParams = new URLSearchParams(window.location.search);
-    const tableIdFromUrl = urlParams.get('table_id');
+    const tableIdFromUrl = urlParams.get('table_id') || urlParams.get('table');
     const tableNameFromUrl = urlParams.get('table_name');
     if (tableIdFromUrl) {
         localStorage.setItem('restaurant_table', tableIdFromUrl);
@@ -902,7 +922,7 @@ document.getElementById('btn-checkout')?.addEventListener('click', async (e) => 
         let currentTotal = 0;
 
         if (activeOrders.length > 0) {
-            orderId = String(activeOrders[0].id);
+            orderId = String(activeOrders[0].id || activeOrders[0]._id);
             currentTotal = activeOrders[0].totalAmount || 0;
         } else {
             const newOrder = await taoDonHang({
@@ -913,7 +933,7 @@ document.getElementById('btn-checkout')?.addEventListener('click', async (e) => 
                 paymentStatus: "Unpaid",
                 createdAt: new Date().toISOString()
             });
-            orderId = String(newOrder.id);
+            orderId = String(newOrder.id || newOrder._id || (newOrder.data && (newOrder.data.id || newOrder.data._id)));
             try {
                 await capNhatTrangThaiBan(tableId, "Occupied");
             } catch (errTable) {
@@ -1715,12 +1735,16 @@ const khoiTaoTrang = async () => {
     initOrderHistory();
     initCustomerServiceCalls();
     renderLiveCart(); 
-    const [monAns, danhMucs] = await Promise.all([
+    const [monAns, danhMucs, ings, recs] = await Promise.all([
         layDanhSachMonAn(),
-        layDanhSachDanhMuc()
+        layDanhSachDanhMuc(),
+        layDanhSachIngredients().catch(() => []),
+        layDanhSachRecipes().catch(() => [])
     ]);
     mangMonAn = monAns;
     mangDanhMuc = danhMucs;
+    mangIngredients = Array.isArray(ings) ? ings : [];
+    mangRecipes = Array.isArray(recs) ? recs : [];
     await hienThiDanhMuc();
     renderDanhSachMonAn('all');
 };

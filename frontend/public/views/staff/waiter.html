@@ -66,10 +66,10 @@
             </div>
             <div class="relative" id="waiter-user-container">
                 <button type="button" id="btn-waiter-user-toggle" class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer select-none">
-                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-black shadow-inner">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    <div id="waiter-avatar-initials" class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-black text-xs shadow-inner">
+                        PV
                     </div>
-                    <span class="text-sm font-bold text-slate-800 hidden sm:block" id="global-user-name">Nguyễn Văn T</span>
+                    <span class="text-sm font-bold text-slate-800 hidden sm:block" id="global-user-name">Phục vụ</span>
                     <i class="fa-solid fa-chevron-down text-slate-400 text-xs hidden sm:block"></i>
                 </button>
                 <!-- Menu con xổ xuống -->
@@ -190,7 +190,7 @@
 
             <!-- Right: Chi tiết bàn -->
             <div class="w-80 bg-white border-l border-slate-200 p-6 flex flex-col shrink-0">
-                <div id="table-detail-panel" class="bg-gradient-to-b from-orange-500 to-orange-600 rounded-3xl p-6 shadow-xl text-white flex flex-col flex-1 relative overflow-hidden hidden">
+                <div id="table-detail-panel" class="bg-gradient-to-b from-orange-500 to-orange-600 rounded-2xl p-6 shadow-xl text-white flex flex-col flex-1 relative overflow-hidden hidden">
                     <!-- Decor background icon -->
                     <svg class="absolute -top-4 -right-4 w-32 h-32 text-orange-400/30" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                     
@@ -405,7 +405,7 @@
             
             <!-- Main Bill -->
             <div class="flex-1 p-6 flex flex-col overflow-hidden bg-slate-50">
-                <div id="bill-detail-panel" class="bg-white rounded-3xl border border-slate-200 flex-1 flex flex-col overflow-hidden shadow-xl relative">
+                <div id="bill-detail-panel" class="bg-white rounded-2xl border border-slate-200 flex-1 flex flex-col overflow-hidden shadow-xl relative">
                     <!-- Header -->
                     <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50/60">
                         <h2 class="text-2xl font-black text-slate-900" id="bill-table-title">Bàn -- <span class="text-lg font-bold text-slate-500 ml-2" id="bill-guest-count">- khách</span></h2>
@@ -533,7 +533,7 @@
             <!-- Main Content -->
             <div class="flex-1 p-8 bg-slate-50 overflow-y-auto flex justify-center">
                 <div class="w-full max-w-3xl">
-                    <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xl">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-xl">
                         <div class="flex justify-between items-center mb-8 border-b border-slate-200 pb-6">
                             <h2 class="text-2xl font-black text-slate-900">Thông tin cá nhân</h2>
                             <button id="btn-logout" onclick="logout()" class="px-5 py-2.5 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 font-bold rounded-xl border border-slate-200 transition flex items-center gap-2 cursor-pointer">
@@ -585,7 +585,7 @@
 
     <!-- MODAL: GỌI THÊM KHÁCH -->
     <div id="modal-add-guest" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-xs shadow-2xl border border-slate-200">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-xs shadow-2xl border border-slate-200">
             <h3 class="text-lg font-black text-slate-900 mb-4 text-center">Cập nhật số khách</h3>
             <div class="flex items-center gap-4 justify-center mb-6">
                 <button id="btn-guest-minus" class="w-12 h-12 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-800 font-black text-2xl flex items-center justify-center transition cursor-pointer">−</button>
@@ -601,7 +601,7 @@
 
     <!-- MODAL: CHUYỂN BÀN -->
     <div id="modal-transfer-table" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-slate-200">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl border border-slate-200">
             <h3 class="text-lg font-black text-slate-900 mb-1">Chuyển bàn</h3>
             <p class="text-slate-500 text-sm mb-4">Chọn bàn trống để chuyển đơn hàng sang</p>
             <div class="grid grid-cols-4 gap-2 mb-6 max-h-56 overflow-y-auto pr-1" id="transfer-table-grid">
@@ -641,7 +641,7 @@
 
     <!-- MODAL: ADD MENU ITEM -->
     <div id="modal-add-menu" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 sm:p-6">
-        <div class="bg-white rounded-3xl w-full max-w-7xl h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-2xl w-full max-w-7xl h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
             <div class="p-5 sm:p-6 border-b border-slate-200 flex justify-between items-center shrink-0 bg-slate-50">
                 <h3 class="text-xl font-black text-slate-900">Thêm món vào bàn</h3>
                 <button id="btn-close-modal" class="text-slate-400 hover:text-slate-700 transition bg-slate-100 hover:bg-slate-200 rounded-full p-2 cursor-pointer">
@@ -695,7 +695,7 @@
 
     <!-- MODAL: ITEM VARIANT & NOTES -->
     <div id="modal-item-variant" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-6 shadow-2xl border border-slate-200">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-slate-200">
             <h3 class="text-xl font-black text-slate-900 mb-4" id="variant-modal-title">Chọn biến thể & Ghi chú</h3>
             
             <div class="mb-4 hidden" id="variant-container-wrapper">
@@ -719,10 +719,10 @@
 
     <!-- MODAL: KHAY MÓN CHỜ BƯNG RA (FOOD PICKUP BOARD) -->
     <div id="modal-pickup-board" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-lg w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
             <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-lg font-black border border-emerald-500/20">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-lg font-black border border-emerald-500/20">
                         <i class="fa-solid fa-bell-concierge"></i>
                     </div>
                     <div>
@@ -742,7 +742,7 @@
 
     <!-- MODAL: TRUNG TÂM CHUÔNG GỌI PHỤC VỤ (SERVICE CENTER) -->
     <div id="modal-service-center" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[160] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
             <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-lg font-black border border-amber-500/20">
@@ -765,7 +765,7 @@
 
     <!-- MODAL: CHUYỂN MÓN SANG BÀN KHÁC -->
     <div id="modal-transfer-item" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[170] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md shadow-2xl border border-slate-200 p-6 flex flex-col">
+        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-slate-200 p-6 flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
                     <i class="fa-solid fa-arrow-right-arrow-left text-indigo-600"></i> Chuyển món sang bàn khác
@@ -791,7 +791,7 @@
 
     <!-- MODAL: ĐẶT TRƯỚC BÀN (TABLE RESERVATION) -->
     <div id="modal-reserve-table" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[170] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm shadow-2xl border border-slate-200 p-6 flex flex-col">
+        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl border border-slate-200 p-6 flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
                     <i class="fa-solid fa-calendar-check text-blue-600"></i> <span id="reserve-modal-title">Đặt trước Bàn --</span>

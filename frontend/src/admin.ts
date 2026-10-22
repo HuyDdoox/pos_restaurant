@@ -282,11 +282,11 @@ const loadDashboardStats = async (overrideBranchId?: string) => {
         });
         
         // Cập nhật DOM
-        if (revEl) revEl.innerHTML = `${todayRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-300 ml-1">đ</span>`;
-        if (weekRevEl) weekRevEl.innerHTML = `${weekRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-300 ml-1">đ</span>`;
+        if (revEl) revEl.innerHTML = `${todayRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-500 ml-1">đ</span>`;
+        if (weekRevEl) weekRevEl.innerHTML = `${weekRevenue.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-500 ml-1">đ</span>`;
         if (ordEl) ordEl.innerHTML = `${orderCount}`;
         if (empEl) empEl.innerHTML = `${activeEmployees.length}`;
-        if (lossEl) lossEl.innerHTML = `${totalLoss.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-300 ml-1">đ</span>`;
+        if (lossEl) lossEl.innerHTML = `${totalLoss.toLocaleString('vi-VN')} <span class="text-xs sm:text-sm font-bold text-slate-500 ml-1">đ</span>`;
         if (lossCountEl) lossCountEl.innerText = `${lossDetails.length} món bị hủy`;
         
         // Render dynamic chart & preview tables

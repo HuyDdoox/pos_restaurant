@@ -538,23 +538,69 @@ export function formatQuantityForDisplay(quantity: number, unit: string) {
     return { displayQty: quantity, displayUnit: unit };
 }
 
+let inventorySortCol = '';
+let inventorySortDir: 'asc' | 'desc' = 'asc';
+
+function setupInventorySorting() {
+    document.querySelectorAll('th[data-inv-sort]').forEach(th => {
+        if (th.getAttribute('data-sort-bound')) return;
+        th.setAttribute('data-sort-bound', 'true');
+        th.addEventListener('click', () => {
+            const col = th.getAttribute('data-inv-sort') || '';
+            if (inventorySortCol === col) {
+                inventorySortDir = inventorySortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                inventorySortCol = col;
+                inventorySortDir = 'asc';
+            }
+
+            // Cập nhật icon
+            document.querySelectorAll('th[data-inv-sort] i').forEach(icon => {
+                icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+            });
+            const curIcon = th.querySelector('i');
+            if (curIcon) {
+                curIcon.className = `fa-solid fa-sort-${inventorySortDir === 'asc' ? 'up text-orange-600' : 'down text-orange-600'} text-[11px] ml-1`;
+            }
+
+            applyInventoryFilters();
+        });
+    });
+}
+
 function renderIngredientsTable(data: any[] = inventoryIngredients) {
     const tbody = document.getElementById('ingredients-table-body');
     if (!tbody) return;
+
+    setupInventorySorting();
 
     if (data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">Chưa có nguyên liệu nào phù hợp.</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = data.map(ing => {
+    // Sort if active
+    let sortedData = [...data];
+    if (inventorySortCol) {
+        sortedData.sort((a, b) => {
+            let valA = a[inventorySortCol === 'stock' ? 'stock_quantity' : (inventorySortCol === 'cost' ? 'cost_per_unit' : 'name')];
+            let valB = b[inventorySortCol === 'stock' ? 'stock_quantity' : (inventorySortCol === 'cost' ? 'cost_per_unit' : 'name')];
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA < valB) return inventorySortDir === 'asc' ? -1 : 1;
+            if (valA > valB) return inventorySortDir === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
+
+    tbody.innerHTML = sortedData.map(ing => {
         const fmt = formatQuantityForDisplay(ing.stock_quantity, ing.unit);
         return `
         <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
-            <td class="px-6 py-4 text-slate-500 font-mono whitespace-nowrap">#${ing.id}</td>
             <td class="px-6 py-4 font-bold text-slate-900 editable-ingredient-cell cursor-pointer group whitespace-nowrap" data-id="${ing.id}" data-field="name" data-value="${ing.name}" title="Nhấn đúp để sửa tên">
                 <span class="border-b border-transparent group-hover:border-slate-400 border-dashed pb-0.5 whitespace-nowrap">${ing.name}</span>
                 ${(ing.status === 'Inactive' || ing.status === 'Archived') ? '<span class="ml-2 bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold whitespace-nowrap border border-slate-200">Ngừng dùng</span>' : ''}
+                <span class="text-[11px] font-mono text-slate-400 font-normal block mt-0.5">#${ing.id}</span>
             </td>
             <td class="px-6 py-4 text-right whitespace-nowrap">
                 <span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-lg font-black border border-orange-200 whitespace-nowrap">
@@ -817,16 +863,21 @@ function renderRecipeMenuItems(data: any[] = inventoryMenuItems) {
         return;
     }
 
-    container.innerHTML = data.map(item => `
+    container.innerHTML = data.map(item => {
+        const cName = (typeof item.category_id === 'object' && item.category_id?.name)
+            ? item.category_id.name
+            : (item.is_combo ? 'Combo Tiệc Âu' : 'Món chính');
+        return `
         <div data-id="${item.id}" data-name="${item.name}" class="recipe-menu-item p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition-colors flex items-center gap-3">
             <img src="${item.image || 'https://placehold.co/50x50/orange/white?text=Food'}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover">
             <div class="flex-1">
                 <p class="font-bold text-slate-900 text-sm">${item.name}</p>
-                <p class="text-xs text-slate-500 font-medium">${item.category_id ? 'Món chính' : 'Khác'}</p>
+                <p class="text-xs text-slate-500 font-medium">${cName}</p>
             </div>
             <i class="fa-solid fa-circle-info text-slate-400 text-sm"></i>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function selectMenuItemForRecipe(id: string, name: string) {

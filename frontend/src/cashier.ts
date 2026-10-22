@@ -29,6 +29,56 @@ let activeOrderDetails: any[] = [];
 const kdsChannel = new BroadcastChannel('foodhub_kds');
 let tablesRequestedBill = new Set<string>();
 
+const initCashierUserProfile = () => {
+    const user: any = currentAuthUser || (() => {
+        try {
+            return JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('user') || '{}');
+        } catch { return {}; }
+    })();
+
+    const fullName = user.fullname || user.name || user.username || 'Thu ngân';
+    const role = user.role || 'Cashier';
+    const roleLabel = role === 'Admin' ? 'Quản trị viên' : (role === 'Cashier' ? 'Thu ngân' : (role === 'Chef' ? 'Bếp trưởng' : 'Phục vụ'));
+    const words = fullName.trim().split(/\s+/);
+    const initials = words.length > 1 
+        ? (words[0][0] + words[words.length - 1][0]).toUpperCase() 
+        : fullName.slice(0, 2).toUpperCase();
+    const code = user.id ? `NV${String(user.id).slice(-3).toUpperCase()}` : 'NV001';
+    const email = user.email || `${user.username || 'nhanvien'}@foodhub.com`;
+
+    const avatarBadge = document.getElementById('cashier-avatar-badge');
+    if (avatarBadge) avatarBadge.innerText = initials;
+
+    const nameEl = document.getElementById('cashier-user-fullname');
+    if (nameEl) nameEl.innerText = fullName;
+
+    const roleEl = document.getElementById('cashier-user-role-label');
+    if (roleEl) roleEl.innerText = roleLabel;
+
+    const profAvatar = document.getElementById('cashier-profile-avatar');
+    if (profAvatar) profAvatar.innerText = initials;
+
+    const profName = document.getElementById('cashier-profile-fullname');
+    if (profName) profName.innerText = fullName;
+
+    const profSub = document.getElementById('cashier-profile-sub');
+    if (profSub) profSub.innerText = `${roleLabel} • ${code}`;
+
+    const profNameRow = document.getElementById('cashier-profile-fullname-row');
+    if (profNameRow) profNameRow.innerText = fullName;
+
+    const profCode = document.getElementById('cashier-profile-code');
+    if (profCode) profCode.innerText = code;
+
+    const profRole = document.getElementById('cashier-profile-role');
+    if (profRole) profRole.innerText = roleLabel;
+
+    const profEmail = document.getElementById('cashier-profile-email');
+    if (profEmail) profEmail.innerText = email;
+};
+
+initCashierUserProfile();
+
 kdsChannel.onmessage = (event) => {
     if (event.data.type === 'REQUEST_CHECKOUT') {
         const { tableId, tableName, method, time } = event.data;
@@ -475,29 +525,8 @@ const calculateBillTotals = () => {
     selectedOrder.totalAmount = calculatedFinalTotal;
 };
 
-// Gắn sự kiện cho các nút giảm giá nhanh (0%, 5%, 10%, 20%)
+// Gắn sự kiện cho thuế và phí dịch vụ
 const setupDiscountAndTaxListeners = () => {
-    document.querySelectorAll('.btn-discount-quick').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            const pct = Number(target.getAttribute('data-discount') || '0');
-            currentDiscountType = 'percent';
-            currentDiscountPercent = pct;
-            currentDiscountFixedAmount = 0;
-            currentDiscountVoucherCode = '';
-            currentDiscountReason = pct > 0 ? `Giảm nhanh ${pct}%` : '';
-
-            document.querySelectorAll('.btn-discount-quick').forEach(b => {
-                b.classList.remove('bg-orange-500', 'text-white');
-                b.classList.add('text-slate-400');
-            });
-            target.classList.remove('text-slate-400');
-            target.classList.add('bg-orange-500', 'text-white');
-
-            calculateBillTotals();
-        });
-    });
-
     const chkService = document.getElementById('chk-service-charge') as HTMLInputElement;
     if (chkService) {
         chkService.addEventListener('change', () => {
@@ -518,7 +547,11 @@ const setupDiscountAndTaxListeners = () => {
 // ==========================================
 // TÍNH NĂNG 1: KHUYẾN MÃI / VOUCHER MODAL
 // ==========================================
+let discountModalEventsInitialized = false;
 const setupDiscountModalEvents = () => {
+    if (discountModalEventsInitialized) return;
+    discountModalEventsInitialized = true;
+
     const btnOpen = document.getElementById('btn-open-discount-modal');
     const overlay = document.getElementById('overlay-discount');
     const btnClose = document.getElementById('btn-close-discount');
@@ -527,6 +560,42 @@ const setupDiscountModalEvents = () => {
     const btnApplyCustom = document.getElementById('btn-apply-custom-discount');
     const voucherListEl = document.getElementById('discount-voucher-list');
     const currentDescEl = document.getElementById('discount-current-desc');
+
+    const tabBtnVouchers = document.getElementById('tab-btn-discount-vouchers');
+    const tabBtnCustom = document.getElementById('tab-btn-discount-custom');
+    const tabPanelVouchers = document.getElementById('tab-panel-discount-vouchers');
+    const tabPanelCustom = document.getElementById('tab-panel-discount-custom');
+    const footerTip = document.getElementById('discount-modal-footer-tip');
+    const badgeCount = document.getElementById('discount-voucher-tab-badge');
+
+    const switchDiscountTab = (tab: 'vouchers' | 'custom') => {
+        if (tab === 'vouchers') {
+            tabBtnVouchers?.classList.add('border-orange-500', 'text-orange-600');
+            tabBtnVouchers?.classList.remove('border-transparent', 'text-slate-500');
+            tabBtnCustom?.classList.remove('border-orange-500', 'text-orange-600');
+            tabBtnCustom?.classList.add('border-transparent', 'text-slate-500');
+
+            tabPanelVouchers?.classList.remove('hidden');
+            tabPanelCustom?.classList.add('hidden');
+
+            btnApplyCustom?.classList.add('hidden');
+            if (footerTip) footerTip.innerText = 'Bấm vào thẻ voucher để áp dụng ngay';
+        } else {
+            tabBtnCustom?.classList.add('border-orange-500', 'text-orange-600');
+            tabBtnCustom?.classList.remove('border-transparent', 'text-slate-500');
+            tabBtnVouchers?.classList.remove('border-orange-500', 'text-orange-600');
+            tabBtnVouchers?.classList.add('border-transparent', 'text-slate-500');
+
+            tabPanelCustom?.classList.remove('hidden');
+            tabPanelVouchers?.classList.add('hidden');
+
+            btnApplyCustom?.classList.remove('hidden');
+            if (footerTip) footerTip.innerText = 'Nhập % hoặc số tiền rồi bấm Áp dụng';
+        }
+    };
+
+    tabBtnVouchers?.addEventListener('click', () => switchDiscountTab('vouchers'));
+    tabBtnCustom?.addEventListener('click', () => switchDiscountTab('custom'));
 
     const updateDiscountSummary = () => {
         if (!currentDescEl) return;
@@ -549,7 +618,7 @@ const setupDiscountModalEvents = () => {
         if (!voucherListEl) return;
         
         voucherListEl.innerHTML = `
-            <div class="col-span-full py-6 text-center text-slate-400 text-xs">
+            <div class="col-span-full py-8 text-center text-slate-400 text-xs">
                 <i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang tải danh sách voucher từ hệ thống...
             </div>
         `;
@@ -557,10 +626,12 @@ const setupDiscountModalEvents = () => {
         await loadAvailableVouchers();
         const subtotal = calculatedSubtotal;
 
+        if (badgeCount) badgeCount.innerText = String(availableVouchers.length);
+
         if (availableVouchers.length === 0) {
             voucherListEl.innerHTML = `
-                <div class="col-span-full py-8 text-center text-slate-500 text-xs">
-                    <i class="fa-solid fa-ticket-simple text-2xl mb-2 block opacity-40"></i>
+                <div class="col-span-full py-10 text-center text-slate-500 text-xs">
+                    <i class="fa-solid fa-ticket-simple text-3xl mb-2 block opacity-40"></i>
                     Không có voucher khuyến mãi nào đang khả dụng.
                 </div>
             `;
@@ -580,25 +651,23 @@ const setupDiscountModalEvents = () => {
             const maxDisplay = (isPercent && maxDisc > 0) ? ` (tối đa ${formatMoney(maxDisc)} đ)` : '';
 
             html += `
-                <div class="voucher-card p-3 rounded-2xl border transition-all cursor-pointer relative ${
+                <div class="voucher-card p-3.5 rounded-lg border transition-all cursor-pointer relative ${
                     isApplied 
-                        ? 'border-orange-500 bg-orange-500/10 shadow-md shadow-orange-500/10' 
+                        ? 'border-orange-500 bg-orange-50/70 shadow-sm ring-2 ring-orange-400/30' 
                         : isEligible 
-                            ? 'border-slate-700 bg-[#0f172a] hover:border-orange-500/50 hover:bg-slate-800/60' 
-                            : 'border-slate-800 bg-[#0f172a]/40 opacity-50 cursor-not-allowed'
+                            ? 'border-slate-200 bg-white hover:border-orange-400 hover:bg-orange-50/30 shadow-2xs hover:shadow-xs' 
+                            : 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed text-slate-400'
                 }" data-voucher-code="${v.code}">
-                    <div class="flex justify-between items-start mb-1">
-                        <div>
-                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${
-                                isApplied ? 'bg-orange-500 text-white' : 'bg-slate-800 text-orange-400 border border-orange-500/30'
-                            }">${v.code}</span>
-                            <h5 class="text-xs font-bold text-white mt-1">${v.name || v.code}</h5>
-                        </div>
-                        <span class="text-xs font-black text-emerald-400">${valDisplay}${maxDisplay}</span>
+                    <div class="flex justify-between items-center gap-2 mb-1.5">
+                        <span class="inline-block px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider shrink-0 ${
+                            isApplied ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-700 border border-orange-200'
+                        }">${v.code}</span>
+                        <span class="text-xs font-black text-orange-600 whitespace-nowrap shrink-0">${valDisplay}${maxDisplay}</span>
                     </div>
-                    ${v.desc ? `<p class="text-[11px] text-slate-400">${v.desc}</p>` : ''}
-                    ${minOrder > 0 ? `<p class="text-[10px] text-slate-500 mt-1 italic">Đơn tối thiểu: ${formatMoney(minOrder)} đ</p>` : ''}
-                    ${isApplied ? '<div class="absolute top-2 right-2 text-orange-400 text-xs"><i class="fa-solid fa-circle-check"></i> Đang dùng</div>' : ''}
+                    <h5 class="text-xs font-bold text-slate-900 truncate mb-1" title="${v.name || v.code}">${v.name || v.code}</h5>
+                    ${v.desc ? `<p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">${v.desc}</p>` : ''}
+                    ${minOrder > 0 ? `<p class="text-[10px] text-slate-400 mt-1.5 italic font-medium">Đơn tối thiểu: <span class="font-mono font-bold text-slate-600">${formatMoney(minOrder)} đ</span></p>` : ''}
+                    ${isApplied ? '<div class="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1"><i class="fa-solid fa-check text-[9px]"></i> Đang dùng</div>' : ''}
                 </div>
             `;
         });
@@ -630,12 +699,6 @@ const setupDiscountModalEvents = () => {
                     currentDiscountPercent = 0;
                 }
 
-                // Reset quick buttons
-                document.querySelectorAll('.btn-discount-quick').forEach(b => {
-                    b.classList.remove('bg-orange-500', 'text-white');
-                    b.classList.add('text-slate-400');
-                });
-
                 calculateBillTotals();
                 updateDiscountSummary();
                 showSuccessToast(`Đã áp dụng voucher ${v.code}!`);
@@ -650,6 +713,7 @@ const setupDiscountModalEvents = () => {
             return;
         }
         updateDiscountSummary();
+        switchDiscountTab('vouchers');
         overlay?.classList.remove('hidden');
         overlay?.classList.add('flex');
         await renderVouchers();
@@ -670,16 +734,6 @@ const setupDiscountModalEvents = () => {
         currentDiscountFixedAmount = 0;
         currentDiscountVoucherCode = '';
         currentDiscountReason = '';
-
-        document.querySelectorAll('.btn-discount-quick').forEach(b => {
-            b.classList.remove('bg-orange-500', 'text-white');
-            b.classList.add('text-slate-400');
-        });
-        const zeroBtn = document.querySelector('.btn-discount-quick[data-discount="0"]');
-        if (zeroBtn) {
-            zeroBtn.classList.remove('text-slate-400');
-            zeroBtn.classList.add('bg-orange-500', 'text-white');
-        }
 
         calculateBillTotals();
         updateDiscountSummary();
@@ -721,12 +775,6 @@ const setupDiscountModalEvents = () => {
 
         currentDiscountVoucherCode = '';
         currentDiscountReason = reason;
-
-        // Reset quick buttons
-        document.querySelectorAll('.btn-discount-quick').forEach(b => {
-            b.classList.remove('bg-orange-500', 'text-white');
-            b.classList.add('text-slate-400');
-        });
 
         calculateBillTotals();
         showSuccessToast("Đã áp dụng giảm giá tùy chỉnh!");
@@ -1537,15 +1585,6 @@ const hienThiChiTietHoaDon = async (order: any) => {
             currentDiscountFixedAmount = 0;
             currentDiscountVoucherCode = '';
             currentDiscountReason = '';
-            document.querySelectorAll('.btn-discount-quick').forEach(b => {
-                b.classList.remove('bg-orange-500', 'text-white');
-                b.classList.add('text-slate-400');
-            });
-            const zeroBtn = document.querySelector('.btn-discount-quick[data-discount="0"]');
-            if (zeroBtn) {
-                zeroBtn.classList.remove('text-slate-400');
-                zeroBtn.classList.add('bg-orange-500', 'text-white');
-            }
         }
         calculateBillTotals();
 
@@ -1943,15 +1982,15 @@ const renderEqualSplitCards = () => {
         const isPaid = equalPaidShares.includes(i);
         const cardBg = isPaid ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200 shadow-sm';
         const statusBadge = isPaid 
-            ? '<span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-full text-[11px] border border-emerald-300">Đã thanh toán</span>'
-            : '<span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-full text-[11px] border border-slate-200">Chờ thanh toán</span>';
+            ? '<span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-md text-[11px] border border-emerald-300">Đã thanh toán</span>'
+            : '<span class="px-2.5 py-1 bg-slate-100 text-slate-700 font-bold rounded-md text-[11px] border border-slate-200">Chờ thanh toán</span>';
 
         const actionBtn = isPaid
-            ? `<button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 rounded-xl font-bold text-xs cursor-not-allowed border border-slate-200">Đã thu tiền</button>`
-            : `<button class="btn-pay-share w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-xs transition-colors shadow-md shadow-orange-500/20 cursor-pointer" data-share="${i}" data-amount="${shareAmount}">Thanh toán phần ${i}</button>`;
+            ? `<button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 rounded-lg font-bold text-xs cursor-not-allowed border border-slate-200">Đã thu tiền</button>`
+            : `<button class="btn-pay-share w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-bold text-xs transition-colors shadow-md shadow-orange-500/20 cursor-pointer" data-share="${i}" data-amount="${shareAmount}">Thanh toán phần ${i}</button>`;
 
         html += `
-            <div class="${cardBg} rounded-2xl p-4 border flex flex-col justify-between">
+            <div class="${cardBg} rounded-lg p-4 border flex flex-col justify-between">
                 <div class="flex justify-between items-center mb-3">
                     <span class="font-bold text-slate-900 text-sm">Phần ${i} / ${equalShareCount}</span>
                     ${statusBadge}
@@ -2170,6 +2209,22 @@ const updateMergePreview = () => {
 // ==========================================
 // TÍNH NĂNG 3: QUICK CASH & TOUCH NUMPAD
 // ==========================================
+// rawCashDigits: nguồn sự thật duy nhất cho giá trị tiền mặt nhập vào.
+// Không bao giờ đọc cashInput.value để tính số — chỉ đọc rawCashDigits.
+let rawCashDigits = '';       // chuỗi chỉ gồm ký tự 0-9, VD: "900000"
+let isFreshCashInput = true;  // true = lần gõ đầu tiên sau khi focus → đè toàn bộ
+
+const MAX_CASH_DIGITS_G = 9;  // Tối đa 9 chữ số (999.000.000 đ)
+const MAX_CASH_AMOUNT_G = 999999999;
+
+/** Render rawCashDigits ra display và cập nhật tiền thối */
+const applyCashDisplay = (cashInput: HTMLInputElement) => {
+    const num = parseInt(rawCashDigits, 10);
+    cashInput.value = (isNaN(num) || num === 0 || rawCashDigits === '') ? '' : formatMoney(num);
+    // Đặt caret cuối string để UX nhất quán
+    cashInput.setSelectionRange(cashInput.value.length, cashInput.value.length);
+};
+
 const setupQuickCashAndNumpad = () => {
     const cashInput = document.getElementById('input-customer-cash') as HTMLInputElement;
     const changeAmountEl = document.getElementById('pay-change-amount');
@@ -2177,77 +2232,188 @@ const setupQuickCashAndNumpad = () => {
     const changeLabel = document.getElementById('pay-change-label');
     const btnConfirmPay = document.getElementById('btn-confirm-pay') as HTMLButtonElement;
 
+    if (!cashInput) return;
+    if (cashInput.getAttribute('data-events-bound') === 'true') return;
+    cashInput.setAttribute('data-events-bound', 'true');
+
+    /** Tính tiền thối dựa trên rawCashDigits */
     const updateChangeCalculation = () => {
         if (!selectedOrder) return;
         const currentTotal = calculatedFinalTotal || selectedOrder.totalAmount || 0;
-        const rawVal = cashInput.value.replace(/[^0-9]/g, '');
-        const customerCash = parseInt(rawVal, 10);
+        const customerCash = rawCashDigits ? parseInt(rawCashDigits, 10) : 0;
 
         if (isNaN(customerCash) || customerCash === 0) {
-            if (changeAmountEl) changeAmountEl.innerText = '0 đ';
-            if (changeContainer) {
-                changeContainer.className = 'p-3 bg-slate-800/80 border border-slate-700 rounded-xl flex justify-between items-center';
+            if (changeAmountEl) {
+                changeAmountEl.innerText = '0 đ';
+                changeAmountEl.className = 'text-2xl font-black text-slate-600';
             }
-            if (changeLabel) changeLabel.innerText = 'Tiền thối lại:';
+            if (changeContainer) {
+                changeContainer.className = 'p-3 bg-slate-100 border border-slate-200 rounded-xl flex justify-between items-center';
+            }
+            if (changeLabel) {
+                changeLabel.innerText = 'Tiền thối lại:';
+                changeLabel.className = 'text-xs font-bold text-slate-500 uppercase tracking-wider';
+            }
             if (btnConfirmPay) btnConfirmPay.disabled = false;
             return;
         }
 
         const change = customerCash - currentTotal;
         if (change >= 0) {
-            // Đủ tiền -> Hiện tiền thối màu xanh
+            // Đủ tiền → Hiện tiền thối màu xanh
             if (changeAmountEl) {
                 changeAmountEl.innerText = `${formatMoney(change)} đ`;
-                changeAmountEl.className = 'text-2xl font-black text-emerald-400';
+                changeAmountEl.className = 'text-2xl font-black text-emerald-600';
             }
-            if (changeLabel) changeLabel.innerText = 'Tiền thối lại:';
+            if (changeLabel) {
+                changeLabel.innerText = 'Tiền thối lại:';
+                changeLabel.className = 'text-xs font-bold text-emerald-700 uppercase tracking-wider';
+            }
             if (changeContainer) {
-                changeContainer.className = 'p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex justify-between items-center';
+                changeContainer.className = 'p-3 bg-emerald-50 border border-emerald-300 rounded-xl flex justify-between items-center';
             }
             if (btnConfirmPay) {
                 btnConfirmPay.disabled = false;
                 btnConfirmPay.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         } else {
-            // Còn thiếu -> Hiện cảnh báo màu đỏ
+            // Còn thiếu → Hiện cảnh báo màu đỏ
             const missing = Math.abs(change);
             if (changeAmountEl) {
                 changeAmountEl.innerText = `Thiếu ${formatMoney(missing)} đ`;
-                changeAmountEl.className = 'text-2xl font-black text-rose-400';
+                changeAmountEl.className = 'text-2xl font-black text-rose-600';
             }
-            if (changeLabel) changeLabel.innerText = 'Chưa đủ tiền:';
+            if (changeLabel) {
+                changeLabel.innerText = 'Chưa đủ tiền:';
+                changeLabel.className = 'text-xs font-bold text-rose-700 uppercase tracking-wider';
+            }
             if (changeContainer) {
-                changeContainer.className = 'p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl flex justify-between items-center';
+                changeContainer.className = 'p-3 bg-rose-50 border border-rose-300 rounded-xl flex justify-between items-center';
             }
         }
     };
 
-    if (cashInput) {
-        cashInput.addEventListener('input', () => {
-            const num = parseInt(cashInput.value.replace(/[^0-9]/g, ''), 10);
-            cashInput.value = isNaN(num) ? '' : formatMoney(num);
-            updateChangeCalculation();
-        });
-    }
+    /** Helper: đặt rawCashDigits + render + tính thối */
+    const setRawAndRender = (digits: string) => {
+        // Chặn tối đa MAX_CASH_DIGITS_G chữ số
+        rawCashDigits = digits.replace(/[^0-9]/g, '').slice(0, MAX_CASH_DIGITS_G);
+        applyCashDisplay(cashInput);
+        updateChangeCalculation();
+    };
+
+    // Khi focus / click vào ô tiền: bật cờ "gõ đè"
+    const prepareFreshInput = () => {
+        isFreshCashInput = true;
+        cashInput.select();
+    };
+    cashInput.addEventListener('focus', prepareFreshInput);
+    cashInput.addEventListener('click', prepareFreshInput);
+
+    // Ngăn toàn bộ input event mặc định của trình duyệt — ta tự quản lý
+    cashInput.addEventListener('keydown', (e: KeyboardEvent) => {
+        // Phím số 0-9: thêm vào rawCashDigits (hoặc đè nếu fresh)
+        if (/^[0-9]$/.test(e.key)) {
+            e.preventDefault();
+            if (isFreshCashInput) {
+                isFreshCashInput = false;
+                setRawAndRender(e.key);
+            } else {
+                setRawAndRender(rawCashDigits + e.key);
+            }
+            return;
+        }
+
+        // Phím Backspace: xóa ký tự cuối trong rawCashDigits
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+            isFreshCashInput = false;
+            setRawAndRender(rawCashDigits.slice(0, -1));
+            return;
+        }
+
+        // Phím Delete: xóa trắng toàn bộ
+        if (e.key === 'Delete') {
+            e.preventDefault();
+            isFreshCashInput = true;
+            setRawAndRender('');
+            return;
+        }
+
+        // Phím Escape: xóa trắng ô tiền
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            isFreshCashInput = true;
+            setRawAndRender('');
+            return;
+        }
+
+        // Phím 'k' hoặc 'K': nhân 1000 (Ví dụ: gõ 900k → 900 000)
+        if (e.key === 'k' || e.key === 'K') {
+            e.preventDefault();
+            isFreshCashInput = false;
+            if (rawCashDigits && rawCashDigits !== '0' && rawCashDigits.length <= 6) {
+                const num = Math.min(parseInt(rawCashDigits, 10) * 1000, MAX_CASH_AMOUNT_G);
+                setRawAndRender(String(num));
+            }
+            return;
+        }
+
+        // Phím 'm' hoặc 'M': nhân 1 000 000 (Ví dụ: gõ 1m → 1 000 000)
+        if (e.key === 'm' || e.key === 'M') {
+            e.preventDefault();
+            isFreshCashInput = false;
+            if (rawCashDigits && rawCashDigits !== '0' && rawCashDigits.length <= 3) {
+                const num = Math.min(parseInt(rawCashDigits, 10) * 1000000, MAX_CASH_AMOUNT_G);
+                setRawAndRender(String(num));
+            }
+            return;
+        }
+
+        // Phím Enter: Xác nhận thanh toán nhanh
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (btnConfirmPay && !btnConfirmPay.disabled) {
+                btnConfirmPay.click();
+            }
+            return;
+        }
+
+        // Chặn tất cả phím khác không phải navigation (Tab, Arrow...) để tránh nhập ký tự lạ
+        const allowedKeys = ['Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+        if (!allowedKeys.includes(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    // Block sự kiện input mặc định hoàn toàn (tất cả đã xử lý trong keydown)
+    cashInput.addEventListener('input', (e) => {
+        // Trường hợp paste hoặc autocomplete → đọc lại value và sync về rawCashDigits
+        const pastedRaw = cashInput.value.replace(/[^0-9]/g, '').slice(0, MAX_CASH_DIGITS_G);
+        rawCashDigits = pastedRaw;
+        applyCashDisplay(cashInput);
+        updateChangeCalculation();
+        isFreshCashInput = false;
+    });
 
     // Quick cash presets
     document.querySelectorAll('.btn-quick-cash').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            isFreshCashInput = false;
             const amountAttr = (e.currentTarget as HTMLElement).getAttribute('data-amount');
             const currentTotal = calculatedFinalTotal || (selectedOrder ? selectedOrder.totalAmount : 0);
+            let targetAmount = 0;
 
             if (amountAttr === 'exact') {
-                cashInput.value = formatMoney(currentTotal);
+                targetAmount = currentTotal;
             } else if (amountAttr?.startsWith('+')) {
                 const add = parseInt(amountAttr.replace('+', ''), 10);
-                const cur = parseInt(cashInput.value.replace(/[^0-9]/g, ''), 10) || 0;
-                cashInput.value = formatMoney(cur + add);
+                const cur = rawCashDigits ? parseInt(rawCashDigits, 10) : 0;
+                targetAmount = Math.min(cur + add, MAX_CASH_AMOUNT_G);
             } else {
-                const val = parseInt(amountAttr || '0', 10);
-                cashInput.value = formatMoney(val);
+                targetAmount = Math.min(parseInt(amountAttr || '0', 10), MAX_CASH_AMOUNT_G);
             }
 
-            updateChangeCalculation();
+            setRawAndRender(String(Math.round(targetAmount)));
         });
     });
 
@@ -2255,22 +2421,29 @@ const setupQuickCashAndNumpad = () => {
     document.querySelectorAll('.btn-numpad').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const key = (e.currentTarget as HTMLElement).getAttribute('data-key');
-            let cur = cashInput.value.replace(/[^0-9]/g, '');
 
             if (key === 'clear') {
-                cur = '';
+                isFreshCashInput = true;
+                setRawAndRender('');
             } else if (key === 'back') {
-                cur = cur.slice(0, -1);
+                isFreshCashInput = false;
+                setRawAndRender(rawCashDigits.slice(0, -1));
             } else if (key === '000') {
-                if (cur && cur !== '0') cur += '000';
+                isFreshCashInput = false;
+                if (rawCashDigits && rawCashDigits !== '0') setRawAndRender(rawCashDigits + '000');
+            } else if (key === '00') {
+                isFreshCashInput = false;
+                if (rawCashDigits && rawCashDigits !== '0') setRawAndRender(rawCashDigits + '00');
             } else {
-                if (cur === '0') cur = key || '';
-                else cur += (key || '');
+                // Phím số đơn
+                if (isFreshCashInput || rawCashDigits === '0' || rawCashDigits === '') {
+                    isFreshCashInput = false;
+                    setRawAndRender(key || '');
+                } else {
+                    isFreshCashInput = false;
+                    setRawAndRender(rawCashDigits + (key || ''));
+                }
             }
-
-            const num = parseInt(cur, 10);
-            cashInput.value = isNaN(num) ? '' : formatMoney(num);
-            updateChangeCalculation();
         });
     });
 };
@@ -2313,13 +2486,39 @@ document.getElementById('btn-pay')?.addEventListener('click', () => {
     const qrDesc = document.getElementById('pay-qr-desc');
     if (qrDesc) qrDesc.innerText = `Ban ${numTable} Don #${selectedOrder.id}`;
 
-    // Reset Cash input
+    // Cập nhật Smart Rounding Presets
+    const totalToPay = calculatedFinalTotal || selectedOrder.totalAmount || 0;
+    const round1Btn = document.querySelector('.btn-quick-cash[data-amount="round1"]') as HTMLButtonElement;
+    const round2Btn = document.querySelector('.btn-quick-cash[data-amount="round2"]') as HTMLButtonElement;
+    if (round1Btn && round2Btn && totalToPay > 0) {
+        let r1 = Math.ceil(totalToPay / 50000) * 50000;
+        if (r1 <= totalToPay) r1 += 50000;
+        let r2 = Math.ceil(totalToPay / 100000) * 100000;
+        if (r2 <= r1) r2 = Math.ceil((r1 + 10000) / 500000) * 500000;
+        if (r2 <= r1) r2 = r1 + 100000;
+
+        round1Btn.setAttribute('data-amount', String(r1));
+        round1Btn.innerText = r1 >= 1000000 ? `${(r1 / 1000000).toLocaleString('vi-VN')}tr` : `${Math.round(r1 / 1000)}k`;
+
+        round2Btn.setAttribute('data-amount', String(r2));
+        round2Btn.innerText = r2 >= 1000000 ? `${(r2 / 1000000).toLocaleString('vi-VN')}tr` : `${Math.round(r2 / 1000)}k`;
+    }
+
+    // Reset Cash input (đồng thời reset rawCashDigits để tránh mang số cũ sang)
     const cashInput = document.getElementById('input-customer-cash') as HTMLInputElement;
     const changeAmount = document.getElementById('pay-change-amount');
     const viewCash = document.getElementById('pay-view-cash');
     const viewTransfer = document.getElementById('pay-view-transfer');
 
-    if (cashInput) cashInput.value = '';
+    if (cashInput) {
+        rawCashDigits = '';      // Reset nguồn sự thật
+        cashInput.value = '';
+        isFreshCashInput = true;
+        setTimeout(() => { 
+            cashInput.focus(); 
+            cashInput.select();
+        }, 80);
+    }
     if (changeAmount) changeAmount.innerText = '0 đ';
     if (viewCash) viewCash.classList.remove('hidden');
     if (viewTransfer) viewTransfer.classList.add('hidden');
@@ -2589,9 +2788,9 @@ const initCashierOrdersEvents = () => {
 
             document.querySelectorAll('.filter-order-btn').forEach(b => {
                 b.classList.remove('bg-orange-500', 'text-white', 'border-transparent', 'shadow-sm');
-                b.classList.add('bg-[#1e293b]', 'text-slate-400', 'border-slate-700');
+                b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
             });
-            target.classList.remove('bg-[#1e293b]', 'text-slate-400', 'border-slate-700');
+            target.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
             target.classList.add('bg-orange-500', 'text-white', 'border-transparent', 'shadow-sm');
 
             renderOrdersList();
@@ -2629,9 +2828,22 @@ export const renderOrdersList = async () => {
 
     allOrders.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    if (currentOrderFilter === 'in_progress') allOrders = allOrders.filter((o: any) => o.status !== 'Completed' && o.status !== 'Cancelled');
-    if (currentOrderFilter === 'completed') allOrders = allOrders.filter((o: any) => o.status === 'Completed' || o.paymentStatus === 'Paid');
-    if (currentOrderFilter === 'cancelled') allOrders = allOrders.filter((o: any) => o.status === 'Cancelled');
+    if (currentOrderFilter === 'in_progress') {
+        allOrders = allOrders.filter((o: any) => {
+            const st = (o.status || '').toLowerCase();
+            return st !== 'completed' && st !== 'cancelled';
+        });
+    }
+    if (currentOrderFilter === 'completed') {
+        allOrders = allOrders.filter((o: any) => {
+            const st = (o.status || '').toLowerCase();
+            const ps = (o.paymentStatus || '').toLowerCase();
+            return st === 'completed' || ps === 'paid';
+        });
+    }
+    if (currentOrderFilter === 'cancelled') {
+        allOrders = allOrders.filter((o: any) => (o.status || '').toLowerCase() === 'cancelled');
+    }
 
     if (searchCashierOrdersKeyword) {
         allOrders = allOrders.filter((o: any) => {
@@ -2654,11 +2866,11 @@ export const renderOrdersList = async () => {
     allOrders.forEach((order: any) => {
         let badge = '';
         if (order.status === 'Cancelled') {
-            badge = '<span class="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/30 whitespace-nowrap">Đã hủy</span>';
+            badge = '<span class="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-xs font-bold border border-rose-200 whitespace-nowrap">Đã hủy</span>';
         } else if (order.status === 'Completed' || order.paymentStatus === 'Paid') {
-            badge = '<span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30 whitespace-nowrap">Đã thanh toán</span>';
+            badge = '<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 whitespace-nowrap">Đã thanh toán</span>';
         } else {
-            badge = '<span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/30 whitespace-nowrap">Đang phục vụ</span>';
+            badge = '<span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs font-bold border border-orange-200 whitespace-nowrap">Đang phục vụ</span>';
         }
 
         const timeStr = order.createdAt ? new Date(order.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
@@ -2669,17 +2881,17 @@ export const renderOrdersList = async () => {
         const shortId = ordId.slice(-8).toUpperCase();
 
         html += `
-            <tr class="hover:bg-slate-700/20 transition-colors border-b border-slate-800/60">
-                <td class="px-6 py-4 font-bold text-orange-400 whitespace-nowrap" title="#${ordId}">#${shortId}</td>
-                <td class="px-6 py-4 font-bold text-white whitespace-nowrap">${numTable}</td>
-                <td class="px-6 py-4 text-slate-400 whitespace-nowrap">${timeStr}</td>
-                <td class="px-6 py-4 text-slate-300 font-bold whitespace-nowrap">${itemCount} món</td>
-                <td class="px-6 py-4 text-right font-black text-white whitespace-nowrap">${formatMoney(order.totalAmount || 0)} đ</td>
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
+                <td class="px-6 py-4 font-bold text-orange-600 font-mono whitespace-nowrap" title="#${ordId}">#${shortId}</td>
+                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${numTable}</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${timeStr}</td>
+                <td class="px-6 py-4 text-slate-700 font-bold whitespace-nowrap">${itemCount} món</td>
+                <td class="px-6 py-4 text-right font-black text-slate-900 whitespace-nowrap">${formatMoney(order.totalAmount || 0)} đ</td>
                 <td class="px-6 py-4 text-center whitespace-nowrap">${badge}</td>
                 <td class="px-6 py-4 text-center whitespace-nowrap">
                     <div class="flex items-center justify-center gap-1.5 whitespace-nowrap">
-                        <button onclick="viewOrderDetails('${ordId}')" class="w-8 h-8 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xem chi tiết đơn hàng #${shortId}"><i class="fa-solid fa-eye text-xs"></i></button>
-                        <button onclick="printOrder('${ordId}')" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-orange-500 hover:text-white text-slate-300 border border-slate-700 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xem mẫu in hóa đơn #${shortId}"><i class="fa-solid fa-print text-xs"></i></button>
+                        <button onclick="viewOrderDetails('${ordId}')" class="w-8 h-8 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xem chi tiết đơn hàng #${shortId}"><i class="fa-solid fa-eye text-xs"></i></button>
+                        <button onclick="printOrder('${ordId}')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-orange-500 hover:text-white text-slate-700 border border-slate-200 flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 shadow-sm" title="Xem mẫu in hóa đơn #${shortId}"><i class="fa-solid fa-print text-xs"></i></button>
                     </div>
                 </td>
             </tr>
@@ -2687,6 +2899,8 @@ export const renderOrdersList = async () => {
     });
     tbody.innerHTML = html;
 };
+
+(window as any).renderOrdersList = renderOrdersList;
 
 (window as any).printOrder = (id: string) => {
     showInvoice(String(id), false);
@@ -2889,36 +3103,60 @@ document.getElementById('modal-order-view-detail')?.addEventListener('click', (e
 // ==========================================
 export const updateOverviewTab = async () => {
     const allOrders = await layTatCaDonHang();
-    const allTables = await layDanhSachBan();
+    const allTables = cachedAllTables.length > 0 ? cachedAllTables : await layDanhSachBan().catch(() => []);
 
     const today = new Date().toDateString();
     let revenue = 0;
-    let ordersCount = 0;
+    let todayOrdersCount = 0;
+    let todayPaidCount = 0;
+    let servingOrdersCount = 0;
 
     allOrders.forEach((o: any) => {
         const d = new Date(o.createdAt).toDateString();
-        if (d === today && o.paymentStatus === 'Paid') {
-            revenue += o.totalAmount;
+        const isPaid = (o.paymentStatus || '').toLowerCase() === 'paid' || (o.status || '').toLowerCase() === 'completed';
+        const isServing = (o.status || '').toLowerCase() !== 'completed' && (o.status || '').toLowerCase() !== 'cancelled';
+
+        if (isServing) {
+            servingOrdersCount++;
         }
         if (d === today) {
-            ordersCount++;
+            todayOrdersCount++;
+            if (isPaid) {
+                revenue += (Number(o.totalAmount) || 0);
+                todayPaidCount++;
+            }
         }
     });
 
     const revEl = document.getElementById('overview-revenue');
     if (revEl) revEl.innerText = formatMoney(revenue) + ' đ';
 
+    const revSubEl = document.getElementById('overview-revenue-sub');
+    if (revSubEl) revSubEl.innerText = todayPaidCount > 0 ? `${todayPaidCount} đơn đã thanh toán hôm nay` : 'Chưa có đơn thanh toán hôm nay';
+
     const ordEl = document.getElementById('overview-orders-count');
-    if (ordEl) ordEl.innerText = ordersCount.toString();
+    if (ordEl) ordEl.innerText = todayOrdersCount.toString();
+
+    const ordSubEl = document.getElementById('overview-orders-sub');
+    if (ordSubEl) ordSubEl.innerText = `${servingOrdersCount} đơn đang phục vụ`;
 
     const activeTables = allTables.filter((t: any) => t.status === 'Occupied' || t.status === 'Waiting_Payment').length;
+    const availableTables = allTables.filter((t: any) => t.status === 'Available').length;
     const tabEl = document.getElementById('overview-active-tables');
     if (tabEl) tabEl.innerText = `${activeTables} / ${allTables.length}`;
 
-    const avg = ordersCount > 0 ? Math.round(revenue / ordersCount) : 0;
+    const tabSubEl = document.getElementById('overview-tables-sub');
+    if (tabSubEl) tabSubEl.innerText = `${availableTables} bàn còn trống`;
+
+    const avg = todayPaidCount > 0 ? Math.round(revenue / todayPaidCount) : 0;
     const avgEl = document.getElementById('overview-avg-order');
     if (avgEl) avgEl.innerText = formatMoney(avg) + ' đ';
+
+    const avgSubEl = document.getElementById('overview-avg-sub');
+    if (avgSubEl) avgSubEl.innerText = todayPaidCount > 0 ? `Tính trên ${todayPaidCount} đơn hoàn tất` : 'Chưa có đơn hoàn tất hôm nay';
 };
+
+(window as any).updateOverviewTab = updateOverviewTab;
 
 // ==========================================
 // TÍNH NĂNG 7: THỰC ĐƠN THU NGÂN (BỘ LỌC & TÌM KIẾM)
@@ -3086,24 +3324,26 @@ export const renderMenuGrid = () => {
         }
 
         html += `
-            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-orange-400 hover:shadow-md transition-all flex flex-col justify-between group">
+            <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm hover:border-orange-400 hover:shadow-md transition-all flex flex-col justify-between group">
                 <div>
-                    <div class="relative overflow-hidden rounded-xl mb-3 border border-slate-100">
+                    <div class="relative overflow-hidden rounded-md mb-3 border border-slate-100">
                         <img src="${item.image}" 
                             loading="lazy" decoding="async"
                             onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300'" 
-                            class="w-full h-36 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300 ${!isAvailable ? 'grayscale opacity-60' : ''}">
+                            class="w-full h-36 object-cover rounded-md group-hover:scale-105 transition-transform duration-300 ${!isAvailable ? 'grayscale opacity-60' : ''}">
                         
-                        <div class="absolute top-2 left-2 flex flex-col gap-1 items-start">
-                            <span class="bg-white/90 backdrop-blur-sm text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
-                                ${catName}
-                            </span>
-                            ${isCombo ? '<span class="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md shadow-2xs"><i class="fa-solid fa-crown text-[9px]"></i> COMBO</span>' : ''}
-                        </div>
+                        <div class="absolute top-2 left-2 right-2 flex items-center justify-between gap-1.5 pointer-events-none">
+                            <div class="flex items-center gap-1 min-w-0 max-w-[62%]">
+                                <span class="bg-white/95 backdrop-blur-sm text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs truncate block" title="${catName}">
+                                    ${catName}
+                                </span>
+                                ${isCombo ? '<span class="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-2xs shrink-0"><i class="fa-solid fa-crown text-[8px]"></i> COMBO</span>' : ''}
+                            </div>
 
-                        <span class="absolute top-2 right-2 ${isAvailable ? 'bg-emerald-50 text-emerald-700 border border-emerald-300' : 'bg-rose-50 text-rose-700 border border-rose-300'} text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs">
-                            ${isAvailable ? '● Còn hàng' : '● Hết hàng'}
-                        </span>
+                            <span class="shrink-0 ${isAvailable ? 'bg-emerald-50 text-emerald-700 border border-emerald-300' : 'bg-rose-50 text-rose-700 border border-rose-300'} text-[10px] font-black px-2 py-0.5 rounded-md shadow-2xs">
+                                ${isAvailable ? '● Còn hàng' : '● Hết hàng'}
+                            </span>
+                        </div>
                     </div>
 
                     <h4 class="font-bold text-slate-800 text-sm mb-1.5 line-clamp-2 leading-snug group-hover:text-orange-600 transition-colors" title="${item.name}">${item.name}</h4>
@@ -3151,23 +3391,41 @@ export const updateReportsTab = async () => {
     for (let i = 0; i < 24; i++) hourlyRevenue.set(i, 0);
 
     const itemSales = new Map<string, number>();
+    const itemNames = new Map<string, string>();
 
     allOrders.forEach((o: any) => {
         const d = new Date(o.createdAt);
         if (d.toDateString() === today) {
-            if (o.paymentStatus === 'Paid') {
-                revenue += o.totalAmount;
+            const isPaid = (o.paymentStatus || '').toLowerCase() === 'paid' || (o.status || '').toLowerCase() === 'completed';
+            const isCancelled = (o.status || '').toLowerCase() === 'cancelled';
+
+            if (isPaid) {
+                const total = Number(o.totalAmount) || 0;
+                revenue += total;
                 const hour = d.getHours();
-                hourlyRevenue.set(hour, (hourlyRevenue.get(hour) || 0) + o.totalAmount);
+                hourlyRevenue.set(hour, (hourlyRevenue.get(hour) || 0) + total);
                 ordersCount++;
 
                 const ordId = String(o.id || o._id);
                 const details = allDetails.filter((det: any) => getDetailOrderId(det) === ordId);
                 details.forEach((det: any) => {
-                    const mId = (det.menuItem_id && typeof det.menuItem_id === 'object') ? String(det.menuItem_id._id || det.menuItem_id.id) : String(det.menuItem_id);
-                    itemSales.set(mId, (itemSales.get(mId) || 0) + (Number(det.quantity) || 1));
+                    let mId = '';
+                    let mName = '';
+                    if (det.menuItem_id && typeof det.menuItem_id === 'object') {
+                        mId = String(det.menuItem_id._id || det.menuItem_id.id || '');
+                        mName = det.menuItem_id.name || '';
+                    } else if (det.menuItem_id) {
+                        mId = String(det.menuItem_id);
+                    }
+
+                    if (mId && mId !== 'undefined' && mId !== 'null') {
+                        itemSales.set(mId, (itemSales.get(mId) || 0) + (Number(det.quantity) || 1));
+                        if (mName && !itemNames.has(mId)) {
+                            itemNames.set(mId, mName);
+                        }
+                    }
                 });
-            } else if (o.status === 'Cancelled') {
+            } else if (isCancelled) {
                 cancelledCount++;
             }
         }
@@ -3189,67 +3447,81 @@ export const updateReportsTab = async () => {
     const topSellingEl = document.getElementById('reports-top-selling');
     if (topSellingEl) {
         let topSellingHtml = '';
-        const sortedItems = Array.from(itemSales.entries()).sort((a, b) => b[1] - a[1]).slice(0, 3);
-        const colors = ['bg-orange-500', 'bg-slate-400', 'bg-amber-500'];
+        const sortedItems = Array.from(itemSales.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const colors = ['bg-orange-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500', 'bg-purple-500'];
         const maxSales = sortedItems.length > 0 ? sortedItems[0][1] : 1;
 
         sortedItems.forEach(([itemId, qty], index) => {
             const menuItem = menuList.find((m: any) => String(m.id || m._id) === String(itemId));
-            const name = menuItem ? menuItem.name : 'Món ' + itemId.slice(-6);
+            const name = menuItem ? menuItem.name : (itemNames.get(itemId) || 'Món ' + itemId.slice(-6));
             const color = colors[index] || 'bg-slate-500';
             const pct = Math.round((qty / maxSales) * 100);
 
             topSellingHtml += `
-                <div class="flex items-center gap-4">
-                    <div class="w-8 h-8 ${color.replace('400', '600').replace('500', '600')} rounded-lg flex items-center justify-center text-white font-black text-sm shrink-0">
+                <div class="flex items-center gap-4 p-2.5 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
+                    <div class="w-8 h-8 ${color.replace('400', '600').replace('500', '600')} rounded-lg flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
                         ${index + 1}
                     </div>
-                    <span class="flex-1 text-white font-bold">${name}</span>
-                    <span class="text-slate-400 font-bold text-sm">${qty} phần</span>
-                    <div class="w-32 bg-slate-700 rounded-full h-2">
-                        <div class="${color} h-2 rounded-full" style="width:${pct}%"></div>
+                    <span class="flex-1 text-slate-800 font-bold text-sm truncate" title="${name}">${name}</span>
+                    <span class="text-slate-600 font-bold text-sm whitespace-nowrap">${qty} phần</span>
+                    <div class="w-32 bg-slate-100 rounded-full h-2.5 border border-slate-200 overflow-hidden shrink-0">
+                        <div class="${color} h-full rounded-full transition-all duration-500" style="width:${pct}%"></div>
                     </div>
                 </div>
             `;
         });
 
         if (sortedItems.length === 0) {
-            topSellingHtml = '<div class="text-slate-400 text-center py-4">Chưa có dữ liệu hôm nay</div>';
+            topSellingHtml = '<div class="text-slate-400 text-center py-6 font-semibold"><i class="fa-solid fa-utensils text-2xl mb-2 block opacity-40"></i>Chưa có món nào được đặt hôm nay</div>';
         }
         topSellingEl.innerHTML = topSellingHtml;
     }
 
-    // Chart cập nhật
+    // Chart cập nhật theo khối thời gian bao phủ 24 giờ
     const chartEl = document.getElementById('reports-chart');
     if (chartEl) {
-        let maxRev = 0;
-        hourlyRevenue.forEach(v => { if (v > maxRev) maxRev = v; });
+        const timeBlocks = [
+            { label: 'Sáng', hours: [6, 7, 8, 9] },
+            { label: '10h-12h', hours: [10, 11] },
+            { label: '12h-14h', hours: [12, 13] },
+            { label: '14h-16h', hours: [14, 15] },
+            { label: '16h-18h', hours: [16, 17] },
+            { label: '18h-20h', hours: [18, 19] },
+            { label: '20h-22h', hours: [20, 21] },
+            { label: 'Khuya', hours: [22, 23, 0, 1, 2, 3, 4, 5] }
+        ];
 
-        const displayHours = [8, 10, 12, 14, 16, 18];
+        let maxBlockRev = 0;
+        const blockValues = timeBlocks.map(block => {
+            const sum = block.hours.reduce((acc, h) => acc + (hourlyRevenue.get(h) || 0), 0);
+            if (sum > maxBlockRev) maxBlockRev = sum;
+            return { label: block.label, rev: sum };
+        });
+
         let html = '';
-        displayHours.forEach(h => {
-            const rev = hourlyRevenue.get(h) || 0;
-            const pct = maxRev > 0 ? Math.max(10, Math.round((rev / maxRev) * 100)) : 10;
-
-            let bgClass = 'bg-orange-500/30 border-orange-500/50';
-            if (pct > 70) bgClass = 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.4)]';
-            else if (pct > 40) bgClass = 'bg-orange-500/70 border-orange-500/50';
-            else if (pct > 20) bgClass = 'bg-orange-500/50 border-orange-500/50';
+        blockValues.forEach(item => {
+            const pct = maxBlockRev > 0 ? Math.max(12, Math.round((item.rev / maxBlockRev) * 100)) : 10;
+            const hasData = item.rev > 0;
+            const bgClass = hasData 
+                ? 'bg-orange-500 hover:bg-orange-600 shadow-sm' 
+                : 'bg-slate-100 border border-dashed border-slate-200';
 
             html += `
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="${bgClass} border rounded-t-lg w-full transition-all duration-500 relative group" style="height:${pct}%">
-                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                            ${formatMoney(rev)} đ
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                    <div class="${bgClass} rounded-t-lg w-full transition-all duration-500 relative group cursor-pointer" style="height:${pct}%">
+                        <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-bold py-1 px-2 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                            ${formatMoney(item.rev)} đ
                         </div>
                     </div>
-                    <span class="text-xs text-slate-500">${h}h</span>
+                    <span class="text-xs font-bold text-slate-500 whitespace-nowrap">${item.label}</span>
                 </div>
             `;
         });
         chartEl.innerHTML = html;
     }
 };
+
+(window as any).updateReportsTab = updateReportsTab;
 
 export const updateReportsTransactions = async () => {
     const allOrders = await layTatCaDonHang();
@@ -3294,9 +3566,9 @@ export const renderOverviewRecentOrders = async () => {
     recentOrders.forEach((order: any) => {
         let badge = '';
         if (order.status === 'Completed' || order.paymentStatus === 'Paid') {
-            badge = '<span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/30 whitespace-nowrap">Đã thanh toán</span>';
+            badge = '<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold border border-emerald-200 whitespace-nowrap">Đã thanh toán</span>';
         } else {
-            badge = '<span class="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-xs font-bold border border-orange-500/30 whitespace-nowrap">Đang phục vụ</span>';
+            badge = '<span class="bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-xs font-bold border border-orange-200 whitespace-nowrap">Đang phục vụ</span>';
         }
 
         const timeStr = new Date(order.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -3318,24 +3590,56 @@ export const renderOverviewRecentOrders = async () => {
     tbody.innerHTML = html;
 };
 
-// ==========================================
-// KHỞI CHẠY HỆ THỐNG THU NGÂN
-// ==========================================
-setupShiftUI();
-setInterval(() => { 
-    renderTableMap(); 
-    renderOrdersList(); 
-}, 3000);
+(window as any).renderOverviewRecentOrders = renderOverviewRecentOrders;
 
-setInterval(updateOverviewTab, 5000);
+// ==========================================
+// KHỞI CHẠY HỆ THỐNG THU NGÂN & CHỐNG NGHẼN REQUEST
+// ==========================================
+setupDiscountAndTaxListeners();
+setupDiscountModalEvents();
+setupShiftUI();
+
+let isPollingTablesAndOrders = false;
+setInterval(async () => {
+    if (isPollingTablesAndOrders) return;
+    isPollingTablesAndOrders = true;
+    try {
+        await Promise.all([renderTableMap(), renderOrdersList()]);
+    } catch (e) {
+        // Tránh gián đoạn hệ thống khi mạng lag
+    } finally {
+        isPollingTablesAndOrders = false;
+    }
+}, 4000);
+
+let isPollingOverview = false;
+setInterval(async () => {
+    if (isPollingOverview) return;
+    const overviewEl = document.getElementById('page-overview');
+    // Tiết kiệm tài nguyên: Chỉ polling chi tiết khi người dùng đang mở tab Tổng quan
+    if (overviewEl && overviewEl.classList.contains('page-hidden')) return;
+
+    isPollingOverview = true;
+    try {
+        await Promise.all([
+            updateOverviewTab(),
+            updateReportsTab(),
+            updateReportsTransactions(),
+            renderOverviewRecentOrders(),
+            renderCashFlowOverview()
+        ]);
+    } catch (e) {
+        // Tránh gián đoạn hệ thống khi mạng lag
+    } finally {
+        isPollingOverview = false;
+    }
+}, 6000);
+
+// Khởi chạy dữ liệu ban đầu
 updateOverviewTab();
 renderMenuTab();
-setInterval(updateReportsTab, 5000);
 updateReportsTab();
-setInterval(updateReportsTransactions, 5000);
 updateReportsTransactions();
-setInterval(renderOverviewRecentOrders, 5000);
 renderOverviewRecentOrders();
-setInterval(renderCashFlowOverview, 5000);
 renderCashFlowOverview();
 

@@ -24,6 +24,8 @@ let currentComboImageValue: string = '';
 let comboBuilderItems: ComboItemEntry[] = [];
 let cachedVariantsForCombo: any[] = [];
 let currentMenuCardFilter: 'all' | 'active' | 'combo' | 'hidden' = 'all';
+let menuSortCol = 'name';
+let menuSortAsc = true;
 
 export const initAdminMenu = () => {
     setupEventListeners();
@@ -31,6 +33,7 @@ export const initAdminMenu = () => {
 };
 
 const setupEventListeners = () => {
+    setupMenuSorting();
     // Tìm kiếm & Lọc (Menu)
     document.getElementById('search-menu')?.addEventListener('input', applyMenuFilters);
     document.getElementById('filter-menu-category')?.addEventListener('change', applyMenuFilters);
@@ -1312,7 +1315,10 @@ const applyMenuFilters = () => {
         
         let matchCategory = true;
         if (categorySelect !== 'all') {
-            matchCategory = String(item.category_id) === String(categorySelect);
+            const itemCatId = (item.category_id && typeof item.category_id === 'object')
+                ? String(item.category_id._id || item.category_id.id || '')
+                : String(item.category_id || '');
+            matchCategory = itemCatId === String(categorySelect);
         }
 
         let matchStatus = true;
@@ -1334,8 +1340,50 @@ const applyMenuFilters = () => {
         return matchName && matchCategory && matchStatus && matchCard;
     });
 
+    filtered.sort((a, b) => {
+        let res = 0;
+        if (menuSortCol === 'name') {
+            res = (a.name || '').localeCompare(b.name || '', 'vi');
+        } else if (menuSortCol === 'price') {
+            res = Number(a.base_price || 0) - Number(b.base_price || 0);
+        } else if (menuSortCol === 'category') {
+            const catA = typeof a.category_id === 'object' && a.category_id ? (a.category_id.name || '') : '';
+            const catB = typeof b.category_id === 'object' && b.category_id ? (b.category_id.name || '') : '';
+            res = catA.localeCompare(catB, 'vi');
+        } else if (menuSortCol === 'status') {
+            res = (a.status || '').localeCompare(b.status || '');
+        }
+        return menuSortAsc ? res : -res;
+    });
+
     renderMenuItemsTable(filtered);
 };
+
+function setupMenuSorting() {
+    document.querySelectorAll<HTMLElement>('[data-menu-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-menu-sort') || 'name';
+            if (menuSortCol === col) {
+                menuSortAsc = !menuSortAsc;
+            } else {
+                menuSortCol = col;
+                menuSortAsc = (col === 'price' ? false : true);
+            }
+            document.querySelectorAll<HTMLElement>('[data-menu-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-menu-sort');
+                if (icon) {
+                    if (hCol === menuSortCol) {
+                        icon.className = menuSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            applyMenuFilters();
+        };
+    });
+}
 
 let currentMenuFilteredList: any[] = [];
 let currentMenuRenderedCount = 0;
@@ -1439,6 +1487,7 @@ const createMenuItemRowHtml = (item: any, canUpdate: boolean = true): string => 
                 <div class="flex items-center gap-2">
                     <span class="whitespace-nowrap text-sm text-slate-900 font-bold">${item.name}</span>
                 </div>
+                <div class="text-xs text-slate-400 font-mono">#${item.id || item._id}</div>
                 ${item.serving_size ? `<p class="text-[11px] text-slate-500 font-medium mt-0.5 whitespace-nowrap"><i class="fa-solid fa-users text-[10px] mr-1 text-slate-400"></i>${item.serving_size}</p>` : ''}
                 ${tagsHtml}
             </td>

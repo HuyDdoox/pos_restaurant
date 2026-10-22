@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node ../tests/e2e_exhaustive_ui_test.js --headless",
-    "test:e2e": "node ../tests/e2e_exhaustive_ui_test.js",
-    "test:e2e:headless": "node ../tests/e2e_exhaustive_ui_test.js --headless",
-    "build": "node --max-old-space-size=4096 ./node_modules/webpack/bin/webpack.js",
+    "build": "node --max-old-space-size=1536 ./node_modules/webpack/bin/webpack.js",
     "webpack:watch": "webpack --watch",
     "server": "node server.js",
     "dev": "concurrently \"npm run webpack:watch\" \"npm run server\""

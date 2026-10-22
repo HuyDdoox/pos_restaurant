@@ -178,12 +178,12 @@
             </div>
             <div id="btn-admin-user-toggle"
                 class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer select-none">
-                <div
+                <div id="admin-sidebar-avatar"
                     class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0 shadow-xs">
                     AD</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-bold text-slate-900 truncate" id="admin-sidebar-user-name">Quản trị viên</p>
-                    <p class="text-xs text-slate-500 truncate">admin@foodhub.com</p>
+                    <p class="text-xs text-slate-500 truncate" id="admin-sidebar-user-email">admin@foodhub.com</p>
                 </div>
                 <i class="fa-solid fa-chevron-up text-slate-400 text-xs"></i>
             </div>
@@ -878,13 +878,18 @@
                     <div class="overflow-x-auto flex-1">
                         <table class="w-full text-sm text-left">
                             <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10">
-                                <tr class="border-b border-slate-200">
-                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Nhân viên</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Mã NV</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Vai trò</th>
+                                <tr class="border-b border-slate-200 select-none">
+                                    <th data-user-sort="name" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Nhân viên <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
+                                    <th data-user-sort="role" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Vai trò <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
                                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Ca làm</th>
                                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Đăng nhập cuối</th>
-                                    <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Trạng thái</th>
+                                    <th data-user-sort="status" class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Trạng thái <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
                                     <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Thao tác</th>
                                 </tr>
                             </thead>
@@ -1038,11 +1043,19 @@
                                     class="admin-sticky-thead text-slate-500 text-xs font-bold uppercase border-b border-slate-200 bg-slate-50">
                                     <tr>
                                         <th class="px-6 py-4 whitespace-nowrap">Ảnh</th>
-                                        <th class="px-6 py-4 whitespace-nowrap">Tên món</th>
-                                        <th class="px-4 py-4 text-center whitespace-nowrap">Danh mục</th>
-                                        <th class="px-6 py-4 whitespace-nowrap">Giá bán</th>
+                                        <th data-menu-sort="name" class="px-6 py-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Tên món <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-menu-sort="category" class="px-4 py-4 text-center whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Danh mục <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-menu-sort="price" class="px-6 py-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Giá bán <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
                                         <th class="px-6 py-4 whitespace-nowrap">Biến thể</th>
-                                        <th class="px-6 py-4 whitespace-nowrap">Trạng thái</th>
+                                        <th data-menu-sort="status" class="px-6 py-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Trạng thái <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
                                         <th class="px-6 py-4 text-right whitespace-nowrap">Thao tác</th>
                                     </tr>
                                 </thead>
@@ -1746,11 +1759,19 @@
                         <table class="w-full text-left text-sm">
                             <thead class="admin-sticky-thead text-slate-500 text-xs font-black uppercase tracking-wider border-b border-slate-200 bg-slate-50">
                                 <tr>
-                                    <th class="px-6 py-4 whitespace-nowrap">Danh mục</th>
+                                    <th data-cat-sort="name" class="px-6 py-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Danh mục <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
                                     <th class="px-6 py-4 whitespace-nowrap">Mô tả</th>
-                                    <th class="px-6 py-4 text-center whitespace-nowrap">Thứ tự</th>
-                                    <th class="px-6 py-4 text-center whitespace-nowrap">Số lượng món</th>
-                                    <th class="px-6 py-4 text-center whitespace-nowrap">Trạng thái</th>
+                                    <th data-cat-sort="order" class="px-6 py-4 text-center whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Thứ tự <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
+                                    <th data-cat-sort="items" class="px-6 py-4 text-center whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Số lượng món <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
+                                    <th data-cat-sort="status" class="px-6 py-4 text-center whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                        Trạng thái <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                    </th>
                                     <th class="px-6 py-4 text-right whitespace-nowrap">Thao tác</th>
                                 </tr>
                             </thead>
@@ -1764,7 +1785,7 @@
 
             <!-- MODAL 1: XEM CÁC MÓN TRONG DANH MỤC (EYE ICON MODAL) -->
             <div id="modal-category-dishes" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
-                <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform transition-all">
+                <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden transform transition-all">
                     <!-- Modal Header -->
                     <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50/70 shrink-0">
                         <div class="flex items-center gap-3">
@@ -1815,7 +1836,7 @@
 
             <!-- MODAL 2: THÊM / CHỈNH SỬA DANH MỤC -->
             <div id="modal-category-form" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
-                <div class="bg-white border border-slate-200 rounded-3xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+                <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
                     <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50/70 shrink-0">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 text-lg">
@@ -1944,13 +1965,18 @@
                             </div>
                             <div class="flex-1 overflow-y-auto custom-scrollbar">
                                 <table class="w-full text-left text-sm">
-                                    <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 border-b border-slate-200">
+                                    <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 border-b border-slate-200 select-none">
                                         <tr>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">ID</th>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tên nguyên liệu</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Tồn kho</th>
+                                            <th data-inv-sort="name" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                                Tên nguyên liệu <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-inv-sort="stock" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                                Tồn kho <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
                                             <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Đơn vị</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Giá nhập (đ/đv)</th>
+                                            <th data-inv-sort="cost" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                                Giá nhập (đ/đv) <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
                                             <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Thao tác</th>
                                         </tr>
                                     </thead>
@@ -2202,12 +2228,24 @@
                                 <table class="w-full text-left text-sm">
                                     <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 border-b border-slate-200">
                                         <tr>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Ngày tạo</th>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Nguyên liệu</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase">SL Tồn máy</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase">SL Thực tế</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-red-500 uppercase">Hao hụt</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-orange-600 uppercase">Thiệt hại</th>
+                                            <th data-loss-rep-sort="date" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Ngày tạo <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-rep-sort="name" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Nguyên liệu <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-rep-sort="systemStock" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                SL Tồn máy <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-rep-sort="actualStock" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                SL Thực tế <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-rep-sort="lossAmount" class="px-6 py-4 text-right text-xs font-bold text-red-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Hao hụt <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-rep-sort="lossCost" class="px-6 py-4 text-right text-xs font-bold text-orange-600 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Thiệt hại <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
                                             <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Lý do</th>
                                             <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase">Cảnh báo</th>
                                         </tr>
@@ -2257,11 +2295,14 @@
                             </div>
                             <div class="flex-1 overflow-y-auto custom-scrollbar">
                                 <table class="w-full text-left text-sm">
-                                    <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 border-b border-slate-200">
+                                    <thead class="sticky top-0 bg-slate-50/95 backdrop-blur z-10 border-b border-slate-200 select-none">
                                         <tr>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">ID</th>
-                                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Tên nguyên liệu</th>
-                                            <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase">Tồn kho hiện tại</th>
+                                            <th data-loss-sort="name" class="px-6 py-4 text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Tên nguyên liệu <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
+                                            <th data-loss-sort="stock" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase cursor-pointer hover:text-slate-900 transition-colors">
+                                                Tồn kho hiện tại <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                            </th>
                                             <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Đơn vị</th>
                                             <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase">Trạng thái</th>
                                         </tr>
@@ -2381,12 +2422,22 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-slate-50 text-slate-500 text-xs font-bold uppercase border-b border-slate-200">
                                     <tr>
-                                        <th class="p-4 whitespace-nowrap">Mã Code</th>
-                                        <th class="p-4 whitespace-nowrap">Tên Chương Trình</th>
-                                        <th class="p-4 whitespace-nowrap">Mức Giảm</th>
+                                        <th data-v-sort="code" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Mã Code <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-v-sort="name" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Tên Chương Trình <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-v-sort="value" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Mức Giảm <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
                                         <th class="p-4 whitespace-nowrap">Thời Hạn</th>
-                                        <th class="p-4 whitespace-nowrap">Lượt Dùng</th>
-                                        <th class="p-4 whitespace-nowrap">Trạng Thái</th>
+                                        <th data-v-sort="used" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Lượt Dùng <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-v-sort="status" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Trạng Thái <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
                                         <th class="p-4 text-right whitespace-nowrap">Thao Tác</th>
                                     </tr>
                                 </thead>
@@ -2478,12 +2529,21 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-slate-50 text-slate-500 text-xs font-bold uppercase border-b border-slate-200">
                                     <tr>
-                                        <th class="p-4 whitespace-nowrap">Mã KH</th>
-                                        <th class="p-4 whitespace-nowrap">Khách Hàng</th>
-                                        <th class="p-4 whitespace-nowrap">Số Điện Thoại</th>
-                                        <th class="p-4 whitespace-nowrap">Hạng Thẻ</th>
-                                        <th class="p-4 whitespace-nowrap">Điểm Tích Lũy</th>
-                                        <th class="p-4 whitespace-nowrap">Tổng Chi Tiêu</th>
+                                        <th data-cust-sort="name" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Khách Hàng <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-cust-sort="phone" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Số Điện Thoại <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-cust-sort="rank" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Hạng Thẻ <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-cust-sort="points" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Điểm Tích Lũy <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
+                                        <th data-cust-sort="spent" class="p-4 whitespace-nowrap cursor-pointer hover:text-slate-900 transition-colors">
+                                            Tổng Chi Tiêu <i class="fa-solid fa-sort text-[10px] ml-1 opacity-60"></i>
+                                        </th>
                                         <th class="p-4 text-right whitespace-nowrap">Thao Tác</th>
                                     </tr>
                                 </thead>
@@ -2672,7 +2732,7 @@
 
             <!-- Modal In Báo Cáo P&L Admin -->
             <div id="admin-overlay-pnl-print" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 overflow-y-auto">
-                <div class="bg-white text-slate-900 rounded-3xl w-full max-w-md shadow-2xl border border-slate-300 p-6 relative">
+                <div class="bg-white text-slate-900 rounded-2xl w-full max-w-md shadow-2xl border border-slate-300 p-6 relative">
                     <button id="btn-admin-close-pnl-print" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 cursor-pointer">
                         <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
@@ -2748,10 +2808,18 @@
             const adminNameEl = document.getElementById('admin-sidebar-user-name');
             const adminDropNameEl = document.getElementById('admin-dropdown-user-name');
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-                const displayName = storedUser.name || storedUser.username || 'Quản trị viên';
+                const storedUser = JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('user') || '{}');
+                const displayName = storedUser.fullname || storedUser.name || storedUser.username || 'Quản trị viên';
+                const words = displayName.trim().split(/\s+/);
+                const initials = words.length > 1 
+                    ? (words[0][0] + words[words.length - 1][0]).toUpperCase() 
+                    : displayName.slice(0, 2).toUpperCase();
                 if (adminNameEl) adminNameEl.innerText = displayName;
                 if (adminDropNameEl) adminDropNameEl.innerText = displayName;
+                const avatarEl = document.getElementById('admin-sidebar-avatar');
+                if (avatarEl) avatarEl.innerText = initials;
+                const emailEl = document.getElementById('admin-sidebar-user-email');
+                if (emailEl && storedUser.email) emailEl.innerText = storedUser.email;
             } catch(e) {}
 
             if (btnAdminUser && menuAdminUser) {

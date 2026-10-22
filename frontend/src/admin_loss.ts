@@ -10,6 +10,12 @@ let lossFilterPeriod = 'all';
 let lowStockSearchTerm = '';
 let lowStockFilterLevel = 'all';
 
+let lowStockSortCol = 'stock';
+let lowStockSortAsc = true;
+
+let lossRepSortCol = 'date';
+let lossRepSortAsc = false;
+
 export function initAdminLoss() {
     const tabs = document.querySelectorAll('.loss-tab-btn');
     tabs.forEach(btn => {
@@ -108,11 +114,66 @@ export function initAdminLoss() {
         });
     }
 
+    setupLossSorting();
+    setupLossRepSorting();
+
     // Lắng nghe sự kiện chuyển trang — đảm bảo luôn render đúng khi tab được mở
     window.addEventListener('pageChanged', async (e: any) => {
         if (e.detail === 'loss-report') {
             await loadLossData();
         }
+    });
+}
+
+function setupLossSorting() {
+    document.querySelectorAll<HTMLElement>('[data-loss-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-loss-sort') || 'name';
+            if (lowStockSortCol === col) {
+                lowStockSortAsc = !lowStockSortAsc;
+            } else {
+                lowStockSortCol = col;
+                lowStockSortAsc = true;
+            }
+            document.querySelectorAll<HTMLElement>('[data-loss-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-loss-sort');
+                if (icon) {
+                    if (hCol === lowStockSortCol) {
+                        icon.className = lowStockSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            renderLowStockAlerts();
+        };
+    });
+}
+
+function setupLossRepSorting() {
+    document.querySelectorAll<HTMLElement>('[data-loss-rep-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-loss-rep-sort') || 'date';
+            if (lossRepSortCol === col) {
+                lossRepSortAsc = !lossRepSortAsc;
+            } else {
+                lossRepSortCol = col;
+                lossRepSortAsc = (col === 'date' ? false : true);
+            }
+            document.querySelectorAll<HTMLElement>('[data-loss-rep-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-loss-rep-sort');
+                if (icon) {
+                    if (hCol === lossRepSortCol) {
+                        icon.className = lossRepSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            renderLossReportsTable();
+        };
     });
 }
 
@@ -197,13 +258,24 @@ function renderLowStockAlerts() {
     const tbody = document.getElementById('low-stock-table-body');
     if (!tbody) return;
 
+    filtered.sort((a: any, b: any) => {
+        if (lowStockSortCol === 'name') {
+            const res = (a.name || '').localeCompare(b.name || '', 'vi');
+            return lowStockSortAsc ? res : -res;
+        } else if (lowStockSortCol === 'stock') {
+            const res = Number(a.stock_quantity || 0) - Number(b.stock_quantity || 0);
+            return lowStockSortAsc ? res : -res;
+        }
+        return 0;
+    });
+
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="5" class="px-6 py-12 text-center text-slate-500 font-bold">
+                <td colspan="4" class="px-6 py-12 text-center text-slate-600 font-bold">
                     <div class="flex flex-col items-center justify-center gap-2">
-                        <i class="fa-solid fa-boxes-stacked text-3xl text-slate-600"></i>
-                        <p class="text-slate-400">Không có nguyên liệu nào phù hợp bộ lọc cảnh báo</p>
+                        <i class="fa-solid fa-boxes-stacked text-3xl text-slate-500"></i>
+                        <p class="text-slate-600">Không có nguyên liệu nào phù hợp bộ lọc cảnh báo</p>
                     </div>
                 </td>
             </tr>
@@ -213,10 +285,12 @@ function renderLowStockAlerts() {
 
     tbody.innerHTML = filtered.map(ing => `
         <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
-            <td class="px-6 py-4 text-slate-500 font-mono whitespace-nowrap">#${ing.id}</td>
-            <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${ing.name}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="font-bold text-slate-900">${ing.name}</div>
+                <div class="text-xs text-slate-400 font-mono">#${ing.id}</div>
+            </td>
             <td class="px-6 py-4 text-right text-xl font-black whitespace-nowrap ${Number(ing.stock_quantity) <= 0 ? 'text-rose-600' : 'text-red-600'}">${ing.stock_quantity}</td>
-            <td class="px-6 py-4 text-slate-600 font-bold whitespace-nowrap">${ing.unit}</td>
+            <td class="px-6 py-4 text-slate-700 font-bold whitespace-nowrap">${ing.unit}</td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
                 <span class="px-3 py-1 ${Number(ing.stock_quantity) <= 0 ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-red-50 text-red-700 border border-red-200'} rounded-lg text-xs font-black uppercase tracking-wider whitespace-nowrap">
                     ${Number(ing.stock_quantity) <= 0 ? 'Hết hàng' : 'Cần nhập gấp'}
@@ -242,7 +316,7 @@ async function loadLossReports() {
 
 function getFilteredLossReports() {
     const now = new Date();
-    return lossReportsCache.filter((r: any) => {
+    const filtered = lossReportsCache.filter((r: any) => {
         // 1. Tìm kiếm (Tên NL, Lý do, Mã NL, Ngày)
         const name = (r.ingredientName || '').toLowerCase();
         const reason = (r.reason || '').toLowerCase();
@@ -284,6 +358,26 @@ function getFilteredLossReports() {
 
         return matchesSearch && matchesReason && matchesAlert && matchesPeriod;
     });
+
+    filtered.sort((a: any, b: any) => {
+        let res = 0;
+        if (lossRepSortCol === 'date') {
+            res = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+        } else if (lossRepSortCol === 'name') {
+            res = (a.ingredientName || '').localeCompare(b.ingredientName || '', 'vi');
+        } else if (lossRepSortCol === 'systemStock') {
+            res = Number(a.systemStock || 0) - Number(b.systemStock || 0);
+        } else if (lossRepSortCol === 'actualStock') {
+            res = Number(a.actualStock || 0) - Number(b.actualStock || 0);
+        } else if (lossRepSortCol === 'lossAmount') {
+            res = Number(a.lossAmount || 0) - Number(b.lossAmount || 0);
+        } else if (lossRepSortCol === 'lossCost') {
+            res = Number(a.lossCost || 0) - Number(b.lossCost || 0);
+        }
+        return lossRepSortAsc ? res : -res;
+    });
+
+    return filtered;
 }
 
 // Tách riêng để có thể gọi lại khi DOM sẵn sàng
@@ -298,13 +392,13 @@ export function renderLossReportsTable() {
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" class="px-6 py-12 text-center text-slate-500 font-bold">
+                <td colspan="8" class="px-6 py-12 text-center text-slate-600 font-bold">
                     <div class="flex flex-col items-center justify-center gap-2">
-                        <svg class="w-8 h-8 text-slate-600 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-slate-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        <p class="text-slate-400">Không tìm thấy phiếu kiểm kê nào phù hợp bộ lọc</p>
-                        <button type="button" id="btn-clear-loss-empty" class="mt-2 text-xs text-red-400 hover:text-red-300 underline font-semibold cursor-pointer">
+                        <p class="text-slate-600">Không tìm thấy phiếu kiểm kê nào phù hợp bộ lọc</p>
+                        <button type="button" id="btn-clear-loss-empty" class="mt-2 text-xs text-red-500 hover:text-red-700 underline font-semibold cursor-pointer">
                             Xóa bộ lọc để xem tất cả
                         </button>
                     </div>
@@ -317,13 +411,16 @@ export function renderLossReportsTable() {
 
     const html = filtered.map((r: any) => `
             <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
-                <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">${new Date(r.createdAt).toLocaleDateString('vi-VN')}</td>
-                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap">${r.ingredientName}</td>
-                <td class="px-6 py-4 text-right text-slate-600 whitespace-nowrap">${r.systemStock} ${r.unit}</td>
+                <td class="px-6 py-4 text-slate-700 font-medium whitespace-nowrap">${new Date(r.createdAt).toLocaleDateString('vi-VN')}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="font-bold text-slate-900">${r.ingredientName}</div>
+                    ${r.ingredientId ? `<div class="text-xs text-slate-400 font-mono">#${r.ingredientId}</div>` : ''}
+                </td>
+                <td class="px-6 py-4 text-right text-slate-700 whitespace-nowrap">${r.systemStock} ${r.unit}</td>
                 <td class="px-6 py-4 text-right font-bold text-slate-900 whitespace-nowrap">${r.actualStock} ${r.unit}</td>
                 <td class="px-6 py-4 text-right whitespace-nowrap ${r.lossAmount > 0 ? 'text-rose-600 font-black' : 'text-emerald-600 font-black'}">${r.lossAmount > 0 ? '-' : '+'}${Math.abs(r.lossAmount)} ${r.unit}</td>
                 <td class="px-6 py-4 text-right text-orange-600 font-bold whitespace-nowrap">${r.lossCost ? r.lossCost.toLocaleString('vi-VN') + ' đ' : '0 đ'}</td>
-                <td class="px-6 py-4 text-slate-600 text-xs whitespace-nowrap">
+                <td class="px-6 py-4 text-slate-700 text-xs whitespace-nowrap">
                     ${r.reason || 'Kiểm kê định kỳ'}
                 </td>
                 <td class="px-6 py-4 text-center whitespace-nowrap">

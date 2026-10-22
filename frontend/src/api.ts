@@ -87,7 +87,8 @@ export const taoDonHang = async (orderData: any) => {
         body: JSON.stringify(orderData)
     });
     if (!response.ok) throw new Error("Lỗi khi tạo đơn hàng");
-    return await response.json();
+    const json = await response.json();
+    return unpackData(json);
 };
 
 export const taoChiTietDonHang = async (detailData: any) => {
@@ -97,7 +98,8 @@ export const taoChiTietDonHang = async (detailData: any) => {
         body: JSON.stringify(detailData)
     });
     if (!response.ok) throw new Error("Lỗi khi tạo chi tiết đơn hàng");
-    return await response.json();
+    const json = await response.json();
+    return unpackData(json);
 };
 
 export const layDonHangDangMoCuaBan = async (tableId: string) => {

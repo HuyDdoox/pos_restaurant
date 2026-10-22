@@ -19,6 +19,12 @@ let currentAdjustingCustomer: any = null;
 let currentVoucherCardFilter: 'all' | 'active' | 'inactive' | 'used' = 'all';
 let currentCustomerCardFilter: 'all' | 'Diamond' | 'Gold' | 'Silver' = 'all';
 
+let voucherSortCol = 'code';
+let voucherSortAsc = true;
+
+let customerSortCol = 'spent';
+let customerSortAsc = false;
+
 // ==========================================
 // 1. QUẢN LÝ VOUCHERS / KHUYẾN MÃI
 // ==========================================
@@ -103,11 +109,27 @@ const renderVouchersTable = () => {
         );
     }
 
+    filtered.sort((a, b) => {
+        let res = 0;
+        if (voucherSortCol === 'code') {
+            res = (a.code || '').localeCompare(b.code || '');
+        } else if (voucherSortCol === 'name') {
+            res = (a.name || '').localeCompare(b.name || '', 'vi');
+        } else if (voucherSortCol === 'value') {
+            res = Number(a.value || 0) - Number(b.value || 0);
+        } else if (voucherSortCol === 'used') {
+            res = Number(a.usedCount || 0) - Number(b.usedCount || 0);
+        } else if (voucherSortCol === 'status') {
+            res = (a.status || '').localeCompare(b.status || '');
+        }
+        return voucherSortAsc ? res : -res;
+    });
+
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="p-8 text-center text-slate-400">
-                    <i class="fa-solid fa-tags text-4xl mb-2 text-slate-600 block"></i>
+                <td colspan="7" class="p-8 text-center text-slate-600 font-bold">
+                    <i class="fa-solid fa-tags text-4xl mb-2 text-slate-500 block"></i>
                     Không tìm thấy chương trình khuyến mãi nào
                 </td>
             </tr>
@@ -334,13 +356,13 @@ export const updateCustomerCardStyles = () => {
 const getTierBadge = (tier: string) => {
     switch (tier) {
         case 'Diamond':
-            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">💎 Kim Cương</span>`;
+            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-cyan-50 text-cyan-800 border border-cyan-200">💎 Kim Cương</span>`;
         case 'Gold':
-            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-500/20 text-amber-400 border border-amber-500/30">🥇 Vàng</span>`;
+            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-50 text-amber-800 border border-amber-200">🥇 Vàng</span>`;
         case 'Silver':
-            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-slate-400/20 text-slate-300 border border-slate-400/30">🥈 Bạc</span>`;
+            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-slate-100 text-slate-700 border border-slate-300">🥈 Bạc</span>`;
         default:
-            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-700/20 text-orange-400 border border-orange-700/30">🥉 Đồng</span>`;
+            return `<span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-50 text-orange-800 border border-orange-200">🥉 Đồng</span>`;
     }
 };
 
@@ -367,11 +389,27 @@ const renderCustomersTable = () => {
         );
     }
 
+    filtered.sort((a, b) => {
+        let res = 0;
+        if (customerSortCol === 'name') {
+            res = (a.name || '').localeCompare(b.name || '', 'vi');
+        } else if (customerSortCol === 'phone') {
+            res = (a.phone || '').localeCompare(b.phone || '');
+        } else if (customerSortCol === 'rank') {
+            res = (a.tier || '').localeCompare(b.tier || '');
+        } else if (customerSortCol === 'points') {
+            res = Number(a.points || 0) - Number(b.points || 0);
+        } else if (customerSortCol === 'spent') {
+            res = Number(a.totalSpent || 0) - Number(b.totalSpent || 0);
+        }
+        return customerSortAsc ? res : -res;
+    });
+
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="p-8 text-center text-slate-400">
-                    <i class="fa-solid fa-crown text-4xl mb-2 text-slate-600 block"></i>
+                <td colspan="6" class="p-8 text-center text-slate-600 font-bold">
+                    <i class="fa-solid fa-crown text-4xl mb-2 text-slate-500 block"></i>
                     Không tìm thấy hội viên phù hợp
                 </td>
             </tr>
@@ -386,10 +424,13 @@ const renderCustomersTable = () => {
 
         html += `
             <tr class="hover:bg-slate-50 transition-colors border-b border-slate-200">
-                <td class="p-4 font-mono font-bold text-xs text-slate-500">${c.id}</td>
                 <td class="p-4 whitespace-nowrap">
                     <div class="font-bold text-slate-900 text-base whitespace-nowrap">${c.name}</div>
-                    <div class="text-xs text-slate-500 whitespace-nowrap">${c.email || 'Chưa có email'}</div>
+                    <div class="flex items-center gap-1.5 text-xs text-slate-500 whitespace-nowrap mt-0.5">
+                        <span class="font-mono text-slate-400 font-bold">#${c.id}</span>
+                        <span>•</span>
+                        <span>${c.email || 'Chưa có email'}</span>
+                    </div>
                 </td>
                 <td class="p-4 font-mono font-bold text-sm text-slate-700 whitespace-nowrap">${c.phone}</td>
                 <td class="p-4 whitespace-nowrap">${getTierBadge(c.tier)}</td>
@@ -758,6 +799,61 @@ export const initAdminPromotions = () => {
         });
     });
 
+    setupVoucherSorting();
+    setupCustomerSorting();
+
     // Initial load
     loadVouchers();
 };
+
+function setupVoucherSorting() {
+    document.querySelectorAll<HTMLElement>('[data-v-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-v-sort') || 'code';
+            if (voucherSortCol === col) {
+                voucherSortAsc = !voucherSortAsc;
+            } else {
+                voucherSortCol = col;
+                voucherSortAsc = (col === 'value' || col === 'used' ? false : true);
+            }
+            document.querySelectorAll<HTMLElement>('[data-v-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-v-sort');
+                if (icon) {
+                    if (hCol === voucherSortCol) {
+                        icon.className = voucherSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            renderVouchersTable();
+        };
+    });
+}
+
+function setupCustomerSorting() {
+    document.querySelectorAll<HTMLElement>('[data-cust-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-cust-sort') || 'spent';
+            if (customerSortCol === col) {
+                customerSortAsc = !customerSortAsc;
+            } else {
+                customerSortCol = col;
+                customerSortAsc = (col === 'points' || col === 'spent' ? false : true);
+            }
+            document.querySelectorAll<HTMLElement>('[data-cust-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-cust-sort');
+                if (icon) {
+                    if (hCol === customerSortCol) {
+                        icon.className = customerSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            renderCustomersTable();
+        };
+    });
+}

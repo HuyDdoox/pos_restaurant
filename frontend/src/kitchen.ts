@@ -10,6 +10,25 @@ import { getCurrentUser, requireAuth, logout } from './auth';
 // Kiểm tra bắt buộc đăng nhập trước khi sử dụng Bếp KDS
 const currentAuthUser = requireAuth(['Chef', 'Admin']);
 
+const initChefUserProfile = () => {
+    const user: any = currentAuthUser || (() => {
+        try {
+            return JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('user') || '{}');
+        } catch { return {}; }
+    })();
+
+    const fullName = user.fullname || user.name || user.username || 'Bếp trưởng';
+    const nameEl = document.getElementById('chef-user-display-name');
+    if (nameEl) nameEl.innerText = fullName;
+
+    const imgEl = document.getElementById('chef-avatar-img') as HTMLImageElement;
+    if (imgEl) {
+        const encoded = encodeURIComponent(fullName);
+        imgEl.src = `https://ui-avatars.com/api/?name=${encoded}&background=10b981&color=fff`;
+    }
+};
+initChefUserProfile();
+
 let mangMonAn: MenuItem[] = [];
 let mangDanhMuc: Category[] = [];
 let mangBan: any[] = [];
@@ -2094,11 +2113,20 @@ initRecipePeekModal();
 initKdsQuickSearch();
 renderKDS();
 
-// Polling ngầm mỗi 3 giây
+let isPollingKitchen = false;
+// Polling ngầm mỗi 3.5 giây có cờ khóa chống bão request
 if (!kitchenPollingInterval) {
-    kitchenPollingInterval = setInterval(() => {
+    kitchenPollingInterval = setInterval(async () => {
+        if (isPollingKitchen) return;
         if (currentTab === 'kds') {
-            renderKDS(true); 
+            isPollingKitchen = true;
+            try {
+                await renderKDS(true); 
+            } catch (e) {
+                // Tránh lỗi gián đoạn
+            } finally {
+                isPollingKitchen = false;
+            }
         }
-    }, 3000);
+    }, 3500);
 }

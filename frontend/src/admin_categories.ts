@@ -26,6 +26,8 @@ let currentViewingCategory: Category | null = null;
 let currentSearchCategoryDishText: string = '';
 let currentCategoryCardFilter: 'all' | 'active' | 'has_dishes' | 'top' = 'all';
 let currentTopCategoryName: string = '';
+let catSortCol: string = 'order';
+let catSortAsc: boolean = true;
 
 const formatMoney = (amount: number): string => {
     return (amount || 0).toLocaleString('vi-VN') + ' đ';
@@ -76,6 +78,7 @@ const updateIconPreview = (iconClass: string) => {
 };
 
 const setupCategoryEventListeners = () => {
+    setupCategorySorting();
     // Tìm kiếm danh mục
     document.getElementById('search-category')?.addEventListener('input', () => {
         renderCategoriesTable();
@@ -242,6 +245,32 @@ const setupCategoryEventListeners = () => {
     }
 };
 
+const setupCategorySorting = () => {
+    document.querySelectorAll<HTMLElement>('[data-cat-sort]').forEach(th => {
+        th.onclick = () => {
+            const col = th.getAttribute('data-cat-sort') || 'name';
+            if (catSortCol === col) {
+                catSortAsc = !catSortAsc;
+            } else {
+                catSortCol = col;
+                catSortAsc = (col === 'items' ? false : true);
+            }
+            document.querySelectorAll<HTMLElement>('[data-cat-sort]').forEach(h => {
+                const icon = h.querySelector('i');
+                const hCol = h.getAttribute('data-cat-sort');
+                if (icon) {
+                    if (hCol === catSortCol) {
+                        icon.className = catSortAsc ? 'fa-solid fa-sort-up text-[10px] ml-1 text-slate-900' : 'fa-solid fa-sort-down text-[10px] ml-1 text-slate-900';
+                    } else {
+                        icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+                    }
+                }
+            });
+            renderCategoriesTable();
+        };
+    });
+};
+
 export const loadCategoriesData = async () => {
     try {
         const [cats, items] = await Promise.all([
@@ -352,20 +381,26 @@ const renderCategoriesTable = () => {
     });
 
     // Sắp xếp
-    if (currentCategoryCardFilter === 'has_dishes') {
-        filtered.sort((a, b) => {
+    filtered.sort((a, b) => {
+        let res = 0;
+        if (catSortCol === 'name') {
+            res = (a.name || '').localeCompare(b.name || '', 'vi');
+        } else if (catSortCol === 'order') {
+            res = (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0);
+        } else if (catSortCol === 'items') {
             const countA = allMenuItems.filter(m => getDishCategoryId(m) === String(a.id)).length;
             const countB = allMenuItems.filter(m => getDishCategoryId(m) === String(b.id)).length;
-            return countB - countA;
-        });
-    } else {
-        filtered.sort((a, b) => (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0));
-    }
+            res = countA - countB;
+        } else if (catSortCol === 'status') {
+            res = (a.status || 'Active').localeCompare(b.status || 'Active');
+        }
+        return catSortAsc ? res : -res;
+    });
 
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="px-6 py-12 text-center text-slate-500 font-medium">
+                <td colspan="6" class="px-6 py-12 text-center text-slate-600 font-bold">
                     <i class="fa-solid fa-shapes text-3xl mb-3 block opacity-30"></i>
                     Không tìm thấy danh mục nào phù hợp
                 </td>
@@ -391,7 +426,7 @@ const renderCategoriesTable = () => {
                         </div>
                         <div>
                             <div class="font-bold text-slate-900 text-sm whitespace-nowrap">${cat.name}</div>
-                            <div class="text-[11px] text-slate-500 font-mono mt-0.5 whitespace-nowrap">${iconClass}</div>
+                            <div class="text-[11px] text-slate-400 font-mono mt-0.5 whitespace-nowrap">#${cat.id} • ${iconClass}</div>
                         </div>
                     </div>
                 </td>

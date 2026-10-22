@@ -185,7 +185,7 @@ exports.createOrder = async (req, res) => {
                 is_combo: Boolean(dish.is_combo),
                 combo_items: (dish.is_combo && Array.isArray(dish.combo_items)) ? dish.combo_items : [],
                 station: dish.station || it.station || 'hot',
-                status: 'Pending'
+                status: it.status || 'Pending'
             });
         }
 

@@ -286,6 +286,35 @@ const updateDashboardCards = () => {
     if (elLocked) elLocked.innerText = lockedUsers.toString();
 };
 
+let userSortCol = '';
+let userSortDir: 'asc' | 'desc' = 'asc';
+
+const setupUserSorting = () => {
+    document.querySelectorAll('th[data-user-sort]').forEach(th => {
+        if (th.getAttribute('data-sort-bound')) return;
+        th.setAttribute('data-sort-bound', 'true');
+        th.addEventListener('click', () => {
+            const col = th.getAttribute('data-user-sort') || '';
+            if (userSortCol === col) {
+                userSortDir = userSortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                userSortCol = col;
+                userSortDir = 'asc';
+            }
+
+            document.querySelectorAll('th[data-user-sort] i').forEach(icon => {
+                icon.className = 'fa-solid fa-sort text-[10px] ml-1 opacity-60';
+            });
+            const curIcon = th.querySelector('i');
+            if (curIcon) {
+                curIcon.className = `fa-solid fa-sort-${userSortDir === 'asc' ? 'up text-orange-600' : 'down text-orange-600'} text-[11px] ml-1`;
+            }
+
+            applyFilters();
+        });
+    });
+};
+
 const applyFilters = () => {
     filteredUsers = allUsers.filter(user => {
         const name = (user.name || user.fullname || '').toLowerCase();
@@ -307,6 +336,18 @@ const applyFilters = () => {
         
         return matchesSearch && matchesRole && matchesBranch && matchesStatus;
     });
+
+    if (userSortCol) {
+        filteredUsers.sort((a: any, b: any) => {
+            let valA = a[userSortCol === 'role' ? 'role' : (userSortCol === 'status' ? 'status' : 'fullname')] || a.name || '';
+            let valB = b[userSortCol === 'role' ? 'role' : (userSortCol === 'status' ? 'status' : 'fullname')] || b.name || '';
+            if (typeof valA === 'string') valA = valA.toLowerCase();
+            if (typeof valB === 'string') valB = valB.toLowerCase();
+            if (valA < valB) return userSortDir === 'asc' ? -1 : 1;
+            if (valA > valB) return userSortDir === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
     
     updateDashboardCards();
     renderTable();
@@ -336,11 +377,10 @@ const createUserRowHtml = (user: IUser): string => {
                     ${roleInitial}
                     <div>
                         <p class="font-bold text-slate-900 whitespace-nowrap">${fullName}</p>
-                        <p class="text-xs text-slate-500 whitespace-nowrap">${userName}</p>
+                        <p class="text-xs text-slate-500 whitespace-nowrap">${userName} • <span class="font-mono text-slate-400">#${user.id}</span></p>
                     </div>
                 </div>
             </td>
-            <td class="px-6 py-4 font-bold text-slate-700 whitespace-nowrap font-mono text-xs">${user.id}</td>
             <td class="px-6 py-4 whitespace-nowrap">${roleBadge}</td>
             <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">Theo ca</td>
             <td class="px-6 py-4 text-slate-600 font-medium whitespace-nowrap">Vừa xong</td>
@@ -414,6 +454,8 @@ const renderNextUsersBatch = () => {
 const renderTable = () => {
     const tbody = document.getElementById('users-table-body');
     if (!tbody) return;
+
+    setupUserSorting();
 
     if (userSentinelObserver) {
         userSentinelObserver.disconnect();
